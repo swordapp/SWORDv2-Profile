@@ -1,0 +1,68 @@
+RFC {rfc}   {title}     {date}
+Jones   Experimental Protocol   [Page {page}]
+
+SWORD Technical Group                                           R. Jones
+Request for Comments: {rfc}                                        SWORD
+Category: Experimental Protocol                                   {date}
+
+{title}
+
+Status of this Memo
+
+This memo defines an Experimental Protocol for the Internet community.  This memo does not specify an Internet standard
+of any kind.  Discussion and suggestions for improvement are requested. Distribution of this memo is unlimited.
+
+Copyright Notice
+
+Copyright (C) SWORD (2011).
+
+Abstract
+
+[abstract]
+
+Table of Contents
+
+[toc]
+
+1. Introduction
+
+[introduction]
+
+2. Notational Conventions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in [RFC2119].
+
+[body]
+
+Security Considerations
+
+[security considerations]
+
+Normative References
+
+[RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+Author's Addresses
+Richard Jones
+OneOverZero/SWORD
+c/o UKOLN ....
+EMail: richard@swordapp.org
+
+
+Copyright (C) SWORD (2011).  All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or
+otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in
+part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all
+such copies and derivative works.  However, this document itself may not be modified in any way, such as by removing the
+copyright notice or references to SWORD, except as needed for the purpose of developing Internet standards in which case
+the procedures for copyrights defined in the Internet Standards process must be followed, or as required to translate it
+into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by SWORD or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and THE INTERNET SOCIETY AND THE
+INTERNET ENGINEERING TASK FORCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY
+THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+FITNESS FOR A PARTICULAR PURPOSE.
