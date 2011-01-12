@@ -1,0 +1,159 @@
+.pl 10.0i
+.po 0
+.ll 7.2i
+.lt 7.2i
+.nr LL 7.2i
+.nr LT 7.2i
+.ds LF R Jones 
+.ds RF FORMFEED[Page %]
+.ds LH INTERNET DRAFT
+.ds RH January 2011
+.ds CH <title>
+.ds CF Expires July 2011
+.hy 0
+.nh
+.ad l
+.in 0
+
+.nf
+.tl 'INTERNET-DRAFT''R Jones'
+.tl 'Intended Status: Experimental''(OneOverZero/SWORD)'
+.tl 'Expires: July 2011''January 2011'
+.fi
+
+.\" Note. The ".tl" directive is used to generate the leading header 
+.\" in Internet drafts. The information specified after ".tl" provides
+.\" left, center and right components of a line separated by the ' character
+.\" in the following manner:
+.\" 
+.\"  .tl '<left component>'<center component>'<right component>'
+.\"
+.\" Only the left and right components are used in Internet-draft headers
+.\" This and other comments in this template can safely be deleted.
+
+.ce 2
+<title>
+.fi
+.in 3
+
+
+.ti 0
+Status of this Memo
+
+This memo defines an Experimental Protocol for the Internet community.  This memo does not specify an Internet standard of any kind.  Discussion and suggestions for improvement are requested.  Distribution of this memo is unlimited.
+
+
+.ti 0
+Copyright and License Notice\" Boilerplate from December 2009
+
+Copyright (C) SWORD (2011).  All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works.  However, this document itself may not be modified in any way, such as by removing the copyright notice or references to SWORD, except as needed for the purpose of developing Internet standards in which case the procedures for copyrights defined in the Internet Standards process must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by SWORD or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and SWORD DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+.bp
+.ti 0
+Abstract
+
+<Abstract Text>
+
+
+.\" \# TD4  -- Set TOC depth by altering this value (TD5 = depth 5)
+.\" \# TOC  -- Beginning of auto updated Table of Contents
+.in 0
+Table of Contents
+
+.nf
+   1  Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+      1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
+   2  Title  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+   3  Security Considerations  . . . . . . . . . . . . . . . . . . . . 4
+   4  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . . 4
+   5  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+      5.1  Normative References  . . . . . . . . . . . . . . . . . . . 4
+      5.2  Informative References  . . . . . . . . . . . . . . . . . . 4
+   Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 4
+.fi
+.in 3
+
+.\" \# ETC -- End of auto updated Table of Contents
+
+.bp
+.ti 0
+1  Introduction
+
+<Introduction Text>
+
+.ti 0
+1.1  Terminology
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 [RFC2119].
+
+.ti 0
+2  Title 
+
+.\" Comment line providing info for the Authors
+Doc text... MUST implement [RFCnnn1] and MAY implement [RFCnnn2].
+
+.in 6
+.nf
+Definitions \" Comment text
+Definitions
+.fi
+.in 3
+
+Doc text
+
+.bp
+.ti 0
+3  Security Considerations
+
+<Security considerations text>
+
+
+.ti 0
+4  IANA Considerations
+
+<IANA considerations text>
+
+
+.ti 0
+5  References 
+
+.ti 0 
+5.1  Normative References
+
+.in 15
+.ti 3
+[RFC2119]   S. Bradner, "Key words for use in RFCs to Indicate Requirement Levels", BCP\014, RFC\02119, March 1997.
+
+.ti 3
+[RFCnnn1]   <Ref RFCnnn1>
+.in 3
+
+
+.ti 0
+5.2  Informative References
+
+.in 15
+.ti 3
+[RFCnnn2]   <Ref RFCnnn2>
+.in 3
+
+
+.ti 0
+Author's Addresses
+
+.sp
+.nf
+Richard Jones
+c/o UKOLN
+University of Bath
+
+EMail: richard@swordapp.org
+.sp
+.fi
+
