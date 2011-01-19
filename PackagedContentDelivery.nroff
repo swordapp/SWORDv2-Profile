@@ -1,0 +1,320 @@
+.pl 10.0i
+.po 0
+.ll 7.2i
+.lt 7.2i
+.nr LL 7.2i
+.nr LT 7.2i
+.ds LF R Jones 
+.ds RF FORMFEED[Page %]
+.ds LH INTERNET DRAFT
+.ds RH January 2011
+.ds CH Packaged Content Delivery
+.ds CF Expires July 2011
+.hy 0
+.nh
+.ad l
+.in 0
+
+.nf
+.tl 'INTERNET-DRAFT''R Jones'
+.tl 'Intended Status: Experimental''(OneOverZero/SWORD)'
+.tl 'Expires: July 2011''January 2011'
+.fi
+
+.\" Note. The ".tl" directive is used to generate the leading header 
+.\" in Internet drafts. The information specified after ".tl" provides
+.\" left, center and right components of a line separated by the ' character
+.\" in the following manner:
+.\" 
+.\"  .tl '<left component>'<center component>'<right component>'
+.\"
+.\" Only the left and right components are used in Internet-draft headers
+.\" This and other comments in this template can safely be deleted.
+
+.ce 2
+Packaged Content Delivery over HTTP
+.fi
+.in 3
+
+
+.ti 0
+Status of this Memo
+
+This memo defines an Experimental Protocol for the Internet community.  This memo does not specify an Internet standard of any kind.  Discussion and suggestions for improvement are requested.  Distribution of this memo is unlimited.
+
+
+.ti 0
+Copyright and License Notice\" Boilerplate from December 2009
+
+Copyright (C) SWORD (2011).  All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works.  However, this document itself may not be modified in any way, such as by removing the copyright notice or references to SWORD, except as needed for the purpose of developing Internet standards in which case the procedures for copyrights defined in the Internet Standards process must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by SWORD or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and SWORD DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+.bp
+.ti 0
+Abstract
+
+Often in information systems there is a requirement to move content between applications and servers in groups of files and associated metadata.  This document describes HTTP Headers and Media Features to aid this process over HTTP.
+
+
+.\" \# TD4  -- Set TOC depth by altering this value (TD5 = depth 5)
+.\" \# TOC  -- Beginning of auto updated Table of Contents
+.in 0
+Table of Contents
+
+.nf
+   1  Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+      1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
+      1.2 Notation . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+   2  Packaging  . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+   3 Accept-Media-Features . . . . . . . . . . . . . . . . . . . . . . 3
+   4 On-Behalf-Of  . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+   5 In-Progress . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+   6 Suppress-Metadata . . . . . . . . . . . . . . . . . . . . . . . . 5
+   7 Media Feature: packaging  . . . . . . . . . . . . . . . . . . . . 5
+   8  Security Considerations  . . . . . . . . . . . . . . . . . . . . 7
+   9  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . . 7
+      9.1 Packaging  . . . . . . . . . . . . . . . . . . . . . . . . . 7
+      9.2 Accept-Media-Features  . . . . . . . . . . . . . . . . . . . 7
+      9.3 On-Behalf-Of . . . . . . . . . . . . . . . . . . . . . . . . 7
+      9.4 In-Progress  . . . . . . . . . . . . . . . . . . . . . . . . 7
+      9.5 Suppress-Metadata  . . . . . . . . . . . . . . . . . . . . . 8
+   10  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+      10.1  Normative References . . . . . . . . . . . . . . . . . . . 8
+   Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 8
+.fi
+.in 3
+
+.\" \# ETC -- End of auto updated Table of Contents
+
+.bp
+.ti 0
+1  Introduction
+
+This specification describes HTTP headers and Media Features to enhance the delivery of packaged content over HTTP to document servers and similar systems from client software.
+
+.ti 0
+1.1  Terminology
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 [RFC2119].
+
+.ti 0
+1.2 Notation
+
+The version of BNF used in this document is taken from [RFC2068], and many of the nonterminals used are defined there.  Note that the underlying charset is US-ASCII.
+
+.ti 0
+2  Packaging
+
+The Packaging request header SHOULD be used by the user agent to give information to the server about the packaging format used to construct the content being POSTed or PUT.  Servers SHOULD use this information to unpack the supplied content into its component parts.
+
+	Packaging = "Packaging" ":" packaging-expression
+
+	packaging-expression = token | quoted-string | absoluteURI
+
+Note that token, quoted-string and absoluteURI are defined in [RFC2068].
+
+For example:
+
+	Packaging: http://purl.org/net/terms/package/default
+
+.ti 0
+3 Accept-Media-Features
+
+The Accept-Media-Features request header MAY be used by the user agent to content negotiate with the server over the features of the package that it will get back on GET.  Traditional content negotiation with existing Accept- headers is limited to mime-type granularity, which is insufficient to negotiate over the format of the contents of, for example, an application/zip container.
+
+This header will take its value from [RFC2533] which defines a syntax for describing Media Feature Sets in the context of content negotiation.
+
+	Accept-Media-Features = "Accept-Media-Features" ":" feature-set
+
+where feature-set is defined by the syntax laid out in [RFC2533], with the following constraints:
+
+* The top level predicate is either an OR ("|") or and AND ("&")
+
+* If the top level predicate is an "&" there can be only one feature set described therein, and it does not require a "q" value
+
+* If the top level predicate is an "|" this must contain only "&" predicates as its children, and each of those predicates can only describe one feature set, and MUST include a "q" value
+
+The following would be acceptable values for the header:
+
+Only accept back a METS package in a ZIP file:
+
+	(& (type="application/zip") (packaging="METS) )
+
+Prefer a METS package but accept a DIDL if not, both must be in ZIP files:
+
+	(| (& (type="application/zip") (packaging="METS") ); q=1.0
+
+	   (& (type="application/zip") (packaging="DIDL") ); q=0.8 
+
+	)
+
+The following would NOT be an acceptable value for the header, for example:
+
+	(| (& (type="application/zip") 
+
+		(| (packaging="METS"); q=1.0 (packaging="DIDL"); q=0.8 ) 
+
+	    ); q=1.0
+
+	   (& (type="application/atom+xml") ); q=0.8 
+
+	)
+
+.ti 0
+4 On-Behalf-Of
+
+The On-Behalf-Of request header MAY be used by the user agent to alert the server as to the identity of the true owner of the content during PUT, POST, DELETE and GET.  Traditional HTTP authentication is insufficient in this regard as it is possible that content will be delivered machine-to-machine and the authenticating user will be the user agent not the content owner.  Servers SHOULD use this information to determine whether and how they accept the content.
+
+	On-Behalf-Of = "On-Behalf-Of" ":" (token | quoted-string)
+
+For example:
+
+	Authorization: Basic [digested auth information for user agent]
+
+	On-Behalf-Of: jbloggs
+
+.ti 0
+5 In-Progress
+
+The In-Progress request header MAY be used by the user agent to inform the server that the current content payload is not yet complete in some unspecified way during PUT, POST or DELETE.  For example, there may by further content packages that the user agent plans to deliver to the server before the full content has been delivered, or the user agent may need to carry out other actions against the server before confirming that the server can proceed to fully process the content.  Exact interpretation of this header is left to the server, so it is necessary that server/client pairs will have to have a common understanding of its meaning which is beyond the scope of this document.
+
+	In-Progress = "In-Progress" ":" ("true" | "false")
+
+.ti 0
+6 Suppress-Metadata
+
+The Suppress-Metadata request header MAY be used by the user agent to instruct the server not to attempt to extract metadata from the supplied content package, during PUT, POST or DELETE.  Content packages commonly contain both file content and metadata about its contents, and during unpacking servers may process this metadata in a way which is meaningful to them.  This directive allows the user agent to suppress that behaviour for its own purposes.  Furthermore, a DELETE operation may be requested which removes content previously delivered from the server, and in this case the header instructs the server to retain a copy of the metadata while deleting the content.
+
+	Suppress-Metadata = "Suppress-Metadata" ":" ("true" | "false")
+
+
+.ti 0
+7 Media Feature: packaging
+
+In order that the Accept-Media-Features request header can allow the successful negotiation of content package types, the "packaging" type is added to the register of media features.
+
+	packaging = "packaging" "=" packaging-expression
+
+	packaging-expression = token | quoted-string | absoluteURI
+
+For example:
+
+	packaging=http://purl.org/net/terms/package/default
+
+Used in Media Feature content negotiation:
+
+	Accept-Media-Features:
+
+		(| (& (type="application/zip") (packaging="METS") ); q=1.0
+
+		   (& (type="application/zip") (packaging=http://purl.org/net/terms/package/default) ); q=0.8 
+
+		)
+
+.bp
+.ti 0
+8  Security Considerations
+
+This document is based on HTTP and thus subject to the security considerations found in Section 15 of [RFC2068].
+
+
+.ti 0
+9  IANA Considerations
+
+This document specifies 5 new message headers which conform to the registry mechanism for provisional message headers in [RFC3864] and one new media feature which conforms to the URI tree registry mechanism in [RFC2506].
+
+.ti 0
+9.1 Packaging
+
+Header field name: Packaging
+
+Applicable protocol: HTTP
+
+Status: provisional
+
+Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
+
+.ti 0
+9.2 Accept-Media-Features
+
+Header field name: Accept-Media-Features
+
+Applicable protocol: HTTP
+
+Status: provisional
+
+Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
+
+.ti 0
+9.3 On-Behalf-Of
+
+Header field name: On-Behalf-Of
+
+Applicable protocol: HTTP
+
+Status: provisional
+
+Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
+
+.ti 0
+9.4 In-Progress 
+
+Header field name: In-Progress
+
+Applicable protocol: HTTP
+
+Status: provisional
+
+Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
+
+.ti 0
+9.5 Suppress-Metadata
+
+Header field name: Packaging
+
+Applicable protocol: HTTP
+
+Status: provisional
+
+Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
+
+.ti 0
+10  References 
+
+.ti 0 
+10.1  Normative References
+
+.in 15
+.ti 3
+[RFC2119]   S. Bradner, "Key words for use in RFCs to Indicate Requirement Levels", BCP\014, RFC\02119, March 1997.
+
+.ti 3
+[RFC2068] Fielding, R., Gettys, J., Mogul, J., Frystyk, H., and T. Berners-Lee, "Hypertext Transfer Protocol -- HTTP/1.1", RFC 2068, January 1997.
+
+.ti 3
+[RFC2533] Klyne, G. "A Syntax for Describing Media Feature Sets", RFC 2533, March 1999
+
+.ti 3
+[RFC3864]	Klyne, G., Nottingham, M., and J. Mogul, “Registration Procedures for Message Header Fields”, BCP 90, RFC 3864, September 2004.
+
+.ti 3
+[RFC2506] Holtman, et. al. "Media Feature Tag Registration Procedure", RFC 2506, March 1999
+
+.ti 0
+Author's Addresses
+
+.sp
+.nf
+Richard Jones
+c/o UKOLN
+University of Bath
+
+EMail: richard@swordapp.org
+.sp
+.fi
+
