@@ -1,0 +1,973 @@
+SWORD Profile version 2.0
+
+1.  Introduction
+
+The Atom Publishing Protocol ([AtomPub]) provides a simple, extensible mechanism for the creation of Web Resources. The
+SWORD profile builds upon AtomPub and HTTP ([RFCxxxx]) and incorporates a number of extensions to enable the following
+kinds of behaviours:
+
+* Clients may create resources by sending compound resources, such as archive files (tar, zip).
+* Both non-interactive and 3rd party mediated operation are required.
+* Workflows may or may not include manual stages before deposited resources become available as web resources.
+* Clients may update or delete parts of the compound resources or associated metadata
+* Clients may display the state and actual server description of deposited resources to users
+
+The practical details of the extensions used in the SWORD Profile are provided in the following Internet Drafts:
+
+* Packaged Content Delivery over HTTP [SWORD001]
+* AtomPub Extensions for Packaged Content [SWORD002]
+* AtomPub Extensions for SWORD [SWORD003]
+* Atom Multipart Extensions for Packaged Content [SWORD004]
+* SWORD Package Registry [SWORD005]
+
+2.  Notational Conventions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in [RFC2119].
+
+3. Terminology
+
+Throughout this document we will regularly refer to identifiers which are used by SWORD.  The following URIs are part
+of the specification:
+
+SD-URI - The service document URI. This is the URI from which the root service document can be located. If the server
+supports nesting of service documents, then these sub-service documents are also subject to the same rules as SD-URI
+and should be considered the same.
+
+Col-URI - The URI of a SWORD Collection. This is the URI to which the initial deposit will take place, and which are
+listed in the service document.
+
+Cont-URI - The Content URI. This is the URI from which the client will be able to retrieve representations of the
+object as it resides in the SWORD server (which representation is returned will be through content negotiation, as
+discussed later).
+
+EM-URI - The Atom Edit Media URI. This is almost always going to be the same as the Cont-URI, but the Atom spec requires
+that these identifiers be allowed to differ.  Throughout this document we will mostly refer to the EM-URI.  An important
+thing to note about the EM-URI and the Cont-URI is that they do not refer to the resource as deposited by the client
+(e.g. the original zip), but to all the content stored in the item on the server, and the format that this URI returns
+is obtained by content negotiation.  This will be discussed in more detail in the Deposit Receipt section.
+
+Edit-URI - The Atom Media Edit URI. This is the URI of the Atom Entry, and therefore also of the container within the
+SWORD server.
+
+State-URI - The SWORD Statement URI.  This is one of the URIs which can be used to retrieve a description of the object
+from the sword server, including the structure of the object and its state.
+
+4.  Namespaces
+
+4.1.    SWORD Namespaces
+
+All SWORD extensions are defined within the namespace:
+
+    http://purl.org/net/sword/
+
+Beneath this URI, we use the following extensions for the various parts of the standard:
+
+For all predicates associated with SWORD:
+    http://purl.org/net/sword/terms/
+
+Root registry for any SWORD recognised package formats including "default":
+    http://purl.org/net/sword/package/
+
+Root namespace for any Error documents which SWORD can produce:
+    http://purl.org/net/sword/error/
+
+Root namespace for any State terms that SWORD wishes to provide:
+    http://purl.org/net/sword/state/
+
+This document uses the prefix "sword" for the namespace name.
+
+4.2.    Referenced Namespaces
+
+The AtomPub namespace is:
+
+    http://www.w3.org/2007/app
+
+This document uses the prefix "app" for the namespace name.
+
+
+The Atom Syndication Format namespace is:
+
+    http://www.w3.org/2005/Atom
+
+This document uses the prefix "atom" for the namespace name.
+
+
+The DCMI Terms namespace is:
+
+    http://purl.org/dc/terms/
+
+This document uses the prefix "dcterms" for the namespace name.
+
+
+The RDF namespace is:
+
+    http://www.w3.org/1999/02/22-rdf-syntax-ns#
+
+This document uses the prefix "rdf" for the namespace name
+
+
+The OAI-ORE namespace is:
+
+        http://www.openarchives.org/ore/terms/
+
+This document uses the prefix "ore" for the namespace name
+
+
+The OAI-ORE Atom terms namespace is:
+
+    http://www.openarchives.org/ore/atom/
+
+This document uses the prefix "oreatom" for the namespace name
+
+5.  URIs
+
+The default packaging format, which represents a plain ZIP file during resource creation or update, or a ZIP file +
+Atom embedded DC metadata during Atom Multipart [AtomMultipart] deposit
+
+    http://purl.org/net/sword/package/default
+
+The packaging format which represents a binary file which should not be unpacked by the server
+
+    http://purl.org/net/sword/package/binary
+
+
+6.  Protocol Operations
+
+While specific HTTP status codes are used below, a SWORD client should be prepared to handle any status code as per the
+HTTP status code definitions [RDFxxxx]
+
+6.1 Retrieving a Service Document
+
+See Section 5.1 and 8 of [AtomPub], for details.
+
+The client may also supply the On-Behalf-Of header [SWORD001] to provide the username of a target user on whose behalf
+a deposit will be made.
+
+    GET SD-URI HTTP/1.1
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    On-Behalf-Of: [username]
+
+When a server that supports mediated deposit receives an On-Behalf-Of header [SWORD001], the returned Service Document SHOULD
+identify only those collections to which the combination of mediated user and authenticated user might successfully
+deposit. If the target server does not support mediated deposit, the returned Service Document SHOULD contain a
+sword:mediation [SWORD002] extension element with a value of false.
+
+The service document supplied in response must meet the following criteria in addition to those specified in [AtomPub]:
+
+* MUST specify the sword:version element with a value of 2.0 [SWORD003]
+* MAY specify the sword:maxUploadSize [SWORD003]
+* MUST specify the app:accept element.  If the Collection can take any format content type, it should specify "*/*" as
+its value [AtomPub]
+* MAY include sword:collectionPolicy [SWORD003]
+* SHOULD include a sword:mediation element with a value of true or false [SWORD002]
+* MAY include a sword:treatment element [SWORD003]
+* MAY include zero or more sword:acceptPackaging elements [SWORD002].  The value SHOULD be a URI for a known packaging
+format (where such URIs exist).
+* MAY include zero or more sword:service [SWORD003] elements containing references to nested service descriptions
+
+Example:
+
+    HTTP 1.1  200 OK
+    Content-Type: text/xml
+
+    <service xmlns:dcterms="http://purl.org/dc/terms/"
+             xmlns:sword="http://purl.org/net/sword/terms/"
+             xmlns:atom="http://www.w3.org/2005/Atom"
+             xmlns="http://www.w3.org/2007/app">
+
+      <sword:version>2.0</sword:version>
+      <sword:maxUploadSize>16777216</sword:maxUploadSize>
+
+      <workspace>
+        <atom:title>Main Site</atom:title>
+
+        <collection href="http://localhost:8080/col-uri/43baf931-d6a0-4da3-8f17-ae6e5efc812b">
+          <atom:title>Collection 43baf931-d6a0-4da3-8f17-ae6e5efc812b</atom:title>
+          <accept>*/*</accept>
+          <accept alternate="multipart-related">*/*</accept>
+          <sword:collectionPolicy>Collection Policy</sword:collectionPolicy>
+          <dcterms:abstract>Collection Description</dcterms:abstract>
+          <sword:mediation>false</sword:mediation>
+          <sword:treatment>Treatment description</sword:treatment>
+          <sword:acceptPackaging>http://purl.org/net/sword/package/default</sword:acceptPackaging>
+          <sword:acceptPackaging>http://purl.org/net/sword/package/METSDSpaceSIP</sword:acceptPackaging>
+          <sword:service>http://localhost:8080/sd-uri/e406cadd-1be5-44cc-8e78-3b8b7e867ea2</sword:service>
+        </collection>
+
+      </workspace>
+
+    </service>
+
+
+6.2 Listing Collections
+
+See Section 5.2 of [AtomPub] for details.
+
+AtomPub states that Collection Resources MUST provide representations in the form of Atom Feed Documents.
+Under the SWORD profile, implementations SHOULD provide such representations. Clients MUST NOT require a Collection
+Feed Document for deposit operation.
+
+
+6.3 Creating a Resource
+
+6.3.1   Creating a Resource with a Binary File Deposit
+
+See Sections 5.3 and 9.2 of [AtomPub] for details.  
+
+The client can create a resource by POSTing the binary content as the body of an HTTP request, with the Content-Type,
+Content-Disposition, and Packaging headers, with the following requirements:
+
+* the client SHOULD supply a Content-Type header
+* the client MUST supply a Content-Disposition header with a filename parameter
+* the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content
+* the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001]
+* the client MAY provide an On-Behalf-Of header [SWORD001]
+* the client MAY provide a Suppress-Metadata header [SWORD001]
+* the client MAY supply a Slug header providing a suggested identifier for the deposited content
+
+    POST Col-URI HTTP/1.1
+    Content-Type: application/zip
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    Content-Length: nnn
+    Content-MD5: [md5-digest]
+    Content-Disposition: filename=[filename]
+    Packaging: http://purl.org/net/sword/package/METSDSpaceSIP
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+    Slug: [suggested identifier]
+
+    [request entity]
+
+The requirements placed on the server here are:
+
+* if no Content-Type header is supplied the server MUST behave as per Section 7.2.1 in [RFC2616]
+* The server SHOULD verify the Content-MD5 header against the content.  If the check fails, the server MUST respond with
+412 Precondition Failed.  See Section XXXX on Error Documents.
+* Server implementations MUST adopt the behaviour and requirements in [RFC2183] with respect to the Content-Disposition
+header
+* If there is no Packaging header, the server MUST assume that it is the default packaging format
+(http://purl.org/net/sword/package/default)
+* Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [AtomPub] with respect to the
+Slug header
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server MUST create a new resource containing content equivalent to or derived from the deposited content, or
+return an error document.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 201 (Created) if the server has completed the deposit of the resource of 202 (Accepted) if
+the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    201 Created
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+6.3.2   Creating a Resource with a Multipart Deposit
+
+See [AtomMultipart] for details.
+
+In order to ensure that all SWORD clients and servers can exchange a full range of file content and metadata, the use
+of Atom Multipart [AtomMultipart] is permitted to combine a default package with a set of Dublin Core metadata terms
+embedded in an Atom Entry.
+
+The client can crete a resource by POSTing a multipart mime message to the server with two parts: An Atom Entry
+containing the metadata for the deposit, and the binary content as the second part, with the following requirements:
+
+* the client MUST comply with the rules laid out in [AtomMultipart]
+* the client MUST supply a Content-Disposition header on the first (atom) part with a "name" parameter set to "atom" [SWORD004]
+* the client MUST supply a Content-Disposition header on the second (binary) part with a "name" parameter set to "payload"
+and a filename parameter [SWORD004]
+* the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content on the second
+(binary) part
+* the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
+on the second (binary) part
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001] on the main HTTP header
+* the client MAY provide an On-Behalf-Of header [SWORD001] on the main HTTP header
+* the client MAY provide a Suppress-Metadata header [SWORD001] on the main HTTP header
+* the client MAY supply a Slug header providing a suggested identifier for the deposited content on the main HTTP header
+* the client MAY add Dublin Core [DublinCore] terms to the Entry as foreign markup; the terms MUST be embedded as
+direct children of the atom:entry element.
+* the client MAY add any other metadata format to the atom:entry element
+
+    POST Col-URI HTTP/1.1
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    Content-Length: nnn
+    Content-Type: multipart/related;
+          boundary="===============1605871705==";
+          type="application/atom+xml"
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+    Slug: [suggested identifier]
+    MIME-Version: 1.0
+
+    Media Post
+    --===============1605871705==
+    Content-Type: application/atom+xml; charset="utf-8"
+    Content-Disposition: x-atom; name="atom"
+    MIME-Version: 1.0
+
+    <?xml version="1.0"?>
+    <entry xmlns="http://www.w3.org/2005/Atom"
+            xmlns:dcterms="http://purl.org/dc/terms/">
+        <title>Titleh</title>
+        <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+        <updated>2005-10-07T17:17:08Z</updated>
+        <author><name>Contributor</name></author>
+        <summary type="text">The abstract</summary>
+
+        <!-- some embedded metadata -->
+        <dcterms:abstract>The abstract</dcterms:abstract>
+        <dcterms:accessRights>Access Rights</dcterms:accessRights>
+        <dcterms:alternative>Alternative Title</dcterms:alternative>
+        <dcterms:available>Date Available</dcterms:available>
+        <dcterms:bibliographicCitation>Bibliographic Citation</dcterms:bibliographicCitation>
+        <dcterms:contributor>Contributor</dcterms:contributor>
+        <dcterms:description>Description</dcterms:description>
+        <dcterms:hasPart>Has Part</dcterms:hasPart>
+        <dcterms:hasVersion>Has Version</dcterms:hasVersion>
+        <dcterms:identifier>Identifier</dcterms:identifier>
+        <dcterms:isPartOf>Is Part Of</dcterms:isPartOf>
+        <dcterms:publisher>Publisher</dcterms:publisher>
+        <dcterms:references>References</dcterms:references>
+        <dcterms:rightsHolder>Rights Holder</dcterms:rightsHolder>
+        <dcterms:source>Source</dcterms:source>
+        <dcterms:title>Title</dcterms:title>
+        <dcterms:type>Type</dcterms:type>
+
+    </entry>
+    --===============1605871705==
+    Content-Type: application/zip
+    Content-Disposition: x-payload; name=payload; filename=[filename]
+    Packaging: http://purl.org/net/sword/package/default
+    Content-MD5: [md5-digest]
+    MIME-Version: 1.0
+
+    ...binary package data...
+    --===============1605871705==--
+
+The requirements placed on the server here are:
+
+* The server SHOULD verify the Content-MD5 header against the binary content.  If the check fails, the server MUST respond with
+412 Precondition Failed.  See Section XXXX on Error Documents.
+* Server implementations MUST adopt the behaviour and requirements in [RFC2183] with respect to the Content-Disposition
+header for the binary content
+* If there is no Packaging header on the binary part, the server MUST assume that it is the default packaging format
+(http://purl.org/net/sword/package/default)
+* Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [AtomPub] with respect to the
+Slug header
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server MUST create a new resource containing content equivalent to or derived from the deposited content, or
+return an error document.
+* The server MUST be able to interpret the Dublin Core foreign markup in the atom:entry element, but MAY NOT understand
+any other embedded formats.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 201 (Created) if the server has completed the deposit of the resource of 202 (Accepted) if
+the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    201 Created
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+6.4 Retrieving the content
+
+See section 5.4 of [AtomPub] for details.
+
+The Deposit Receipt contains two URIs which can be used to retrieve content from the server: Cont-URI and EM-URI.  These
+are provided in the atom:content@src element and the atom:link@rel="edit-media" elements respectively.  Their only
+functional difference is that you are MUST NOT carry out any HTTP operations other than GET on the Cont-URI, while all
+operations are permitted on the EM-URI.  It is acceptable for both URIs to be the same, and in this section we refer
+only to the EM-URI but in all cases it can be substituted for the Cont-URI.
+
+The Deposit Receipt contains zero or more sword:packaging elements [SWORD002], indicating to the client what package
+formats can be retrieved from the server.  For example:
+
+<entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/">
+
+    [...]
+
+    <content type="application/zip"
+        src="http://www.sss.ac.uk/geography-collection/my_deposit"/>
+    <link rel="edit-media"
+        href="http://www.sss.ac.uk/geography-collection/my_deposit"/>
+
+    <sword:packaging>http://purl.org/net/sword/package/default</sword:packaging>
+    <sword:packaging>http://purl.org/net/sword/package/METSDSpaceSIP</sword:packaging>
+    <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
+        
+</entry>
+
+To retrieve the content in the desired packaging format, the client makes an HTTP GET request to the EM-URI and MAY
+supply a Packaging header [SWORD001] with the URI from one of the sword:packaging elements.
+
+The server will respond in different ways depending on a number of conditions:
+
+* If the Packaging header is not supplied, the server SHOULD assume the default packaging format
+(http://purl.org/net/sword/package/default), but MAY elect another format if it wishes.  The server MUST then
+supply the client with a package which meets these specifications.
+* If the Packaging header is supplied, and contains the URI (or other allowed value) of a format that the server
+supports, the server MUST then supply the client with a package which meets these specifications.
+* If the Packaging header is supplied but contains a URI (or other allowed value) for a format that the server does
+not support, the server MUST respond with 406 Not Acceptable and MAY include an error document as per Section XXX:
+Error Documents.
+
+For more details about the packaging process, see Section XXX: Packaging
+
+
+6.4 Editing the Content of a Resource
+
+See section 5.4 and 9.3 of [AtomPub] for details.
+
+The client can replace the existing content of a resource by performing an HTTP PUT of some new binary content to the
+EM-URI, with the following requirements:
+
+* the client SHOULD supply a Content-Type header
+* the client MUST supply a Content-Disposition header with a filename parameter
+* the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content
+* the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001]
+* the client MAY provide an On-Behalf-Of header [SWORD001]
+* the client MAY provide a Suppress-Metadata header [SWORD001]
+
+    POST EM-URI HTTP/1.1
+    Content-Type: application/zip
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    Content-Length: nnn
+    Content-MD5: [md5-digest]
+    Content-Disposition: filename=[filename]
+    Packaging: http://purl.org/net/sword/package/METSDSpaceSIP
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+
+    [request entity]
+
+The requirements placed on the server here are:
+
+* The server SHOULD verify the Content-MD5 header against the content.  If the check fails, the server MUST respond with
+412 Precondition Failed.  See Section XXXX on Error Documents.
+* Server implementations MUST adopt the behaviour and requirements in [RFC2183] with respect to the Content-Disposition
+header
+* If there is no Packaging header, the server MUST assume that it is the default packaging format
+(http://purl.org/net/sword/package/default)
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server MUST effectively replace all the existing content in the item (subject to the rules associated with Metadata
+Handling), although implementations may choose to provide versioning or some other mechanism for retaining the
+overwritten content.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 200 (OK) if the server has completed the deposit of the resource or 202 (Accepted) if
+the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    200 OK
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+
+6.5 Deleting the Content of a Resource
+
+See Sections 5.4 and 9.4 of [AtomPub] for details.
+
+The client can remove all the content of a resource without removing the resource itself by issuing an HTTP DELETE
+request on the EM-URI, with the following requirements:
+
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001]
+* the client MAY provide an On-Behalf-Of header [SWORD001]
+* the client MAY provide a Suppress-Metadata header [SWORD001]
+
+    DELETE EM-URI HTTP/1.1
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+
+The requirements placed on the server here are:
+
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server MUST effectively delete all the existing content in the item (subject to the rules associated with Metadata
+Handling), although implementations may choose to provide versioning or some other mechanism for retaining the
+deleted content.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 200 (OK) if the server has completed the delete of the content or 202 (Accepted) if
+the server has accepted the delete request but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    200 OK
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+6.6 Adding Content to a Resource
+
+6.6.1   Adding New Packages or Files to a Container
+
+The client can add further packaged or binary content to a container, adding to existing content rather than overwriting,
+by issuing an HTTP POST to the Edit-URI, with the following requirements:
+
+* the client SHOULD supply a Content-Type header
+* the client MUST supply a Content-Disposition header with a filename parameter
+* the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content
+* the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001]
+* the client MAY provide an On-Behalf-Of header [SWORD001]
+* the client MAY provide a Suppress-Metadata header [SWORD001]
+
+    POST Edit-URI HTTP/1.1
+    Content-Type: application/zip
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    Content-Length: nnn
+    Content-MD5: [md5-digest]
+    Content-Disposition: filename=[filename]
+    Packaging: http://purl.org/net/sword/package/METSDSpaceSIP
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+
+    [request entity]
+
+The requirements placed on the server here are:
+
+* The server SHOULD verify the Content-MD5 header against the content.  If the check fails, the server MUST respond with
+412 Precondition Failed.  See Section XXXX on Error Documents.
+* Server implementations MUST adopt the behaviour and requirements in [RFC2183] with respect to the Content-Disposition
+header
+* If there is no Packaging header, the server MUST assume that it is the default packaging format
+(http://purl.org/net/sword/package/default)
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server SHOULD NOT overwrite any existing content, and MUST add content equivalent to or derived from the deposited
+content to the existing container or respond with an error document.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 200 (OK) if the server has completed the deposit of the resource or 202 (Accepted) if
+the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    200 OK
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+6.6.2   Adding New Metadata to a Resource
+
+The client can update the metadata attached to a resource by issuing an HTTP POST of a new Atom Entry document
+containing metadata embedded as foreign markup, with the following requirements:
+
+* the client MUST supply a Content-Type header with the value "application/atom+xml" or "application/atom+xml;type=entry"
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001]
+* the client MAY provide an On-Behalf-Of header [SWORD001]
+* the client MAY provide a Suppress-Metadata header [SWORD001]
+* the client MAY add Dublin Core [DublinCore] terms to the Entry as foreign markup; the terms MUST be embedded as
+direct children of the atom:entry element.
+* the client MAY add any other metadata format to the atom:entry element
+
+    POST Edit-URI HTTP/1.1
+    Content-Type: application/atom+xml;type=entry
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    Content-Length: nnn
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+
+    [entry document]
+
+The requirements placed on the server here are:
+
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server MUST be able to interpret the Dublin Core foreign markup in the atom:entry element, but MAY NOT understand
+any other embedded formats.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 200 (OK) if the server has completed the deposit of the resource or 202 (Accepted) if
+the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    200 OK
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+6.6.3   Adding New Metadata and Packages or Files to a Resource with Multipart
+
+The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom
+Multipart [AtomMultipart] document, with the following requirements:
+
+* the client MUST comply with the rules laid out in [AtomMultipart]
+* the client MUST supply a Content-Disposition header on the first (atom) part with a "name" parameter set to "atom" [SWORD004]
+* the client MUST supply a Content-Disposition header on the second (binary) part with a "name" parameter set to "payload"
+and a filename parameter [SWORD004]
+* the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content on the second
+(binary) part
+* the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
+on the second (binary) part
+* the client MAY provide an In-Progress header with a value of "true" or "false" [SWORD001] on the main HTTP header
+* the client MAY provide an On-Behalf-Of header [SWORD001] on the main HTTP header
+* the client MAY provide a Suppress-Metadata header [SWORD001] on the main HTTP header
+* the client MAY add Dublin Core [DublinCore] terms to the Entry as foreign markup; the terms MUST be embedded as
+direct children of the atom:entry element.
+* the client MAY add any other metadata format to the atom:entry element
+
+    POST Col-URI HTTP/1.1
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    Content-Length: nnn
+    Content-Type: multipart/related;
+          boundary="===============1605871705==";
+          type="application/atom+xml"
+    In-Progress: true
+    On-Behalf-Of: jbloggs
+    Suppress-Metadata: true
+    Slug: [suggested identifier]
+    MIME-Version: 1.0
+
+    Media Post
+    --===============1605871705==
+    Content-Type: application/atom+xml; charset="utf-8"
+    Content-Disposition: x-atom; name="atom"
+    MIME-Version: 1.0
+
+    <?xml version="1.0"?>
+    <entry xmlns="http://www.w3.org/2005/Atom"
+            xmlns:dcterms="http://purl.org/dc/terms/">
+        <title>Titleh</title>
+        <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+        <updated>2005-10-07T17:17:08Z</updated>
+        <author><name>Contributor</name></author>
+        <summary type="text">The abstract</summary>
+
+        <!-- some embedded metadata -->
+        <dcterms:abstract>The abstract</dcterms:abstract>
+        <dcterms:accessRights>Access Rights</dcterms:accessRights>
+        <dcterms:alternative>Alternative Title</dcterms:alternative>
+        <dcterms:available>Date Available</dcterms:available>
+        <dcterms:bibliographicCitation>Bibliographic Citation</dcterms:bibliographicCitation>
+        <dcterms:contributor>Contributor</dcterms:contributor>
+        <dcterms:description>Description</dcterms:description>
+        <dcterms:hasPart>Has Part</dcterms:hasPart>
+        <dcterms:hasVersion>Has Version</dcterms:hasVersion>
+        <dcterms:identifier>Identifier</dcterms:identifier>
+        <dcterms:isPartOf>Is Part Of</dcterms:isPartOf>
+        <dcterms:publisher>Publisher</dcterms:publisher>
+        <dcterms:references>References</dcterms:references>
+        <dcterms:rightsHolder>Rights Holder</dcterms:rightsHolder>
+        <dcterms:source>Source</dcterms:source>
+        <dcterms:title>Title</dcterms:title>
+        <dcterms:type>Type</dcterms:type>
+
+    </entry>
+    --===============1605871705==
+    Content-Type: application/zip
+    Content-Disposition: x-payload; name=payload; filename=[filename]
+    Packaging: http://purl.org/net/sword/package/default
+    Content-MD5: [md5-digest]
+    MIME-Version: 1.0
+
+    ...binary package data...
+    --===============1605871705==--
+
+The requirements placed on the server here are:
+
+* The server SHOULD verify the Content-MD5 header against the binary content.  If the check fails, the server MUST respond with
+412 Precondition Failed.  See Section XXXX on Error Documents.
+* Server implementations MUST adopt the behaviour and requirements in [RFC2183] with respect to the Content-Disposition
+header for the binary content
+* If there is no Packaging header on the binary part, the server MUST assume that it is the default packaging format
+(http://purl.org/net/sword/package/default)
+* Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [AtomPub] with respect to the
+Slug header
+* If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Continued Deposit
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
+Section XXXX: Metadata Handling
+* The server MUST be able to interpret the Dublin Core foreign markup in the atom:entry element, but MAY NOT understand
+any other embedded formats.
+
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
+with the HTTP status code 201 (Created) if the server has completed the deposit of the resource of 202 (Accepted) if
+the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
+Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+
+For example:
+
+    201 Created
+    Location: [Edit-URI]
+
+    [optional Deposit Receipt]
+
+
+6.7 Delete the Container
+
+The client can delete the entire object on the server by issuing an HTTP DELETE request on the Edit-URI, with the
+following requirements:
+
+* the client MAY provide an On-Behalf-Of header [SWORD001]
+
+    DELETE Edit-URI HTTP/1.1
+    Authorization: Basic ZGFmZnk6c2VjZXJldA==
+    On-Behalf-Of: jbloggs
+
+The requirements placed on the server here are:
+
+* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* The server MUST effectively remove the Container and all its content, although implementations may choose to provide
+versioning or some other mechanism for retaining the deleted content.
+* The Edit-URI MUST subsequently return a 404 Not Found
+
+
+6.8 Retrieving the Statement
+
+The Statement can be found either embedded as foreign markup inside the Deposit Receipt, or can be retrieved by
+requesting the URI provided in the atom:link@rel="http://purl.org/net/sword/terms/statement" element.  The format
+of the statement is identified by the "type" attribute of the atom:link@rel="http://purl.org/net/sword/terms/statement"
+element and MAY be "application/rdf+xml" for an OAI-ORE Resource Map, or "application/atom+xml;type=feed" for an
+Atom Feed.
+
+For details on these serialisations see Section XXX: SWORD Statement
+
+
+7. Packaging
+
+AtomPub uses the MIME mechanism to describe the data encoding for resources. This mechanism is inadequate where compound
+types are involved, such as tar archive files, METS packages, SCORM packages, MPEG21 DIDL packages etc. For example, a
+server might support certain METS profiles but not others. Other servers might be agnostic towards packaging, but
+support only certain contents within an archive.
+
+In order to support package deposit and retrieval, SWORD uses the mechanisms described in [SWORD002] to extend AtomPub.
+
+7.1 Package support in Service description
+
+The SWORD Service Document uses the sword:acceptPackaging element from [SWORD002] to indicate that a SWORD collection will
+accept deposits of a particular packaging format.
+
+Clients should refer to the sword:treatment description in the Service Document to find out the treatment for a particular
+packaging type.
+
+Packages formats SHOULD be identified by a URI (as per [SWORD002]), and MAY be identified by a URI from the SWORD
+package registry (see [SWORD0005]).
+
+<?xml version="1.0" encoding='utf-8'?>
+<service xmlns="http://www.w3.org/2007/app"
+         xmlns:atom="http://www.w3.org/2005/Atom"
+	 xmlns:sword="http://purl.org/net/sword/"
+	 xmlns:dcterms="http://purl.org/dc/terms/">
+
+ <sword:version>2.0</sword:version>
+
+ <workspace>
+   <atom:title>Main Site</atom:title>
+   <collection
+       href="http://www.swordserver.org/atom/geography-collection" >
+     <atom:title>My Repository : Geography Collection</atom:title>
+     <accept>application/zip</accept>
+     <sword:collectionPolicy>Collection Policy</sword:collectionPolicy>
+     <dcterms:abstract>Collection description</dcterms:abstract>
+     <sword:acceptPackaging>http://purl.org/net/sword/package/METSDSpaceSIP</sword:acceptPackaging>
+     <sword:acceptPackaging>http://purl.org/net/sword/package/BagIt</sword:acceptPackaging>
+   </collection>
+
+ </workspace>
+</service>
+
+7.2 Package support during resource creation
+
+When creating Media Resources, the client SHOULD indicate the archive file MIME type using the
+HTTP "Content-Type" header, and SHOULD also give information about content packaging using the Packaging HTTP header [SWORD001]
+(See Section XXX for details).
+
+The value of the Packaging header SHOULD match one of values the server has advertised as acceptable for the collection
+in the manner described in Section 7.1.
+
+If a server receives a POST with an unacceptable Packaging header value, it MUST reject the POST by returning an HTTP
+response with a status code of 415 (Unsupported Media Type), or store the content without further processing (as
+per [SWORD001]).
+
+7.3 Package description in entry documents
+
+When describing packaged resources in Media Entry documents, servers MUST use the atom:content@type attribute to
+describe the MIME type of the resource, and MAY add sword:packaging elements to the entry.
+
+If the server does not supply any sword:packaging elements, the client MUST assume that the server only supports the
+default packaging format [SWORD005].
+
+7.4 Example
+
+  POST /geography-collection HTTP/1.1
+  Host: www.swordserver.org
+  Content-Type: application/zip
+  Authorization: Basic ZGFmZnk6c2VjZXJldA==
+  Content-Length: nnn
+  Content-MD5: [md5-digest]
+  Content-Disposition: filename=myDSpaceMETSItem.zip
+  Packaging: http://purl.org/net/sword/package/METSDSpaceSIP
+  User-Agent: MyJavaClient/0.1 Restlet/2.0
+
+
+  HTTP/1.1 201 Created
+  Date: Mon, 18 August 2008 14:27:11 GMT
+  Content-Length: nnn
+  Content-Type: application/atom+xml; charset="utf-8"
+  Location: http://www.swordserver.org/geography-collection/atom/my_deposit.atom
+
+  <?xml version="1.0"?>
+
+   <entry xmlns="http://www.w3.org/2005/Atom"
+	 xmlns:sword="http://purl.org/net/sword/">
+     <title>My Deposit</title>
+     <id>info:something:1</id>
+
+     <updated>2008-08-18T14:27:08Z</updated>
+     <author><name>jbloggs</name></author>
+     <summary type="text">A summary</summary
+     <generator uri="http://www.swordserver.org/engine" version="1.0"/>
+
+     <content type="application/zip"
+        src="http://www.swordserver.org/geography-collection/deposit1.zip"/>
+     <sword:packaging>http://purl.org/net/sword/package/METSDSpaceSIP</sword:packaging>
+     <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
+     <link rel="edit"
+        href="http://www.swordserver.org/geography-collection/atom/my_deposit.atom" />
+  </entry>
+
+7.5 Registering packaging types under the sword namespace
+
+Clients and servers SHOULD use URIs to communicate about package types, and MAY use URIs registered in the SWORD
+Package Registry [SWORD005].  To register a new URI in the SWORD Package Registry, follow the instructions laid out
+in [SWORD005].  Registration of package URIs in the SWORD Package Registry is strictly optional.
+
+8. Authentication and Mediated Deposit
+
+In [AtomPub] section 14, implementations MUST support HTTP Basic Authentication in conjunction with a TLS connection.
+The SWORD Profile relaxes this requirement: SWORD client and server implementations SHOULD be capable of being
+configured to use HTTP Basic Authentication [RFC2617] in conjunction with a TLS connection as specified by [RFC2818].
+
+In a number of situations the authenticated user using a SWORD client is not the owner of the deposited resource.
+SWORD provides a way of representing this usage by allowing clients to set a HTTP header field On-Behalf-Of which,
+if present SHOULD contain a user principle for the owner of the resource. It is also possible to use this SWORD mediation
+mechanism for situations such as non-interactive batch deposit in which the authenticated user is a software acting on
+behalf of a user. 
+
+The mediation technique described by SWORD is not intrinsically secure - it is assumed that trust between the owning
+user and the mediating user will be established by extending SWORD, or outside the scope of a resource creation, using
+a mechanism such as that described by [OAUTH].
+
+8.1 Mediation In Service Description
+
+SWORD servers SHOULD indicate whether they support mediated deposit by including a sword:mediation element containing a
+text element of either "true" or "false" in app:collection elements in Service Documents (see Section XXX).
+
+Clients SHOULD use the On-Behalf-Of header when retrieving Service Documents if they intend to use the feature for
+resource creation. Servers MAY use this header information along with authentication and any other information in
+constructing the Service Document representation returned. For example, the server might include only collections to
+which theOn-Behalf-Of can deposit.
+
+    <?xml version="1.0" encoding='utf-8'?>
+    <service xmlns="http://www.w3.org/2007/app"
+             xmlns:atom="http://www.w3.org/2005/Atom"
+         xmlns:sword="http://purl.org/net/sword/"
+         xmlns:dcterms="http://purl.org/dc/terms/">
+
+     <sword:version>2.0</sword:version>
+
+     <workspace>
+
+       <atom:title>Main Site</atom:title>
+       <collection
+           href="http://www.swordserver.org/atom/geography-collection" >
+         <atom:title>My Repository : Geography Collection</atom:title>
+
+         <accept>application/xml</accept>
+         <accept>application/zip</accept>
+         <accept>application/atom+xml</accept>
+
+         <sword:collectionPolicy>Collection Policy</sword:collectionPolicy>
+         <dcterms:abstract>Collection description</dcterms:abstract>
+
+         <sword:mediation>true</sword:mediation>
+         <sword:treatment>treatment description</sword:treatment>
+         <sword:packaging>http://purl.org/net/sword/package/BagIt </sword:packaging>
+       </collection>
+
+     </workspace>
+    </service>
+
+8.2 Recording Depositing Users
+
+In all cases (mediated or not) where a user has authenticated to make a deposit, servers SHOULD preserve the user's identity
+in the sword:depositedBy property of the SWORD Statement. In mediated deposit, the value given in the
+On-Behalf-Of header SHOULD be used for the value of the sword:depositedOnBehalfOf property of the SWORD Statement.
+
+
+9. Metadata Handling
+
+Because, when 
+Metadata Handling - Suppress-Metadata
+
+
+
+10. Continued Deposit
+
+Continued Deposit - In-Progress
+
+
+11. Deposit Receipt
+Deposit Receipt
+
+
+12. SWORD Statement
+
+12.1 OAI-ORE Serialisation
+
+12.2 Atom Serialisation
+
+13. Error Documents
+
+14. Auto-Discovery
+
+
+
