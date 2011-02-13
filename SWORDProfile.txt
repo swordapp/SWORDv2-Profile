@@ -158,12 +158,13 @@ The service document supplied in response must meet the following criteria in ad
 * MUST specify the sword:version element with a value of 2.0 [SWORD003]
 * MAY specify the sword:maxUploadSize [SWORD003]
 * MUST specify the app:accept element.  If the Collection can take any format content type, it should specify "*/*" as
-its value [AtomPub]
+its value [AtomPub].  It MUST also specify an app:accept element with an "alternate" attribute set to "multipart-related"
+as required by [AtomMultipart]
 * MAY include sword:collectionPolicy [SWORD003]
 * SHOULD include a sword:mediation element with a value of true or false [SWORD002]
 * MAY include a sword:treatment element [SWORD003]
 * MAY include zero or more sword:acceptPackaging elements [SWORD002].  The value SHOULD be a URI for a known packaging
-format (where such URIs exist).
+format (where such URIs exist) [SWORD005]
 * MAY include zero or more sword:service [SWORD003] elements containing references to nested service descriptions
 
 Example:
@@ -248,13 +249,13 @@ The requirements placed on the server here are:
 412 Precondition Failed.  See Section XXXX on Error Documents.
 * Server implementations MUST adopt the behaviour and requirements in [RFC2183] with respect to the Content-Disposition
 header
-* If there is no Packaging header, the server MUST assume that it is the default packaging format
-(http://purl.org/net/sword/package/default)
+* If there is no Packaging header, the server MUST assume that it is the default packaging format [SWORD005]
 * Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [AtomPub] with respect to the
 Slug header
 * If there is no In-Progress header, the server MUST assume that it is "false", and MUST behave as described in
 Section XXXX: Continued Deposit
-* If there is an On-Behalf-Of header, the server MUST behave as described in Section XXX: Mediated Deposit
+* The server MUST carry out authentication and mediated deposit as described in Section XXX: Authentication and Mediated
+Deposit
 * If there is no Suppress-Metadata header, the server MUST assume that it is "false", and MUST behave as described in
 Section XXXX: Metadata Handling
 * The server MUST create a new resource containing content equivalent to or derived from the deposited content, or
@@ -284,9 +285,10 @@ The client can crete a resource by POSTing a multipart mime message to the serve
 containing the metadata for the deposit, and the binary content as the second part, with the following requirements:
 
 * the client MUST comply with the rules laid out in [AtomMultipart]
-* the client MUST supply a Content-Disposition header on the first (atom) part with a "name" parameter set to "atom" [SWORD004]
-* the client MUST supply a Content-Disposition header on the second (binary) part with a "name" parameter set to "payload"
-and a filename parameter [SWORD004]
+* the client MUST supply a Content-Disposition header of type "attachment" on the first (atom) part with a "name"
+parameter set to "atom" [SWORD004]
+* the client MUST supply a Content-Disposition header of type "attachment" on the second (binary) part with a "name"
+parameter set to "payload" and a filename parameter [SWORD004]
 * the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content on the second
 (binary) part
 * the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
@@ -314,7 +316,7 @@ direct children of the atom:entry element.
     Media Post
     --===============1605871705==
     Content-Type: application/atom+xml; charset="utf-8"
-    Content-Disposition: x-atom; name="atom"
+    Content-Disposition: attachment; name="atom"
     MIME-Version: 1.0
 
     <?xml version="1.0"?>
@@ -348,7 +350,7 @@ direct children of the atom:entry element.
     </entry>
     --===============1605871705==
     Content-Type: application/zip
-    Content-Disposition: x-payload; name=payload; filename=[filename]
+    Content-Disposition: attachment; name=payload; filename=[filename]
     Packaging: http://purl.org/net/sword/package/default
     Content-MD5: [md5-digest]
     MIME-Version: 1.0
@@ -482,7 +484,7 @@ overwritten content.
 Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
 with the HTTP status code 200 (OK) if the server has completed the deposit of the resource or 202 (Accepted) if
 the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
-Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+Receipt MUST be available under the Edit-URI (Member Entry URI), which the server MAY supply in the Location header.
 
 For example:
 
@@ -523,7 +525,7 @@ deleted content.
 Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
 with the HTTP status code 200 (OK) if the server has completed the delete of the content or 202 (Accepted) if
 the server has accepted the delete request but still has deposit workflows to run before finally accepting it.  The Deposit
-Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+Receipt MUST be available under the Edit-URI (Member Entry URI), which the server MAY supply in the Location header.
 
 For example:
 
@@ -579,7 +581,7 @@ content to the existing container or respond with an error document.
 Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
 with the HTTP status code 200 (OK) if the server has completed the deposit of the resource or 202 (Accepted) if
 the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
-Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+Receipt MUST be available under the Edit-URI (Member Entry URI), which the server MAY supply in the Location header.
 
 For example:
 
@@ -620,11 +622,13 @@ Section XXXX: Continued Deposit
 Section XXXX: Metadata Handling
 * The server MUST be able to interpret the Dublin Core foreign markup in the atom:entry element, but MAY NOT understand
 any other embedded formats.
+* The server SHOULD only add metadata and not overwrite any existing metadata, but exact implementation will depend on
+the functions of the server.
 
 Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
 with the HTTP status code 200 (OK) if the server has completed the deposit of the resource or 202 (Accepted) if
 the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
-Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+Receipt MUST be available under the Edit-URI (Member Entry URI), which the server MAY supply in the Location header.
 
 For example:
 
@@ -639,9 +643,10 @@ The client can add new content and update the metadata attached to a resource by
 Multipart [AtomMultipart] document, with the following requirements:
 
 * the client MUST comply with the rules laid out in [AtomMultipart]
-* the client MUST supply a Content-Disposition header on the first (atom) part with a "name" parameter set to "atom" [SWORD004]
-* the client MUST supply a Content-Disposition header on the second (binary) part with a "name" parameter set to "payload"
-and a filename parameter [SWORD004]
+* the client MUST supply a Content-Disposition header of type "attachment" on the first (atom) part with a "name"
+parameter set to "atom" [SWORD004]
+* the client MUST supply a Content-Disposition header of type "attachment" on the second (binary) part with a "name"
+parameter set to "payload" and a filename parameter [SWORD004]
 * the client SHOULD supply a Content-MD5 header with the MD5 checksum hex encoded for the binary content on the second
 (binary) part
 * the client SHOULD supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used
@@ -668,7 +673,7 @@ direct children of the atom:entry element.
     Media Post
     --===============1605871705==
     Content-Type: application/atom+xml; charset="utf-8"
-    Content-Disposition: x-atom; name="atom"
+    Content-Disposition: attachment; name="atom"
     MIME-Version: 1.0
 
     <?xml version="1.0"?>
@@ -702,7 +707,7 @@ direct children of the atom:entry element.
     </entry>
     --===============1605871705==
     Content-Type: application/zip
-    Content-Disposition: x-payload; name=payload; filename=[filename]
+    Content-Disposition: attachment; name=payload; filename=[filename]
     Packaging: http://purl.org/net/sword/package/default
     Content-MD5: [md5-digest]
     MIME-Version: 1.0
@@ -731,7 +736,7 @@ any other embedded formats.
 Once the server has processed the request it SHOULD return a Deposit Receipt as described in Section XXX: Deposit Receipt
 with the HTTP status code 201 (Created) if the server has completed the deposit of the resource of 202 (Accepted) if
 the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit
-Receipt MUST be available under the Edit-URI (Member Entry URI), as supplied in the Location header.
+Receipt MUST be available under the Edit-URI (Member Entry URI), which the server MAY supply in the Location header.
 
 For example:
 
@@ -758,6 +763,9 @@ The requirements placed on the server here are:
 * The server MUST effectively remove the Container and all its content, although implementations may choose to provide
 versioning or some other mechanism for retaining the deleted content.
 * The Edit-URI MUST subsequently return a 404 Not Found
+
+Once the server has processed the request is MUST respond with an HTTP status code 204 (No Content) and leave the
+response body empty.
 
 
 6.8 Retrieving the Statement
