@@ -938,7 +938,7 @@ which theOn-Behalf-Of can deposit.
 
          <sword:mediation>true</sword:mediation>
          <sword:treatment>treatment description</sword:treatment>
-         <sword:packaging>http://purl.org/net/sword/package/BagIt </sword:packaging>
+         <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
        </collection>
 
      </workspace>
@@ -953,19 +953,126 @@ On-Behalf-Of header SHOULD be used for the value of the sword:depositedOnBehalfO
 
 9. Metadata Handling
 
-Because, when 
-Metadata Handling - Suppress-Metadata
+The Atom Publishing Protocol [AtomPub] has good default support for metadata and the packaging formats that are used to
+exchange data between scholarly systems often support rich metadata formats.  Therefore, handling metadata well is an
+important aspect to SWORD.
 
+Requests that come into a SWORD server MAY contain a Suppress-Metadata HTTP header [SWORD001] which MUST contain one of the values
+"true" or "false".  If no header is provided the server MUST assume a value of "false" for the purposes of any internal
+processing.  The following two sections describe how the server should behave under the different conditions.
 
+9.1 Handle Metadata Updates
+
+If Suppress-Metadata is "false", then the server SHOULD consider the metadata supplied in the deposit for inclusion in its 
+metadata record for the object being deposited.  There are several conditions in which the server may find itself needing
+to look at the incoming metadata as a source for its records:
+
+* The object is a new deposit: In this case the server MAY extract the metadata from the deposit and use it to populate a
+metadata record
+* The object is being updated with new metadata and optionally content: the server MAY extract the metadata from the deposit
+and use it to extend and overwrite as it sees fit any existing metadata record
+* The object is having its content deleted: the server MAY remove any metadata associated with the item, particularly if that
+metadata was originally obtained from some previously deposited package
+
+9.2 Suppress Metadata Updates
+
+If Suppress-Metadata is "true", then the server SHOULD consider that any metadata supplied in the deposit be ignored or
+at least not used in any way to overwrite existing metadata.  There are several conditions in which the server may find itself
+needing to suppress metadata hanlding:
+
+* The object is a new deposit: In this case the server SHOULD NOT extract the metadata from the deposit and use it to populate a
+metadata record, but this does not preclude the server generating metadata from other sources or processes.
+* The object is being updated with new content and optionally metadata: the server SHOULD NOT extract metadata from the deposit
+and use it to overwrite any existing metadata record.
+* The object is having its content deleted: the server SHOULD NOT remove any metadata associated with the item, although the
+content itself is being removed.
 
 10. Continued Deposit
 
-Continued Deposit - In-Progress
+As scholarly systems may wish to give the client more control over the publishing process, SWORD uses the In-Progress HTTP
+header [SWORD001] to allow the client to indicate that a deposit should not yet be injected into any post-submission or
+pre-publication workflow.  The In-Progress header MUST take the value "true" or "false", and if it is not present the 
+server MUST assume that it is "false" and behave as described below.
+
+10.1 Deposit Complete
+
+If In-Progress is "false", the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.
+
+10.2 Deposit Incomplete
+
+If In-Progress is "true", the server SHOULD expect the client to provide further updates to the item some undetermined
+time in the future.  Details of how this is implemented is dependent on the server's purpose.  For example, a repository
+system may hold items which are marked In-Progress in a workspace until such time as a client request indicates that the
+deposit is complete.
 
 
 11. Deposit Receipt
-Deposit Receipt
 
+On successfully accepting a POST (deposit), implementers SHOULD return an Atom Entry Document with the HTTP response.  The Atom 
+Entry Document is known in SWORD as the Deposit Receipt must conform to the following conditions:
+
+* It MAY contain information about the metadata associated with the deposit as it is stored on the server.  If it does, it SHOULD provide this metadata in extended Dublin Core, although it MAY also provide it in other formats.  Any Dublin Core markup should be in Dublin Core XML and embedded directly in the atom:entry element, not in a dcterms:metadata element.
+* It MUST contain a Media Entry URI (Edit-URI)
+* It MUST contain a Media Resource URI (EM-URI)
+* It MAY contain an arbitrary number of sword:packaging elements declaring the formats that the Media Resource can be retrieved in
+* It MUST contain a single sword:treatment element which contains either a human-readable statement describing treatment the deposited resource has received or a URI that dereferences to such a description.
+* It MAY contain a single sword:verboseDescription element which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.
+* It MAY contain the SWORD Statement (see Section 12) embedded as foreign markup using its OAI-ORE serialisation (See Section 12.1)
+* It MAY contain one or more atom:link element with the rel attribute of "http://purl.org/net/sword/terms/statement", and the href to a URI where the statement can be retrieved.  The atom:link element MUST contain a type attribute which indicates the mime-type of the statement (for example "application/atom+xml;type=feed" or "application/rdf+xml")
+* It MAY contain an atom:link@rel="alternate" element with an href attribute which points to the splash page of the item on the server
+
+11.1 Example
+
+ <entry xmlns="http://www.w3.org/2005/Atom"
+	 xmlns:sword="http://purl.org/net/sword/">
+   
+   <title>My Deposit</title>
+   <id>info:something:1</id>
+   <updated>2008-08-18T14:27:08Z</updated>
+   <summary type="text">A summary</summary>
+   <generator uri="http://www.myrepository.ac.uk/sword-plugin" version="1.0"/>
+
+   <!-- the item's metadata -->
+	<dcterms:abstract>The abstract</dcterms:abstract>
+	<dcterms:accessRights>Access Rights</dcterms:accessRights>
+	<dcterms:alternative>Alternative Title</dcterms:alternative>
+	<dcterms:available>Date Available</dcterms:available>
+	<dcterms:bibliographicCitation>Bibliographic Citation</dcterms:bibliographicCitation>
+	<dcterms:contributor>Contributor</dcterms:contributor>
+	<dcterms:description>Description</dcterms:description>
+	<dcterms:hasPart>Has Part</dcterms:hasPart>
+	<dcterms:hasVersion>Has Version</dcterms:hasVersion>
+	<dcterms:identifier>Identifier</dcterms:identifier>
+	<dcterms:isPartOf>Is Part Of</dcterms:isPartOf>
+	<dcterms:publisher>Publisher</dcterms:publisher>
+	<dcterms:references>References</dcterms:references>
+	<dcterms:rightsHolder>Rights Holder</dcterms:rightsHolder>
+	<dcterms:source>Source</dcterms:source>
+	<dcterms:title>Title</dcterms:title>
+	<dcterms:type>Type</dcterms:type>
+
+   <sword:verboseDescription>
+   	Does collection exist? True.
+   	User authenticates? True.
+   	User: jbloggs
+   	User has rights to collection? True. 
+   </sword:verboseDescription>
+   <sword:treatment>Unpacked. JPEG contents converted to JPEG2000.</sword:treatment>
+
+   <link rel="alternate" href="http://www.swordserver.ac.uk/col1/mydeposit.html"/>
+   <content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/>
+   <link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/>
+   <link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" />
+   <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
+
+   <link rel="http://purl.org/net/sword/terms/statement" type="application/atom+xml;type=feed" href="http://www.swordserver.ac.uk/col1/mydeposit.feed"/>
+   <link rel="http://purl.org/net/sword/terms/statement" type="application/rdf+xml" href="http://www.swordserver.ac.uk/col1/mydeposit.rdf"/>
+
+   <rdf:RDF>
+      <!-- OAI-ORE serialisation of Statement here -->
+   </rdf:RDF>
+   
+</entry>
 
 12. SWORD Statement
 

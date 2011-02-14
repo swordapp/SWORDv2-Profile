@@ -1,0 +1,330 @@
+.pl 10.0i
+.po 0
+.ll 7.2i
+.lt 7.2i
+.nr LL 7.2i
+.nr LT 7.2i
+.ds LF R Jones 
+.ds RF FORMFEED[Page %]
+.ds LH SWORD 003
+.ds RH January 2011
+.ds CH AtomPub Extensions for Scholarly Systems
+.ds CF Expires July 2011
+.hy 0
+.nh
+.ad l
+.in 0
+
+.nf
+.tl 'INTERNET-DRAFT''R Jones'
+.tl 'Intended Status: Experimental''(OneOverZero/SWORD)'
+.tl 'Expires: July 2011''January 2011'
+.tl 'SWORD 003'''
+.fi
+
+.\" Note. The ".tl" directive is used to generate the leading header 
+.\" in Internet drafts. The information specified after ".tl" provides
+.\" left, center and right components of a line separated by the ' character
+.\" in the following manner:
+.\" 
+.\"  .tl '<left component>'<center component>'<right component>'
+.\"
+.\" Only the left and right components are used in Internet-draft headers
+.\" This and other comments in this template can safely be deleted.
+
+.ce 2
+AtomPub Extensions for Scholarly Systems
+.fi
+.in 3
+
+
+.ti 0
+Status of this Memo
+
+This memo defines an Experimental Protocol for the Internet community.  This memo does not specify an Internet standard of any kind.  Discussion and suggestions for improvement are requested.  Distribution of this memo is unlimited.
+
+
+.ti 0
+Copyright and License Notice\" Boilerplate from December 2009
+
+Copyright (C) SWORD (2011).  All Rights Reserved.
+
+This document and translations of it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works.  However, this document itself may not be modified in any way, such as by removing the copyright notice or references to SWORD, except as needed for the purpose of developing Internet standards in which case the procedures for copyrights defined in the Internet Standards process must be followed, or as required to translate it into languages other than English.
+
+The limited permissions granted above are perpetual and will not be revoked by SWORD or its successors or assigns.
+
+This document and the information contained herein is provided on an "AS IS" basis and SWORD DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+.bp
+.ti 0
+Abstract
+
+The Atom Publishing Protocol [RFC5023] defines how to create a Media Resource by POSTing the media to a server.  It deals exclusively with the upload of a single file to the Media Entry, and does not make explicit allowances for the possibility that the end point may be a more complex publishing system.  This specification covers extensions to the protocol to support extra features for publishing in scholarly systems.
+
+
+.\" \# TD4  -- Set TOC depth by altering this value (TD5 = depth 5)
+.\" \# TOC  -- Beginning of auto updated Table of Contents
+.in 0
+Table of Contents
+
+.nf
+   1  Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+      1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
+      1.2 Namespaces . . . . . . . . . . . . . . . . . . . . . . . . . 3
+   2  Service Document Extensions  . . . . . . . . . . . . . . . . . . 3
+      2.1 sword:version  . . . . . . . . . . . . . . . . . . . . . . . 3
+      2.2 sword:maxUploadSize  . . . . . . . . . . . . . . . . . . . . 4
+      2.3 sword:collectionPolicy . . . . . . . . . . . . . . . . . . . 4
+      2.4 sword:treatment  . . . . . . . . . . . . . . . . . . . . . . 5
+      2.5 sword:service  . . . . . . . . . . . . . . . . . . . . . . . 6
+   3 Media Entry Extensions  . . . . . . . . . . . . . . . . . . . . . 6
+      3.1 .... . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+   9  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+      9.1  Normative References  . . . . . . . . . . . . . . . . . . . 7
+   Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 7
+.fi
+.in 3
+
+.\" \# ETC -- End of auto updated Table of Contents
+
+.bp
+.ti 0
+1  Introduction
+
+This specification defines a set of extensions to the Atom Publishing Protocol [RFC5023] to support the transfer and recovery of content in scholarly systems.  We will refer to a service which complies to this extension to AtomPub a SWORD server throughout the course of this document.
+
+.ti 0
+1.1  Terminology
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 [RFC2119].
+
+.ti 0
+1.2 Namespaces
+
+All extensions are defined within the namespace:
+
+    http://purl.org/net/sword/
+
+This document uses the prefix "sword" for the namespace name.
+
+The AtomPub namespace is:
+
+    http://www.w3.org/2007/app
+
+This document uses the prefix "app" for the namespace name.
+
+The Atom Syndication Format namespace is:
+
+    http://www.w3.org/2005/Atom
+
+This document uses the prefix "atom" for the namespace name.
+
+.ti 0
+2  Service Document Extensions
+
+This section documents extensions to the Atom Service Document.
+
+.ti 0
+2.1 sword:version
+
+The sword:version element MUST be used to specify the version number of the SWORD server.  This is to avoid confusion with servers which support older versions of the standard in which it was not compulsory to supply this information.  It is a direct child of the app:service element.
+
+For example:
+
+.nf
+    <service xmlns="http://www.w3.org/2007/app"
+             xmlns:sword="http://purl.org/net/sword/terms/"
+             xmlns:atom="http://www.w3.org/2005/Atom">
+      
+      <sword:version>2.0</sword:version>
+      
+      <workspace>
+
+        <atom:title>Main Site</atom:title>
+        <collection href="http://www.appserver.org/col1">
+          <atom:title>Collection 1</atom:title>
+          <accept>*/*</accept>
+        </collection>
+
+      </workspace>
+    </service>
+.fi
+
+.ti 0
+2.2 sword:maxUploadSize
+
+The sword:maxUploadSize element MAY be used to indicate to the user agent what the maximum content size deliverable in one request is.  It is a direct child of the app:service element.  If the server does not supply an element, the client MUST assume that the server will support arbitrarily large files, although due consideration should be taken of limitations in other supporting technology.
+
+For example:
+
+.nf
+    <service xmlns="http://www.w3.org/2007/app"
+             xmlns:sword="http://purl.org/net/sword/terms/"
+             xmlns:atom="http://www.w3.org/2005/Atom">
+      
+      <sword:version>2.0</sword:version>
+      <sword:maxUploadSize>1024</sword:maxUploadSize>
+
+      <workspace>
+
+        <atom:title>Main Site</atom:title>
+        <collection href="http://www.appserver.org/col1">
+          <atom:title>Collection 1</atom:title>
+          <accept>*/*</accept>
+        </collection>
+
+      </workspace>
+    </service>
+.fi
+
+.ti 0
+2.3 sword:collectionPolicy
+
+The sword:collectionPolicy MAY be included, as a child of the app:collection element.  It is to be used for a human-readable description of collection policy. Include either a text description or a URI.
+
+For example:
+
+.nf
+    <service xmlns="http://www.w3.org/2007/app"
+             xmlns:sword="http://purl.org/net/sword/terms/"
+             xmlns:atom="http://www.w3.org/2005/Atom">
+      
+      <sword:version>2.0</sword:version>
+      <sword:maxUploadSize>1024</sword:maxUploadSize>
+
+      <workspace>
+
+        <atom:title>Main Site</atom:title>
+        <collection href="http://www.appserver.org/col1">
+          <atom:title>Collection 1</atom:title>
+          <accept>*/*</accept>
+          <sword:collectionPolicy>http://www.swordserver.ac.uk/policy</sword:collectionPolicy>
+        </collection>
+
+      </workspace>
+    </service>
+.fi
+
+.ti 0
+2.4 sword:treatment
+
+The sword:treatment element MAY be included, as a child of the app:collection element. Used for a human-readable statement about what treatment the deposited resource will receive.
+
+For example:
+
+.nf
+    <service xmlns="http://www.w3.org/2007/app"
+             xmlns:sword="http://purl.org/net/sword/terms/"
+             xmlns:atom="http://www.w3.org/2005/Atom">
+      
+      <sword:version>2.0</sword:version>
+      <sword:maxUploadSize>1024</sword:maxUploadSize>
+
+      <workspace>
+
+        <atom:title>Main Site</atom:title>
+        <collection href="http://www.appserver.org/col1">
+          <atom:title>Collection 1</atom:title>
+          <accept>*/*</accept>
+          <sword:collectionPolicy>http://www.swordserver.ac.uk/policy</sword:collectionPolicy>
+          <sword:treatment>treatment description</sword:treatment>
+        </collection>
+
+      </workspace>
+    </service>
+.fi
+
+.ti 0
+2.5 sword:service
+
+0 or more sword:service elements MAY be included, as children of app:collection, to direct clients to nested service definitions. If present, the value MUST be a URI that dereferences to another Service Document.
+
+For example:
+
+.nf
+    <service xmlns="http://www.w3.org/2007/app"
+             xmlns:sword="http://purl.org/net/sword/terms/"
+             xmlns:atom="http://www.w3.org/2005/Atom">
+      
+      <sword:version>2.0</sword:version>
+      <sword:maxUploadSize>1024</sword:maxUploadSize>
+
+      <workspace>
+
+        <atom:title>Main Site</atom:title>
+        <collection href="http://www.appserver.org/col1">
+          <atom:title>Collection 1</atom:title>
+          <accept>*/*</accept>
+          <sword:collectionPolicy>http://www.swordserver.ac.uk/policy</sword:collectionPolicy>
+          <sword:treatment>treatment description</sword:treatment>
+          <sword:service>http://www.swordserver.ac.uk/service/subservice</sword:service>
+        </collection>
+
+      </workspace>
+    </service>
+.fi
+
+
+.ti 0
+3 Media Entry Extensions
+
+This section documents extensions to the Media Entry document which can be retrieved from the server from the Media Entry URI.
+
+.ti 0
+3.1 ....
+
+The sword:packaging element SHOULD be used by the server to indicate the packaging formats that it is capable of delivering the Media Resource to the user agent in.  If there is no sword:packaging element, the user agent MUST NOT assume any packaging format; instead it must rely on the atom:content@type as normal, per [RFC5023].  If a sword:packaging element is provided the user agent MAY request the atom:content@src URI with the Packaging HTTP header [SWORD001] containing the value of the sword:packaging element.
+
+The value of the sword:packaging element SHOULD contain a URI identifying the packaging format, but MAY contain any text string which can be understood by servers and user agents.
+
+For example:
+
+.nf
+  <entry xmlns="http://www.w3.org/2005/Atom"
+	 xmlns:sword="http://purl.org/net/sword/">
+
+     <title>My Deposit</title>
+     <id>info:something:1</id>
+
+     <updated>2008-08-18T14:27:08Z</updated>
+     <author><name>jbloggs</name></author>
+     <summary type="text">A summary</summary>
+     <generator uri="http://www.appserver.org/engine" version="1.0"/>
+
+     <content type="application/zip"
+        src="http://www.appserver.org/col1/deposit1.zip"/>	
+     <sword:packaging>
+        http://purl.org/net/sword/package/METSDSpaceSIP
+     </sword:packaging>
+     <link rel="edit"
+        href="http://www.appserver.org/col1/my_deposit.atom" />
+
+  </entry>
+.fi
+
+.ti 0
+9  References 
+
+.ti 0 
+9.1  Normative References
+
+.in 15
+.ti 3
+[RFC2119]   S. Bradner, "Key words for use in RFCs to Indicate Requirement Levels", BCP\014, RFC\02119, March 1997.
+
+.ti 3
+[RFC5023]  Gregorio, J. and B. de hOra, "The Atom Publishing Protocol", RFC 5023, October 2007.
+
+.ti 0
+Author's Addresses
+
+.sp
+.nf
+Richard Jones
+c/o UKOLN
+University of Bath
+
+EMail: richard@swordapp.org
+.sp
+.fi
+
