@@ -72,17 +72,17 @@ Table of Contents
       1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
       1.2 Notation . . . . . . . . . . . . . . . . . . . . . . . . . . 3
    2  Packaging  . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
-      2.1 During HTTP POST or HTTP PUT . . . . . . . . . . . . . . . . 3
-      2.2 During HTTP GET  . . . . . . . . . . . . . . . . . . . . . . 3
-   3 On-Behalf-Of  . . . . . . . . . . . . . . . . . . . . . . . . . . 4
-   4 In-Progress . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+   3 Accept-Packaging  . . . . . . . . . . . . . . . . . . . . . . . . 3
+   4 On-Behalf-Of  . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+   5 In-Progress . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
    6 Suppress-Metadata . . . . . . . . . . . . . . . . . . . . . . . . 4
    7  Security Considerations  . . . . . . . . . . . . . . . . . . . . 6
    8  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . . 6
       8.1 Packaging  . . . . . . . . . . . . . . . . . . . . . . . . . 6
-      8.2 On-Behalf-Of . . . . . . . . . . . . . . . . . . . . . . . . 6
+      8.2 Accept-Packaging . . . . . . . . . . . . . . . . . . . . . . 6
+      8.3 On-Behalf-Of . . . . . . . . . . . . . . . . . . . . . . . . 6
       8.3 In-Progress  . . . . . . . . . . . . . . . . . . . . . . . . 6
-      8.4 Suppress-Metadata  . . . . . . . . . . . . . . . . . . . . . 6
+      8.4 Suppress-Metadata  . . . . . . . . . . . . . . . . . . . . . 7
    9  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
       9.1  Normative References  . . . . . . . . . . . . . . . . . . . 7
    Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 7
@@ -112,7 +112,6 @@ The version of BNF used in this document is taken from [RFC2068], and many of th
 
 The Packaging header is constructed as follows:
 
-
 	Packaging = "Packaging" ":" packaging-expression
 
 	packaging-expression = token | quoted-string | absoluteURI
@@ -123,18 +122,27 @@ For example:
 
 	Packaging: http://purl.org/net/terms/package/default
 
-.ti 0
-2.1 During HTTP POST or HTTP PUT
-
 The Packaging request header SHOULD be used by the user agent during HTTP POST to give information to the server about the packaging format used to construct the content being POSTed or PUT.  Servers SHOULD use this information to unpack the supplied content into its component parts.  If the server does not understand the package format it MUST either store the content as delivered without unpacking or respond with 415 (Unsupported Media Type).
 
 .ti 0
-2.2 During HTTP GET
+3 Accept-Packaging
 
-The Packaging request header SHOULD be used by the user agent during HTTP GET to indicate to the server the package format that the content identified by the URI should be returned in.  Servers MUST either return the content in the specified format or return a 406 Not Acceptable.
+The Accept-Packaging header is constructed as follows:
+
+	Accept-Packaging = "Accept-Packaging" ":" packaging-expression
+
+	packaging-expression = token | quoted-string | absoluteURI
+
+Note that token, quoted-string and absoluteURI are defined in [RFC2068].
+
+For example:
+
+	Accept-Packaging: http://purl.org/net/terms/package/default
+
+The Accept-Packaging request header SHOULD be used by the user agent during HTTP GET to indicate to the server the package format that the content identified by the URI should be returned in.  Servers MUST either return the content in the specified format or return a 406 Not Acceptable.
 
 .ti 0
-3 On-Behalf-Of
+4 On-Behalf-Of
 
 The On-Behalf-Of request header MAY be used by the user agent to alert the server as to the identity of the true owner of the content during PUT, POST, DELETE and GET.  Traditional HTTP authentication is insufficient in this regard as it is possible that content will be delivered machine-to-machine and the authenticating user will be the user agent not the content owner.  Servers SHOULD use this information to determine whether and how they accept the content.
 
@@ -147,7 +155,7 @@ For example:
 	On-Behalf-Of: jbloggs
 
 .ti 0
-4 In-Progress
+5 In-Progress
 
 The In-Progress request header MAY be used by the user agent to inform the server that the current content payload is not yet complete in some unspecified way during PUT, POST or DELETE.  For example, there may by further content packages that the user agent plans to deliver to the server before the full content has been delivered, or the user agent may need to carry out other actions against the server before confirming that the server can proceed to fully process the content.  Exact interpretation of this header is left to the server, so it is necessary that server/client pairs will have to have a common understanding of its meaning which is beyond the scope of this document.
 
@@ -184,7 +192,18 @@ Status: provisional
 Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
 
 .ti 0
-8.2 On-Behalf-Of
+8.2 Accept-Packaging
+
+Header field name: Accept-Packaging
+
+Applicable protocol: HTTP
+
+Status: provisional
+
+Author/Change controller: Richard Jones c/o UKOLN, University of Bath; richard@swordapp.org
+
+.ti 0
+8.3 On-Behalf-Of
 
 Header field name: On-Behalf-Of
 

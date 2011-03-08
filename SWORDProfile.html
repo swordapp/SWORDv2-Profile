@@ -4,6 +4,15 @@
 	<title>SWORD 2.0 Profile</title>
 	<style type="text/css">
 
+body {
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
+.toc {
+    font-size: 10pt;
+}
+
 .code {
 	font-family: monospace;
 	background: #ffffaa;
@@ -13,6 +22,7 @@
 	padding-bottom: 5px;
 	margin-top: 5px;
 	margin-bottom: 5px;
+    font-size: 10pt;
 }
 
 .code_inline {
@@ -22,6 +32,7 @@
 	padding-left: 5px;
 	padding-top: 3px;
 	padding-bottom: 3px;
+    font-size: 10pt;
 }
 
 	</style>
@@ -30,14 +41,17 @@
 
 <h1>SWORD 2.0 Profile</h1>
 
-<a href="#introduction">1. Introduction</a><br/>
-<a href="#notationalconventions">2. Notational Conventions</a><br/>
-<a href="#terminology">3. Terminology</a><br/>
-<a href="#namespaces">4. Namespaces</a><br/>
+<table cellspacing="20" class="toc">
+<tr><td>
+
+<strong><a href="#introduction">1. Introduction</a><br/></strong>
+<strong><a href="#notationalconventions">2. Notational Conventions</a></strong><br/>
+<strong><a href="#terminology">3. Terminology</a></strong><br/>
+<strong><a href="#namespaces">4. Namespaces</a></strong><br/>
 &nbsp;&nbsp;<a href="#namespaces_sword">4.1. SWORD Namespaces</a><br/>
 &nbsp;&nbsp;<a href="#namespaces_referenced">4.2. Referenced Namespaces</a><br/>
-<a href="#uris">5. URIs</a><br/>
-<a href="#protocoloperations">6. Protocol Operations</a><br/>
+<strong><a href="#uris">5. URIs</a></strong><br/>
+<strong><a href="#protocoloperations">6. Protocol Operations</a></strong><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_retreivingservicedocument">6.1 Retrieving a Service Document</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_listingcollections">6.2 Listing Collections</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_creatingresource">6.3. Creating a Resource</a><br/>
@@ -52,10 +66,53 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.6.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_deleteconteiner">6.7. Delete the Container</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_statement">6.8. Retrieving the Statement</a><br/>
-<a href="#packaging">7. Packaging</a><br/>
-&nbsp;&nbsp;<a href="#packaging_servicedescription">7.1. Package support in Service description</a>
+<strong><a href="#packaging">7. Packaging</a></strong><br/>
+&nbsp;&nbsp;<a href="#packaging_servicedescription">7.1. Package support in Service description</a><br/>
+&nbsp;&nbsp;<a href="#packaging_creation">7.2. Package support during resource creation</a><br/>
+&nbsp;&nbsp;<a href="#packaging_entrydocuments">7.3. Package description in Entry documents</a><br/>
+&nbsp;&nbsp;<a href="#packaging_registration">7.4. Registering packaging types under the SWORD namespace</a><br/>
+<strong><a href="#authenticationmediateddeposit">8. Authentication and Mediated Deposit</a></strong><br/>
+&nbsp;&nbsp;<a href="#authenticationmediateddeposit_servicedescription">8.1. Mediation In Service Description</a><br/>
+&nbsp;&nbsp;<a href="#authenticatedmediateddeposit_recordingusers">8.2. Recording Depositing Users</a><br/>
+
+</td><td>
+
+<strong><a href="#metadatahandling">9. Metadata Handling</a></strong><br/>
+&nbsp;&nbsp;<a href="#metadatahandling_handle">9.1. Handle Metadata Updates</a><br/>
+&nbsp;&nbsp;<a href="#metadatahandling_suppress">9.2. Suppress Metadata Updates</a><br/>
+<strong><a href="#continueddeposit">10. Continued Deposit</a></strong><br/>
+&nbsp;&nbsp;<a href="#continueddeposit_complete">10.1. Deposit Complete</a><br/>
+&nbsp;&nbsp;<a href="#continueddeposit_incomplete">10.2. Deposit Incomplete</a><br/>
+<strong><a href="#depositreceipt">11. Deposit Receipt</a></strong><br/>
+<strong><a href="#statement">12. SWORD Statement</a></strong><br/>
+&nbsp;&nbsp;<a href="#statement_predicates">12.1. Predicates used by the Statement</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_originaldeposit">12.1.1. sword:originalDeposit</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_state">12.1.2. sword:state</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_packaging">12.1.3. sword:packaging</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_depositedon">12.1.4. sword:depositedOn</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_depositedby">12.1.5. sword:depositedBy</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_obo">12.1.6. sword:depositedOnBehalfOf</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#statement_predicates_description">12.1.7. sword:stateDescription</a><br/>
+&nbsp;&nbsp;<a href="#statement_oaiore">12.2. OAI-ORE Serialisation</a><br/>
+&nbsp;&nbsp;<a href="#statement_atom">12.3. Atom Serialisation</a><br/>
+<strong><a href="#errordocuments">13. Error Documents</a></strong><br/>
+&nbsp;&nbsp;<a href="#errordocuments_uris">13.1. Error URIs</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_content">13.1.1. sword:ErrorContent</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_checksum">13.1.2. sword:ErrorChecksumMismatch</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_badrequest">13.1.3. sword:ErrorBadRequest</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_unknown">13.1.4. sword:TargetOwnerUnknown</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_mediation">13.1.5. sword:MediationNotAllowed</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_notallowed">13.1.6. sword:MethodNotAllowed</a><br/>
+&nbsp;&nbsp;<a href="#errordocuments_example">13.2. Error Document Example</a><br/>
+<strong><a href="#autodiscovery">14. Auto-Discovery</a></strong><br/>
+<strong><a href="#references">15. References</a></strong><br/>
+<strong><a href="#credits">16. Credits</a>
+
+</td></tr></table>
 
 <h2><a name="introduction">1. Introduction</a></h2>
+
+<strong>FIXME: a longer, better introduction, including the graphic illustrating the outline of the SWORD 2.0 process</strong>
 
 <p>
 The Atom Publishing Protocol ([<a href="#atompub">AtomPub</a>]) provides a simple, extensible mechanism for the creation of Web Resources. The SWORD profile builds upon AtomPub and HTTP ([<a href="#rfc2616">RFC2616</a>]) and incorporates a number of extensions to enable the following kinds of behaviours:
@@ -74,16 +131,16 @@ The practical details of the extensions used in the SWORD Profile are provided i
 </p>
 
 <ol>
-<li>Packaged Content Delivery over HTTP [<a href="sword001">SWORD001</a>]</li>
-<li>AtomPub Extensions for Packaged Content [<a href="sword0002">SWORD002</a>]</li>
-<li>AtomPub Extensions for SWORD [<a href="sword0003">SWORD003</a>]</li>
-<li>Atom Multipart Extensions for Packaged Content [<a href="sword0004">SWORD004</a>]</li>
+<li>Packaged Content Delivery over HTTP [<a href="#sword001">SWORD001</a>]</li>
+<li>AtomPub Extensions for Packaged Content [<a href="#sword002">SWORD002</a>]</li>
+<li>AtomPub Extensions for SWORD [<a href="#sword003">SWORD003</a>]</li>
+<li>Atom Multipart Extensions for Packaged Content [<a href="#sword004">SWORD004</a>]</li>
 </ol>
 
 <h2><a name="notationalconventions">2. Notational Conventions</a></h2>
 
 <p>
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [<a href="rfc2119">RFC2119</a>].
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [<a href="#rfc2119">RFC2119</a>].
 </p>
 
 <h2><a name="terminology">3. Terminology</a></h2>
@@ -216,7 +273,7 @@ This document uses the prefix <strong>rdf</strong> for the namespace name; for e
 </p>
 
 <p>
-The OAI-ORE [<a href="oaiore">OAIORE</a>] namespace is:
+The OAI-ORE [<a href="#oaiore">OAIORE</a>] namespace is:
 </p>
 
 <div class="code">
@@ -262,7 +319,7 @@ While specific HTTP status codes are used below, a SWORD client should be prepar
 </ol>
 
 <p>
-The client may also supply the <span class="code_inline">On-Behalf-Of</span> header [<a href="sword001">SWORD001</a>] to provide the username of a target user on whose behalf a deposit will be made.  See <a href="#authenticationmediatedeposit">Section 8: Authentication and Mediated Deposit</a> for more details.
+The client may also supply the <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] to provide the username of a target user on whose behalf a deposit will be made.  See <a href="#authenticationmediatedeposit">Section 8: Authentication and Mediated Deposit</a> for more details.
 </p>
 
 <div class="code">
@@ -284,7 +341,7 @@ The service document supplied in response MUST meet the following criteria in ad
 
 <ul>
 <li>The SWORD server MUST specify the <span class="code_inline">sword:version</span> element with a value of <span class="code_inline">2.0</span> [<a href="#sword003">SWORD003</a>]</li>
-<li>The SWORD server MAY specify the <span class="code_inline">sword:maxUploadSize</span> (in kB) of content that can be uploaded in one request [<a href="sword003">SWORD003</a>]</li>
+<li>The SWORD server MAY specify the <span class="code_inline">sword:maxUploadSize</span> (in kB) of content that can be uploaded in one request [<a href="#sword003">SWORD003</a>]</li>
 <li>The SWORD server MUST specify the <span class="code_inline">app:accept</span> element.  If the Collection can take any format content type, it should specify <span class="code_inline">*/*</span> as its value [<a href="#atompub">AtomPub</a>].  It MUST also specify an <span class="code_inline">app:accept</span> element with an <span class="code_inline">alternate</span> attribute set to <span class="code_inline">multipart-related</span> as required by [<a href="#atommultipart">AtomMultipart</a>]</li>
 <li>The SWORD server MAY include <span class="code_inline">sword:collectionPolicy</span> [<a href="#sword003">SWORD003</a>]</li>
 <li>The SWORD server SHOULD include a <span class="code_inline">sword:mediation</span> element with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword002">SWORD002</a>]</li>
@@ -398,7 +455,7 @@ The requirements placed on the server here are:
 
 <ul>
 <li>If no <span class="code_inline">Content-Type</span> header is supplied the server MUST behave as per Section 7.2.1 in [<a href="#rfc2616">RFC2616</a>]</li>
-<li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="errordocuments">Section 13: Error Documents</a>.</li>
+<li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header.</li>
 <li>If there is no <span class="code_inline">Packaging</span> header, the server MUST assume that it is the default packaging format
 <li>Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [<a href="#atompub">AtomPub</a>] with respect to the <span class="code_inline">Slug</span> header.</li>
@@ -772,7 +829,7 @@ The requirements placed on the server here are:
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
 <li>If there is no <span class="code_inline">Packaging</span> header, the server MUST assume that it is the default packaging format</li>
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
-<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a>.</li>
 <li>The server SHOULD NOT overwrite any existing content, and MUST add content equivalent to or derived from the deposited content to the existing container or respond with an error document.</li>
 </ul>
@@ -868,7 +925,7 @@ The client can add new content and update the metadata attached to a resource by
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
-<li>The client MAY add Dublin Core [<a href="#dublinecore">DublinCore</a>] terms to the Entry as foreign markup; the terms MUST be embedded as direct children of the <span class="code_inline">atom:entry</span> element.</li>
+<li>The client MAY add Dublin Core [<a href="#dublincore">DublinCore</a>] terms to the Entry as foreign markup; the terms MUST be embedded as direct children of the <span class="code_inline">atom:entry</span> element.</li>
 <li>The client MAY add any other metadata format to the <span class="code_inline">atom:entry</span> element</li>
 </ul>
 
@@ -948,7 +1005,7 @@ The requirements placed on the server here are:
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header for the Media Part.</li>
 <li>If there is no <span class="code_inline">Packaging</span> header on the Media Part, the server MUST assume that it is the default packaging format</li>
 <li>Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [<a href="#atompub">AtomPub</a>] with respect to the <span class="code_inline">Slug</span> header</li>
-<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="continueddeposit">Section 10: Continued Deposit</a>.</li>
+<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a>.</li>
 <li>The server MUST be able to interpret the Dublin Core [<a href="#dublincore">DublinCore</a>] foreign markup in the <span class="code_inline">atom:entry</span> element, but MAY NOT understand any other embedded formats, but MUST NOT generate an error on encountering not-understood foreign markup.</li>
@@ -995,7 +1052,7 @@ The requirements placed on the server here are:
 </p>
 
 <ul>
-<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>The server MUST effectively remove the Container and all its content, although implementations may choose to provide versioning or some other mechanism for retaining the deleted content.</li>
 <li>The <strong>Edit-URI</strong> MUST return a 404 Not Found on any future requests.</li>
 </ul>
@@ -1030,573 +1087,892 @@ In order to support package deposit and retrieval, SWORD uses the mechanisms des
 
 <h3><a name="packaging_servicedescription">7.1. Package support in Service description</a></h3>
 
-The SWORD Service Document uses the sword:acceptPackaging element from [SWORD002] to indicate that a SWORD collection will accept deposits of a particular packaging format.
+<p>
+The SWORD Service Document uses the <span class="code_inline">sword:acceptPackaging</span> element from [<a href="#sword002">SWORD002</a>] to indicate that a SWORD collection will accept deposits of a particular packaging format.
+</p>
 
-Clients should refer to the sword:treatment description in the Service Document to find out the treatment for a particular packaging type.
+<p>
+Clients should refer to the <span class="code_inline">sword:treatment</span> description in the Service Document to find out the treatment for a particular packaging type.
+</p>
 
-Packages formats SHOULD be identified by a URI (as per [SWORD002]), and MAY be identified by a URI from the SWORD package registry (see [SWORD0005]).
+<p>
+Packages formats SHOULD be identified by a URI (as per [<a href="#sword002">SWORD002</a>]), but MAY be identified by an arbitrary string.
+</p>
 
-<?xml version="1.0" encoding='utf-8'?>
-<service xmlns="http://www.w3.org/2007/app"
-         xmlns:atom="http://www.w3.org/2005/Atom"
-	 xmlns:sword="http://purl.org/net/sword/"
-	 xmlns:dcterms="http://purl.org/dc/terms/">
+<div class="code">
+<pre>
+&lt;?xml version="1.0" encoding='utf-8'?&gt;
+&lt;service xmlns="http://www.w3.org/2007/app"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/"
+        xmlns:dcterms="http://purl.org/dc/terms/"&gt;
 
- <sword:version>2.0</sword:version>
+    &lt;sword:version&gt;2.0&lt;/sword:version&gt;
 
- <workspace>
-   <atom:title>Main Site</atom:title>
-   <collection
-       href="http://www.swordserver.org/atom/geography-collection" >
-     <atom:title>My Repository : Geography Collection</atom:title>
-     <accept>application/zip</accept>
-     <sword:collectionPolicy>Collection Policy</sword:collectionPolicy>
-     <dcterms:abstract>Collection description</dcterms:abstract>
-     <sword:acceptPackaging>http://purl.org/net/sword/package/METSDSpaceSIP</sword:acceptPackaging>
-     <sword:acceptPackaging>http://purl.org/net/sword/package/BagIt</sword:acceptPackaging>
-   </collection>
+    &lt;workspace&gt;
 
- </workspace>
-</service>
+    &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+        &lt;collection href="http://www.swordserver.org/atom/geography-collection" &gt;
+            &lt;atom:title&gt;My Repository : Geography Collection&lt;/atom:title&gt;
+            &lt;accept&gt;application/zip&lt;/accept&gt;
+            &lt;sword:collectionPolicy&gt;Collection Policy&lt;/sword:collectionPolicy&gt;
+            &lt;dcterms:abstract&gt;Collection description&lt;/dcterms:abstract&gt;
+<strong>            &lt;sword:acceptPackaging&gt;http://purl.org/net/sword/package/METSDSpaceSIP&lt;/sword:acceptPackaging&gt;</strong>
+<strong>            &lt;sword:acceptPackaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:acceptPackaging&gt;</strong>
+<strong>            &lt;sword:treatment&gt;Treatment description&lt;/sword:treatment&gt;</strong>
+        &lt;/collection&gt;
 
-7.2 Package support during resource creation
+    &lt;/workspace&gt;
+&lt;/service&gt;
+</pre>
+</div>
 
-When creating Media Resources, the client SHOULD indicate the archive file MIME type using the HTTP "Content-Type" header, and SHOULD also give information about content packaging using the Packaging HTTP header [SWORD001].
+<h3><a name="packaging_creation">7.2. Package support during resource creation</a></h3>
 
-The value of the Packaging header SHOULD match one of values the server has advertised as acceptable for the collection in the manner described in Section 7.1.
+<p>
+When creating Media Resources, the client SHOULD indicate the archive file MIME type using the HTTP <span class="code_inline">Content-Type</span> header, and SHOULD also give information about content packaging using the <span class="code_inline">Packaging HTTP</span> header [<a href="#sword001">SWORD001</a>].
+</p>
 
-If a server receives a POST with an unacceptable Packaging header value, it MUST reject the POST by returning an HTTP response with a status code of 415 (Unsupported Media Type), or store the content without further processing (as per [SWORD001]).
+<p>
+The value of the <span class="code_inline">Packaging</span> header SHOULD match one of values the server has advertised as acceptable for the collection in the manner described in <a href="#packaging_servicedescription">Section 7.1.</a>.
+</p>
 
-7.3 Package description in entry documents
+<p>
+If a server receives a POST with an unacceptable <span class="code_inline">Packaging</span> header value, it MUST reject the POST by returning an HTTP response with a status code of <span class="code_inline">415 (Unsupported Media Type)</span>, or store the content without further processing (as per [<a href="#sword001">SWORD001</a>]).
+</p>
 
-When describing packaged resources in Media Entry documents, servers MUST use the atom:content@type attribute to describe the MIME type of the resource, and MAY add sword:packaging elements to the entry.
+<div class="code">
+<pre>
+POST /col-uri/43 HTTP/1.1
+Host: example.org
+Content-Type: application/zip
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+Content-MD5: [md5-digest]
+Content-Disposition: filename=myDSpaceMETSItem.zip
+<strong>Packaging: http://purl.org/net/sword/package/METSDSpaceSIP</strong>
+User-Agent: MyJavaClient/0.1 Restlet/2.0
+</pre>
+</div>
 
-If the server does not supply any sword:packaging elements, the client MUST assume that the server only supports the default packaging format [SWORD005].
+<h3><a name="packaging_entrydocuments">7.3. Package description in Entry documents</a></h3>
 
-7.4 Example
+<p>
+When describing packaged resources in Media Entry documents, servers MUST use the <span class="code_inline">atom:content@type</span> attribute to describe the MIME type of the resource, and MAY add <span class="code_inline">sword:packaging</span> elements to the <span class="code_inline">atom:entry</span>.
+</p>
 
-  POST /geography-collection HTTP/1.1
-  Host: example.org
-  Content-Type: application/zip
-  Authorization: Basic ZGFmZnk6c2VjZXJldA==
-  Content-Length: nnn
-  Content-MD5: [md5-digest]
-  Content-Disposition: filename=myDSpaceMETSItem.zip
-  Packaging: http://purl.org/net/sword/package/METSDSpaceSIP
-  User-Agent: MyJavaClient/0.1 Restlet/2.0
+<p>
+If the server does not supply any <span class="code_inline">sword:packaging<span> elements, the client MUST assume that the server only supports the default packaging format.
+</p>
 
+<div class="code">
+<pre>
+&lt;?xml version="1.0"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/"&gt;
+    &lt;title&gt;My Deposit&lt;/title&gt;
+    &lt;id&gt;info:something:1&lt;/id&gt;
 
-  HTTP/1.1 201 Created
-  Date: Mon, 18 August 2008 14:27:11 GMT
-  Content-Length: nnn
-  Content-Type: application/atom+xml; charset="utf-8"
-  Location: http://www.swordserver.org/geography-collection/atom/my_deposit.atom
+    &lt;updated&gt;2008-08-18T14:27:08Z&lt;/updated&gt;
+    &lt;author&gt;&lt;name&gt;jbloggs&lt;/name&gt;&lt;/author&gt;
+    &lt;summary type="text"&gt;A summary&lt;/summary
+    &lt;generator uri="http://www.swordserver.org/engine" version="1.0"/&gt;
 
-  <?xml version="1.0"?>
+<strong>    &lt;content type="application/zip" src="http://swordapp.org/col-uri/43/my_deposit/package.zip"/&gt;</strong>
+<strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/METSDSpaceSIP&lt;/sword:packaging&gt;</strong>
+<strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;</strong>
+    &lt;link rel="edit" href="http://swordapp.org/col-uri/43/my_deposit.atom" /&gt;
+&lt;/entry&gt;
+</pre>
+</div>
 
-   <entry xmlns="http://www.w3.org/2005/Atom"
-	 xmlns:sword="http://purl.org/net/sword/">
-     <title>My Deposit</title>
-     <id>info:something:1</id>
+<h3><a name="packaging_registration">7.4. Registering packaging types under the SWORD namespace</a></h3>
 
-     <updated>2008-08-18T14:27:08Z</updated>
-     <author><name>jbloggs</name></author>
-     <summary type="text">A summary</summary
-     <generator uri="http://www.swordserver.org/engine" version="1.0"/>
+<p>
+Clients and servers SHOULD use URIs to communicate about package types, and MAY use URIs registered under the SWORD namespace (such as the default package).  To register a new URI in the SWORD namespace, please contact the SWORD team at the contact details at the bottom of this document.  Registration of package URIs under the SWORD namespace is strictly OPTIONAL.
+</p>
 
-     <content type="application/zip"
-        src="http://www.swordserver.org/geography-collection/deposit1.zip"/>
-     <sword:packaging>http://purl.org/net/sword/package/METSDSpaceSIP</sword:packaging>
-     <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
-     <link rel="edit"
-        href="http://www.swordserver.org/geography-collection/atom/my_deposit.atom" />
-  </entry>
+<h2><a name="authenticationmediateddeposit">8. Authentication and Mediated Deposit</a></h2>
 
-7.5 Registering packaging types under the sword namespace
+<p>
+In [<a href="#atompub">AtomPub</a>] Section 14, implementations MUST support HTTP Basic Authentication in conjunction with a TLS connection. The SWORD Profile relaxes this requirement: SWORD client and server implementations SHOULD be capable of being configured to use HTTP Basic Authentication [<a href="#rfc2617">RFC2617</a>] in conjunction with a TLS connection as specified by [<a href="#rfc2818">RFC2818</a>].
+</p>
 
-Clients and servers SHOULD use URIs to communicate about package types, and MAY use URIs registered in the SWORD Package Registry [SWORD005].  To register a new URI in the SWORD Package Registry, follow the instructions laid out in [SWORD005].  Registration of package URIs in the SWORD Package Registry is strictly optional.
+<p>
+In a number of situations the authenticated user using a SWORD client is not the owner of the deposited resource. SWORD provides a way of representing this usage by allowing clients to set a HTTP header field <span class="code_inline">On-Behalf-Of</span> which, if present SHOULD contain a user principle for the owner of the resource. It is also possible to use this SWORD mediation mechanism for situations such as non-interactive batch deposit in which the authenticated user is a software acting on behalf of a user. 
+</p>
 
-8. Authentication and Mediated Deposit
+<p>
+The mediation technique described by SWORD is not intrinsically secure - it is assumed that trust between the owning user and the mediating user will be established by extending SWORD, or outside the scope of a resource creation, using a mechanism such as that described by [<a href="#oauth">OAUTH</a>].
+</p>
 
-In [AtomPub] section 14, implementations MUST support HTTP Basic Authentication in conjunction with a TLS connection. The SWORD Profile relaxes this requirement: SWORD client and server implementations SHOULD be capable of being configured to use HTTP Basic Authentication [RFC2617] in conjunction with a TLS connection as specified by [RFC2818].
+<h3><a name="authenticationmediateddeposit_servicedescription">8.1. Mediation In Service Description</a></h3>
 
-In a number of situations the authenticated user using a SWORD client is not the owner of the deposited resource. SWORD provides a way of representing this usage by allowing clients to set a HTTP header field On-Behalf-Of which, if present SHOULD contain a user principle for the owner of the resource. It is also possible to use this SWORD mediation mechanism for situations such as non-interactive batch deposit in which the authenticated user is a software acting on behalf of a user. 
+<p>
+SWORD servers SHOULD indicate whether they support mediated deposit by including a <span class="code_inline">sword:mediation</span> element containing a text element of either <span class="code_inline">true</span> or <span class="code_inline">false</span> in <span class="code_inline">app:collection</span> elements in Service Documents.
+</p>
 
-The mediation technique described by SWORD is not intrinsically secure - it is assumed that trust between the owning user and the mediating user will be established by extending SWORD, or outside the scope of a resource creation, using a mechanism such as that described by [OAUTH].
+<p>
+Clients SHOULD use the  <span class="code_inline">On-Behalf-Of</span> header when retrieving Service Documents if they intend to use the feature for resource creation. Servers MAY use this header information along with authentication and any other information in constructing the Service Document representation returned. For example, the server might include only collections to which the <span class="code_inline">On-Behalf-Of</span> can deposit.
+</p>
 
-8.1 Mediation In Service Description
+<div class="code">
+<pre>
+&lt;?xml version="1.0" encoding='utf-8'?&gt;
+&lt;service xmlns="http://www.w3.org/2007/app"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/"
+        xmlns:dcterms="http://purl.org/dc/terms/"&gt;
 
-SWORD servers SHOULD indicate whether they support mediated deposit by including a sword:mediation element containing a text element of either "true" or "false" in app:collection elements in Service Documents (see Section XXX).
+    &lt;sword:version&gt;2.0&lt;/sword:version&gt;
 
-Clients SHOULD use the On-Behalf-Of header when retrieving Service Documents if they intend to use the feature for resource creation. Servers MAY use this header information along with authentication and any other information in constructing the Service Document representation returned. For example, the server might include only collections to which the On-Behalf-Of can deposit.
+    &lt;workspace&gt;
+        &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+        &lt;collection href="http://swordapp.org/col-uri/43" &gt;
+            &lt;atom:title&gt;Collection 43&lt;/atom:title&gt;
 
-    <?xml version="1.0" encoding='utf-8'?>
-    <service xmlns="http://www.w3.org/2007/app"
-             xmlns:atom="http://www.w3.org/2005/Atom"
-         xmlns:sword="http://purl.org/net/sword/"
-         xmlns:dcterms="http://purl.org/dc/terms/">
+            &lt;accept&gt;application/xml&lt;/accept&gt;
+            &lt;accept&gt;application/zip&lt;/accept&gt;
+            &lt;accept&gt;application/atom+xml&lt;/accept&gt;
 
-     <sword:version>2.0</sword:version>
+            &lt;sword:collectionPolicy&gt;Collection Policy&lt;/sword:collectionPolicy&gt;
+            &lt;dcterms:abstract&gt;Collection description&lt;/dcterms:abstract&gt;
 
-     <workspace>
+<strong>            &lt;sword:mediation&gt;true&lt;/sword:mediation&gt;</strong>
+            &lt;sword:treatment&gt;treatment description&lt;/sword:treatment&gt;
+            &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;
+        &lt;/collection&gt;
+    &lt;/workspace&gt;
+&lt;/service&gt;
+</pre>
+</div>
 
-       <atom:title>Main Site</atom:title>
-       <collection
-           href="http://www.swordserver.org/atom/geography-collection" >
-         <atom:title>My Repository : Geography Collection</atom:title>
+<h3><a name="authenticatedmediateddeposit_recordingusers">8.2. Recording Depositing Users</a></h3>
 
-         <accept>application/xml</accept>
-         <accept>application/zip</accept>
-         <accept>application/atom+xml</accept>
+<p>
+In all cases (mediated or not) where a user has authenticated to make a deposit, servers SHOULD preserve the user's identity in the <span class="code_inline">sword:depositedBy</span> property of the SWORD Statement. In mediated deposit, the value given in the <span class="code_inline">On-Behalf-Of</span> header SHOULD be used for the value of the <span class="code_inline">sword:depositedOnBehalfOf</span> property of the SWORD Statement.  See <a href="#statement">Section 12: SWORD Statement</a> for details of the serialisation.
+</p>
 
-         <sword:collectionPolicy>Collection Policy</sword:collectionPolicy>
-         <dcterms:abstract>Collection description</dcterms:abstract>
+<h2><a name="metadatahandling">9. Metadata Handling</a></h2>
 
-         <sword:mediation>true</sword:mediation>
-         <sword:treatment>treatment description</sword:treatment>
-         <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
-       </collection>
+<p>
+The Atom Publishing Protocol [<a href="#atompub">AtomPub</a>] has good default support for metadata and the packaging formats that are used to exchange data between scholarly systems often support rich metadata formats.  Therefore, handling metadata well is an important aspect to SWORD.
+</p>
 
-     </workspace>
-    </service>
+<p>
+Requests that come into a SWORD server MAY contain a <span class="code_inline">Suppress-Metadata</span> HTTP header [<a href="#sword001">SWORD001</a>] which MUST contain one of the values <span class="code_inline">true</span> or <span class="code_inline">false</span>.  If no header is provided the server MUST assume a value of <span class="code_inline">false</span> for the purposes of any internal processing.  The following two sections describe how the server should behave under the different conditions.
+</p>
 
-8.2 Recording Depositing Users
+<h3><a name="metadatahandling_handle">9.1. Handle Metadata Updates</a></h3>
 
-In all cases (mediated or not) where a user has authenticated to make a deposit, servers SHOULD preserve the user's identity in the sword:depositedBy property of the SWORD Statement. In mediated deposit, the value given in the On-Behalf-Of header SHOULD be used for the value of the sword:depositedOnBehalfOf property of the SWORD Statement.
+<p>
+If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inline">false</span>, then the server SHOULD consider the metadata supplied in the deposit for inclusion in its  metadata record for the object being deposited.  There are several conditions in which the server may find itself needing to look at the incoming metadata as a source for its records:
+</p>
 
+<ol>
+<li>The object is a new deposit: In this case the server MAY extract the metadata from the deposit and use it to populate a metadata record</li>
+<li>The object is being updated with new metadata and optionally content: the server MAY extract the metadata from the deposit and use it to extend and overwrite as it sees fit any existing metadata record</li>
+<li>The object is having its content deleted: the server MAY remove any metadata associated with the item, particularly if that metadata was originally obtained from some previously deposited package</li>
+</ol>
 
-9. Metadata Handling
+<h3><a name="metadatahandling_suppress">9.2. Suppress Metadata Updates</a></h3>
 
-The Atom Publishing Protocol [AtomPub] has good default support for metadata and the packaging formats that are used to exchange data between scholarly systems often support rich metadata formats.  Therefore, handling metadata well is an important aspect to SWORD.
+<p>
+If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inline">true</span>, then the server SHOULD consider that any metadata supplied in the deposit be ignored or at least not used in any way to overwrite existing metadata.  There are several conditions in which the server may find itself needing to suppress metadata hanlding:
+</p>
 
-Requests that come into a SWORD server MAY contain a Suppress-Metadata HTTP header [SWORD001] which MUST contain one of the values "true" or "false".  If no header is provided the server MUST assume a value of "false" for the purposes of any internal processing.  The following two sections describe how the server should behave under the different conditions.
+<ol>
+<li>The object is a new deposit: In this case the server SHOULD NOT extract the metadata from the deposit and use it to populate a metadata record, but this does not preclude the server generating metadata from other sources or processes.</li>
+<li>The object is being updated with new content and optionally metadata: the server SHOULD NOT extract metadata from the deposit and use it to overwrite any existing metadata record.</li>
+<li>The object is having its content deleted: the server SHOULD NOT remove any metadata associated with the item, although the content itself is being removed.</li>
+</ol>
 
-9.1 Handle Metadata Updates
+<h2><a name="continueddeposit">10. Continued Deposit</a></h2>
 
-If Suppress-Metadata is "false", then the server SHOULD consider the metadata supplied in the deposit for inclusion in its  metadata record for the object being deposited.  There are several conditions in which the server may find itself needing to look at the incoming metadata as a source for its records:
+<p>
+As scholarly systems may wish to give the client more control over the publishing process, SWORD uses the <span class="code_inline">In-Progress</span> HTTP header [<a href="#sword001">SWORD001</a>] to allow the client to indicate that a deposit should not yet be injected into any post-submission or pre-publication workflow.  The <span class="code_inline">In-Progress</span> header MUST take the value <span class="code_inline">true</span> or <span class="code_inline">false</span>, and if it is not present the  server MUST assume that it is <span class="code_inline">false</span> and behave as described below.
+</p>
 
-* The object is a new deposit: In this case the server MAY extract the metadata from the deposit and use it to populate a metadata record
-* The object is being updated with new metadata and optionally content: the server MAY extract the metadata from the deposit and use it to extend and overwrite as it sees fit any existing metadata record
-* The object is having its content deleted: the server MAY remove any metadata associated with the item, particularly if that metadata was originally obtained from some previously deposited package
+<h3><a name="continueddeposit_complete">10.1. Deposit Complete</a></h3>
 
-9.2 Suppress Metadata Updates
+<p>
+If <span class="code_inline">In-Progress</span> is <span class="code_inline">false</span>, the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.
+</p>
 
-If Suppress-Metadata is "true", then the server SHOULD consider that any metadata supplied in the deposit be ignored or at least not used in any way to overwrite existing metadata.  There are several conditions in which the server may find itself needing to suppress metadata hanlding:
+<h3><a name="continueddeposit_incomplete">10.2. Deposit Incomplete</a></h3>
 
-* The object is a new deposit: In this case the server SHOULD NOT extract the metadata from the deposit and use it to populate a metadata record, but this does not preclude the server generating metadata from other sources or processes.
-* The object is being updated with new content and optionally metadata: the server SHOULD NOT extract metadata from the deposit and use it to overwrite any existing metadata record.
-* The object is having its content deleted: the server SHOULD NOT remove any metadata associated with the item, although the content itself is being removed.
+<p>
+If <span class="code_inline">In-Progress</span> is <span class="code_inline">true</span>, the server SHOULD expect the client to provide further updates to the item some undetermined time in the future.  Details of how this is implemented is dependent on the server's purpose.  For example, a repository system may hold items which are marked <span class="code_inline">In-Progress</span> in a workspace until such time as a client request indicates that the deposit is complete.
+</p>
 
-10. Continued Deposit
+<h2><a name="depositreceipt">11. Deposit Receipt</a></h2>
 
-As scholarly systems may wish to give the client more control over the publishing process, SWORD uses the In-Progress HTTP header [SWORD001] to allow the client to indicate that a deposit should not yet be injected into any post-submission or pre-publication workflow.  The In-Progress header MUST take the value "true" or "false", and if it is not present the  server MUST assume that it is "false" and behave as described below.
-
-10.1 Deposit Complete
-
-If In-Progress is "false", the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.
-
-10.2 Deposit Incomplete
-
-If In-Progress is "true", the server SHOULD expect the client to provide further updates to the item some undetermined time in the future.  Details of how this is implemented is dependent on the server's purpose.  For example, a repository system may hold items which are marked In-Progress in a workspace until such time as a client request indicates that the deposit is complete.
-
-
-11. Deposit Receipt
-
+<p>
 On successfully accepting a POST (deposit), implementers SHOULD return an Atom Entry Document with the HTTP response.  The Atom Entry Document is known in SWORD as the Deposit Receipt must conform to the following conditions:
+</p>
 
-* It MAY contain information about the metadata associated with the deposit as it is stored on the server.  If it does, it SHOULD provide this metadata in extended Dublin Core, although it MAY also provide it in other formats.  Any Dublin Core markup should be in Dublin Core XML and embedded directly in the atom:entry element, not in a dcterms:metadata element.
-* It MUST contain a Media Entry URI (Edit-URI)
-* It MUST contain a Media Resource URI (EM-URI)
-* It MAY contain an arbitrary number of sword:packaging elements declaring the formats that the Media Resource can be retrieved in
-* It MUST contain a single sword:treatment element which contains either a human-readable statement describing treatment the deposited resource has received or a URI that dereferences to such a description.
-* It MAY contain a single sword:verboseDescription element which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.
-* It MAY contain the SWORD Statement (see Section 12) embedded as foreign markup using its OAI-ORE serialisation (See Section 12.1)
-* It MAY contain one or more atom:link element with the rel attribute of "http://purl.org/net/sword/terms/statement", and the href to a URI where the statement can be retrieved.  The atom:link element MUST contain a type attribute which indicates the mime-type of the statement (for example "application/atom+xml;type=feed" or "application/rdf+xml")
-* It MUST contain either at least one atom:link@rel="http://purl.org/net/sword/terms/statement" or an embedded Statement document.
-* It MAY contain an atom:link@rel="alternate" element with an href attribute which points to the splash page of the item on the server
+<ul>
+<li>It MAY contain information about the metadata associated with the deposit as it is stored on the server.  If it does, it SHOULD provide this metadata in extended Dublin Core [<a href="#dublincore">DublinCore</a>], although it MAY also provide it in other formats.  Any Dublin Core markup should be in Dublin Core XML and embedded directly in the <span class="code_inline">atom:entry</span> element, not in a <span class="code_inline">dcterms:metadata</span> element.</li>
+<li>It MUST contain a Media Entry URI (<strong>Edit-URI</strong>)</li>
+<li>It MUST contain a Media Resource URI (<strong>EM-URI</strong>)</li>
+<li>It MAY contain an arbitrary number of <span class="code_inline">sword:packaging</span> elements declaring the formats that the Media Resource can be retrieved in</li>
+<li>It MUST contain a single <span class="code_inline">sword:treatment</span> element which contains either a human-readable statement describing treatment the deposited resource has received or a URI that dereferences to such a description.</li>
+<li>It MAY contain a single <span class="code_inline">sword:verboseDescription</span> element which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.</li>
+<li>It MAY contain the SWORD Statement (see <a href="#statement">Section 12: SWORD Statement</a>) embedded as foreign markup using its OAI-ORE [<a href="#oaiore">OAIORE</a>] serialisation (See <a href="#statement_oaiore">Section 12.1: OAI-ORE Serialisation</a>)</li>
+<li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a URI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
+<li>It MUST contain either at least one <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> or an embedded Statement document.</li>
+<li>It MAY contain an <span class="code_inline">atom:link@rel="alternate"</span> element with an <span class="code_inline">href</span> attribute which points to the splash page of the item on the server</li>
+</ul>
 
-11.1 Example
+<p>
+For example:
+</p>
 
- <entry xmlns="http://www.w3.org/2005/Atom"
-	 xmlns:sword="http://purl.org/net/sword/">
-   
-   <title>My Deposit</title>
-   <id>info:something:1</id>
-   <updated>2008-08-18T14:27:08Z</updated>
-   <summary type="text">A summary</summary>
-   <generator uri="http://www.myrepository.ac.uk/sword-plugin" version="1.0"/>
+<div class="code">
+<pre>
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/"&gt;
 
-   <!-- the item's metadata -->
-	<dcterms:abstract>The abstract</dcterms:abstract>
-	<dcterms:accessRights>Access Rights</dcterms:accessRights>
-	<dcterms:alternative>Alternative Title</dcterms:alternative>
-	<dcterms:available>Date Available</dcterms:available>
-	<dcterms:bibliographicCitation>Bibliographic Citation</dcterms:bibliographicCitation>
-	<dcterms:contributor>Contributor</dcterms:contributor>
-	<dcterms:description>Description</dcterms:description>
-	<dcterms:hasPart>Has Part</dcterms:hasPart>
-	<dcterms:hasVersion>Has Version</dcterms:hasVersion>
-	<dcterms:identifier>Identifier</dcterms:identifier>
-	<dcterms:isPartOf>Is Part Of</dcterms:isPartOf>
-	<dcterms:publisher>Publisher</dcterms:publisher>
-	<dcterms:references>References</dcterms:references>
-	<dcterms:rightsHolder>Rights Holder</dcterms:rightsHolder>
-	<dcterms:source>Source</dcterms:source>
-	<dcterms:title>Title</dcterms:title>
-	<dcterms:type>Type</dcterms:type>
+    &lt;title&gt;My Deposit&lt;/title&gt;
+    &lt;id&gt;info:something:1&lt;/id&gt;
+    &lt;updated&gt;2008-08-18T14:27:08Z&lt;/updated&gt;
+    &lt;summary type="text"&gt;A summary&lt;/summary&gt;
+    &lt;generator uri="http://www.myrepository.ac.uk/sword-plugin" version="1.0"/&gt;
+<strong>
+    &lt;!-- the item's metadata --&gt;
+    &lt;dcterms:abstract&gt;The abstract&lt;/dcterms:abstract&gt;
+    &lt;dcterms:accessRights&gt;Access Rights&lt;/dcterms:accessRights&gt;
+    &lt;dcterms:alternative&gt;Alternative Title&lt;/dcterms:alternative&gt;
+    &lt;dcterms:available&gt;Date Available&lt;/dcterms:available&gt;
+    &lt;dcterms:bibliographicCitation&gt;Bibliographic Citation&lt;/dcterms:bibliographicCitation&gt;
+    &lt;dcterms:contributor&gt;Contributor&lt;/dcterms:contributor&gt;
+    &lt;dcterms:description&gt;Description&lt;/dcterms:description&gt;
+    &lt;dcterms:hasPart&gt;Has Part&lt;/dcterms:hasPart&gt;
+    &lt;dcterms:hasVersion&gt;Has Version&lt;/dcterms:hasVersion&gt;
+    &lt;dcterms:identifier&gt;Identifier&lt;/dcterms:identifier&gt;
+    &lt;dcterms:isPartOf&gt;Is Part Of&lt;/dcterms:isPartOf&gt;
+    &lt;dcterms:publisher&gt;Publisher&lt;/dcterms:publisher&gt;
+    &lt;dcterms:references&gt;References&lt;/dcterms:references&gt;
+    &lt;dcterms:rightsHolder&gt;Rights Holder&lt;/dcterms:rightsHolder&gt;
+    &lt;dcterms:source&gt;Source&lt;/dcterms:source&gt;
+    &lt;dcterms:title&gt;Title&lt;/dcterms:title&gt;
+    &lt;dcterms:type&gt;Type&lt;/dcterms:type&gt;
+</strong>
+<strong>    &lt;sword:verboseDescription&gt;Verbose description&lt;/sword:verboseDescription&gt;</strong>
+<strong>    &lt;sword:treatment&gt;Unpacked. JPEG contents converted to JPEG2000.&lt;/sword:treatment&gt;</strong>
 
-   <sword:verboseDescription>
-   	Does collection exist? True.
-   	User authenticates? True.
-   	User: jbloggs
-   	User has rights to collection? True. 
-   </sword:verboseDescription>
-   <sword:treatment>Unpacked. JPEG contents converted to JPEG2000.</sword:treatment>
+<strong>    &lt;link rel="alternate" href="http://www.swordserver.ac.uk/col1/mydeposit.html"/&gt;</strong>
+    &lt;content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;
+<strong>    &lt;link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;</strong>
+<strong>    &lt;link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" /&gt;</strong>
+<strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;</strong>
+<strong>
+    &lt;link rel="http://purl.org/net/sword/terms/statement" 
+            type="application/atom+xml;type=feed" 
+            href="http://www.swordserver.ac.uk/col1/mydeposit.feed"/&gt;
+    &lt;link rel="http://purl.org/net/sword/terms/statement" 
+            type="application/rdf+xml" 
+            href="http://www.swordserver.ac.uk/col1/mydeposit.rdf"/&gt;
 
-   <link rel="alternate" href="http://www.swordserver.ac.uk/col1/mydeposit.html"/>
-   <content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/>
-   <link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/>
-   <link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" />
-   <sword:packaging>http://purl.org/net/sword/package/BagIt</sword:packaging>
+    &lt;rdf:RDF&gt;
+      &lt;!-- OAI-ORE serialisation of Statement here --&gt;
+    &lt;/rdf:RDF&gt;
+</strong>
+&lt;/entry&gt;
+</pre>
+</div>
 
-   <link rel="http://purl.org/net/sword/terms/statement" type="application/atom+xml;type=feed" href="http://www.swordserver.ac.uk/col1/mydeposit.feed"/>
-   <link rel="http://purl.org/net/sword/terms/statement" type="application/rdf+xml" href="http://www.swordserver.ac.uk/col1/mydeposit.rdf"/>
+<h2><a name="statement">12. SWORD Statement</a></h2>
 
-   <rdf:RDF>
-      <!-- OAI-ORE serialisation of Statement here -->
-   </rdf:RDF>
-   
-</entry>
-
-12. SWORD Statement
-
+<p>
 The Statement is a document or region of the Deposit Receipt which describes two features of the object as it appears on the server:
+</p>
 
-* Structure.  This may include originally uploaded content files, unpackaged content, derived content and any other features of the object
-* State.  This allows the server to indicate to the client some information with regard to the state of the item on the server, including but not limited, to its ingest workflow position.
+<ol>
+<li><strong>Structure</strong>.  This may include originally uploaded content files, unpackaged content, derived content and any other features of the object</li>
+<li><strong>State</strong>.  This allows the server to indicate to the client some information with regard to the state of the item on the server, including but not limited, to its ingest workflow position.</li>
+</ol>
 
-12.1 Predicates used by the Statement
+<h3><a name="statement_predicates">12.1. Predicates used by the Statement</a></h3>
 
+<p>
 All predicates used by the statement in any of its serialisations are defined here, and all exist under the sword namespace:
+</p>
 
-	http://purl.org/net/sword/terms/
+<div class="code">
+http://purl.org/net/sword/terms/
+</div>
 
-12.1.1 sword:originalDeposit
+<h4><a name="statement_predicates_originaldeposit">12.1.1. sword:originalDeposit</a></h4>
 
-URI: http://purl.org/net/sword/terms/originalDeposit
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/originalDeposit
+</p>
 
+<p>
 This is used to indicate the URI of a resource on the server which was an original deposit package.  This allows the client to easily identify any packages which form the basis of the original deposit among other parts of the object which may be derived from the original.
+</p>
 
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:originalDeposit href="http://location/of/deposit"/>
+<div class="code">
+&lt;sword:originalDeposit href="http://location/of/deposit"/&gt;
+</div>
 
+<p>
 In RDF/XML this can be serialised as as:
+</p>
 
-	<sword:originalDepsit rdf:resource="http://location/of/deposit"/>
+<div class="code">
+&lt;sword:originalDepsit rdf:resource="http://location/of/deposit"/&gt;
+</div>
 
-12.1.2 sword:state
+<h4><a name="statement_predicates_state">12.1.2. sword:state</a></h4>
 
-URI: http://purl.org/net/sword/terms/state
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/state
+</p>
 
-This is used to supply the URI representing the state of an item on the server.  This can be any URI, and is not constrained to any ontology.  This can be used in combination with sword:stateDescription to provide more details to the client.
+<p>
+This is used to supply the URI representing the state of an item on the server.  This can be any URI, and is not constrained to any ontology.  This can be used in combination with <span class="code_inline">sword:stateDescription</span> to provide more details to the client.
+</p>
 
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:state href="http://sword/state"/>
+<div class="code">
+&lt;sword:state href="http://sword/state"/&gt;
+</div>
 
+<p>
 In RDF/XML this can be serialised as:
+</p>
 
-	<sword:state rdf:resource="http://sword/state" />
+<div class="code">
+&lt;sword:state rdf:resource="http://sword/state" /&gt;
+</div>
 
+<h4><a name="statement_predicates_packaging">12.1.3. sword:packaging</a></h4>
 
-12.1.3 sword:packaging
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/packaging
+</p>
 
-URI: http://purl.org/net/sword/terms/packaging
+<p>
+This is used to identify the packaging format of a resource.  Particularly, if used in conjunction with <span class="code_inline">sword:originalDeposit</span>, this can be used to indicate the package format that an original deposit package used.
+</p>
 
-This is used to identify the packaging format of a resource.  Particularly, if used in conjunction with sword:originalDeposit, this can be used to indicate the package format that an original deposit package used.
-
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:originalDeposit href="http://location/of/deposit">
-		<sword:packaging>http://sword/packaging/</sword:packaging>
-	</sword:originalDeposit>
+<div class="code">
+<pre>
+&lt;sword:originalDeposit href="http://location/of/deposit"&gt;
+    &lt;sword:packaging&gt;http://sword/packaging/&lt;/sword:packaging&gt;
+&lt;/sword:originalDeposit&gt;
+</pre>
+</div>
 
+<p>
 In RDF/XML this can be serialised as:
+</p>
 
-	<sword:originalDepsit rdf:resource="http://location/of/deposit"/>
-	<rdf:Description rdf:about="http://location/of/deposit">
-		<sword:packaging rdf:resource="http://sword/packaging/"/>
-	</rdf:Description>
+<div class="code">
+<pre>
+&lt;sword:originalDepsit rdf:resource="http://location/of/deposit"/&gt;
+&lt;rdf:Description rdf:about="http://location/of/deposit"&gt;
+    &lt;sword:packaging rdf:resource="http://sword/packaging/"/&gt;
+&lt;/rdf:Description&gt;
+</pre>
+</div>
 
+<h4><a name="statement_predicates_depositedon">12.1.4. sword:depositedOn</a></h4>
 
-12.1.4 sword:depositedOn
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/depositedOn
+</p>
 
-URI: http://purl.org/net/sword/terms/depositedOn
-
+<p>
 This is used to provide a user who was responsible for depositing an original sword package.  The use credentials may just be the username of the depositor, but the server is free to add further details where necessary.
+</p>
 
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:originalDeposit href="http://location/of/deposit">
-		<sword:depositedOn>2011-01-01T00:00:00Z</sword:depositedOn>
-	</sword:originalDeposit>
+<div class="code">
+<pre>
+&lt;sword:originalDeposit href="http://location/of/deposit"&gt;
+    &lt;sword:depositedOn&gt;2011-01-01T00:00:00Z&lt;/sword:depositedOn&gt;
+&lt;/sword:originalDeposit&gt;
+</pre>
+</div>
 
+<p>
 In RDF/XML this may be serialised as
+</p>
 
-	<sword:originalDepsit rdf:resource="http://location/of/deposit"/>
-	<rdf:Description rdf:about="http://location/of/deposit">
-		<sword:depositedOn rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-01-01T00:00:00Z</sword:depositedOn>
-	</rdf:Description>
+<div class="code">
+<pre>
+&lt;sword:originalDepsit rdf:resource="http://location/of/deposit"/&gt;
+&lt;rdf:Description rdf:about="http://location/of/deposit"&gt;
+    &lt;sword:depositedOn rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"&gt;2011-01-01T00:00:00Z&lt;/sword:depositedOn&gt;
+&lt;/rdf:Description&gt;
+</pre>
+</div>
 
-12.1.5 sword:depositedBy
+<h4><a name="statement_predicates_depositedby">12.1.5. sword:depositedBy</a></h4>
 
-URI: http://purl.org/net/sword/terms/depositedBy
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/depositedBy
+</p>
 
+<p>
 This is used to provide a user who was responsible for depositing an original sword package.  The use credentials may just be the username of the depositor, but the server is free to add further details where necessary.
+</p>
 
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:originalDeposit href="http://location/of/deposit">
-		<sword:depositedBy>jbloggs</sword:depositedBy>
-	</sword:originalDeposit>
+<div class="code">
+<pre>
+&lt;sword:originalDeposit href="http://location/of/deposit"&gt;
+    &lt;sword:depositedBy&gt;jbloggs&lt;/sword:depositedBy&gt;
+&lt;/sword:originalDeposit&gt;
+</pre>
+</div>
 
+<p>
 In RDF/XML this may be serialised as
+</p>
 
-	<sword:originalDepsit rdf:resource="http://location/of/deposit"/>
-	<rdf:Description rdf:about="http://location/of/deposit">
-		<sword:depositedBy>jbloggs</sword:depositedBy>
-	</rdf:Description>
+<div class="code">
+<pre>
+&lt;sword:originalDepsit rdf:resource="http://location/of/deposit"/&gt;
+&lt;rdf:Description rdf:about="http://location/of/deposit"&gt;
+	&lt;sword:depositedBy&gt;jbloggs&lt;/sword:depositedBy&gt;
+&lt;/rdf:Description&gt;
+</pre>
+</div>
 
-12.1.6 sword:depositedOnBehalfOf
+<h4><a name="statement_predicates_obo">12.1.6. sword:depositedOnBehalfOf</a></h4>
 
-URI: http://purl.org/net/sword/terms/depositedOnBehalfOf
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/depositedOnBehalfOf
+</p>
 
+<p>
 This is used to provide the user for whom the original sword package was deposited on behalf of.  The use credentials may just be the username of the depositor, but the server is free to add further details where necessary.
+</p>
 
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:originalDeposit href="http://location/of/deposit">
-		<sword:depositedOnBehalfOf>jbloggs</sword:depositedOnBehalfOf>
-	</sword:originalDeposit>
+<div class="code">
+<pre>
+&lt;sword:originalDeposit href="http://location/of/deposit"&gt;
+    &lt;sword:depositedOnBehalfOf&gt;jbloggs&lt;/sword:depositedOnBehalfOf&gt;
+&lt;/sword:originalDeposit&gt;
+</pre>
+</div>
 
+<p>
 In RDF/XML this may be serialised as
+</p>
 
-	<sword:originalDepsit rdf:resource="http://location/of/deposit"/>
-	<rdf:Description rdf:about="http://location/of/deposit">
-		<sword:depositedOnBehalfOf>jbloggs</sword:depositedOnBehalfOf>
-	</rdf:Description>
+<div class="code">
+<pre>
+&lt;sword:originalDepsit rdf:resource="http://location/of/deposit"/&gt;
+&lt;rdf:Description rdf:about="http://location/of/deposit"&gt;
+    &lt;sword:depositedOnBehalfOf&gt;jbloggs&lt;/sword:depositedOnBehalfOf&gt;
+&lt;/rdf:Description&gt;
+</pre>
+</div>
 
+<h3><a name="statement_predicates_description">12.1.7. sword:stateDescription</a></h3>
 
-12.1.7 sword:stateDescription
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/terms/stateDescription
+</p>
 
-URI: http://purl.org/net/sword/terms/stateDescription
+<p>
+This is used to provide a human readable description of the state that the item is in on the server.  This is used in conjunction with the <span class="code_inline">sword:state</span> to provide additional details for the client to use in its interface with the end user.
+</p>
 
-This is used to provide a human readable description of the state that the item is in on the server.  This is used in conjunction with the sword:state to provide additional details for the client to use in its interface with the end user.
-
+<p>
 In XML this may be serialised as:
+</p>
 
-	<sword:state href="http://sword/state">
-		<sword:stateDescription>The item has passed through the workflow and is now archived</sword:stateDescription>
-	</sword:state>
+<div class="code">
+<pre>
+&lt;sword:state href="http://sword/state"&gt;
+	&lt;sword:stateDescription&gt;The item has passed through the workflow and is now archived&lt;/sword:stateDescription&gt;
+&lt;/sword:state&gt;
+</pre>
+</div>
 
+<p>
 In RDF/XML this may be serialised as
+</p>
 
-	<sword:state rdf:resource="http://sword/state"/>
-	<rdf:Description rdf:about="http://sword/state">
-		<sword:stateDescription>The item has passed through the workflow and is now archived</sword:stateDescription>
-	</rdf:Description>
+<div class="code">
+<pre>
+&lt;sword:state rdf:resource="http://sword/state"/&gt;
+&lt;rdf:Description rdf:about="http://sword/state"&gt;
+	&lt;sword:stateDescription&gt;The item has passed through the workflow and is now archived&lt;/sword:stateDescription&gt;
+&lt;/rdf:Description&gt;
+</pre>
+</div>
 
+<h3><a name="statement_oaiore">12.2. OAI-ORE Serialisation</a></h3>
 
-12.2 OAI-ORE Serialisation
+<p>
+The SWORD statement can be provided as an OAI-ORE Resource [<a href="#oaiore">OAIORE</a>] Map with sword extensions.  For an RDF document to comply with the requirements of the SWORD statement it needs to meet the following requirements but is not constrained in any way as to what additional data is provided alongside.  As such, it is expected that the SWORD statement may be included with existing RDF serialisations of objects provided by the server.
+</p>
 
-The SWORD statement can be provided as an OAI-ORE Resource [OAIORE] Map with sword extensions.  For an RDF document to comply with the requirements of the SWORD statement it needs to meet the following requirements but is not constrained in any way as to what additional data is provided alongside.  As such, it is expected that the SWORD statement may be included with existing RDF serialisations of objects provided by the server.
-
+<p>
 The responsibilities of the server are:
+</p>
 
-* The aggregation SHOULD identify any original deposit packages with the sword:originalDeposit term
-* The aggregation MAY specify a state for the item on the server with the sword:state term
-* If present, the sword:state term SHOULD include a human readable description in the sword:stateDescription term
-* If present, the sword:originalDeposit term MAY include one or more sword:packaging terms
-* If present, the sword:originalDeposit term MAY include the date the package was originally deposited in the sword:depositedOn term
-* If present, the sword:originalDeposit term MAY include the depositor of the package in the sword:depositedBy term
-* If present, the sword:originalDeposit term MAY include the user on whose behalf the deposit was made in the sword:depositedOnBehalfOf term
-* The statement MAY include any other ORE terms, and any other terms from other ontologies
+<ul>
+<li>The aggregation SHOULD identify any original deposit packages with the <span class="code_inline">sword:originalDeposit</span> term</li>
+<li>The aggregation MAY specify a state for the item on the server with the <span class="code_inline">sword:state</span> term</li>
+<li>If present, the <span class="code_inline">sword:state</span> term SHOULD include a human readable description in the <span class="code_inline">sword:stateDescription</span> term</li>
+<li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include one or more <span class="code_inline">sword:packaging</span> terms</li>
+<li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include the date the package was originally deposited in the <span class="code_inline">sword:depositedOn</span> term</li>
+<li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include the depositor of the package in the <span class="code_inline">sword:depositedBy</span> term</li>
+<li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include the user on whose behalf the deposit was made in the <span class="code_inline">sword:depositedOnBehalfOf</span> term</li>
+<li>The statement MAY include any other ORE terms, and any other terms from other ontologies</li>
+</ul>
 
+<p>
 For example:
+</p>
 
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:ore="http://www.openarchives.org/ore/terms/">
-    <rdf:Description rdf:about="http://localhost:8080/edit-uri/43/62">
-      <ore:describes rdf:resource="http://localhost:8080/agg-uri/43/62"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://localhost:8080/agg-uri/43/62">
-      <ore:isDescribedBy rdf:resource="http://localhost:8080/edit-uri/43/62"/>
-      <ore:aggregates rdf:resource="http://localhost:8080/part-uri/43/62/example.zip"/>
-      <sword:originalDeposit rdf:resource="http://localhost:8080/part-uri/43/62/example.zip"/>
-      <sword:state rdf:resource="http://purl.org/net/sword/state/archived"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://localhost:8080/part-uri/43/62/example.zip">
-      <sword:packaging rdf:resource="http://purl.org/net/sword/package/default"/>
-      <sword:depositedOn rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2011-02-25T14:40:09Z</sword:depositedOn>
-      <sword:depositedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sword</sword:depositedBy>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://purl.org/net/sword/state/archived">
-      <sword:stateDescription>The work has passed through review and is now in the archive</sword:stateDescription>
-    </rdf:Description>
-  </rdf:RDF>
+<div class="code">
+<pre>
+&lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+        xmlns:ore="http://www.openarchives.org/ore/terms/"&gt;
 
+    &lt;rdf:Description rdf:about="http://localhost:8080/edit-uri/43/my_deposit"&gt;
+        &lt;ore:describes rdf:resource="http://localhost:8080/agg-uri/43/my_deposit"/&gt;
+    &lt;/rdf:Description&gt;
+
+    &lt;rdf:Description rdf:about="http://localhost:8080/agg-uri/43/my_deposit"&gt;
+        &lt;ore:isDescribedBy rdf:resource="http://localhost:8080/edit-uri/43/my_deposit"/&gt;
+        &lt;ore:aggregates rdf:resource="http://localhost:8080/part-uri/43/my_deposit/example.zip"/&gt;
+        &lt;sword:originalDeposit rdf:resource="http://localhost:8080/part-uri/43/my_deposit/example.zip"/&gt;
+        &lt;sword:state rdf:resource="http://purl.org/net/sword/state/archived"/&gt;
+    &lt;/rdf:Description&gt;
+
+    &lt;rdf:Description rdf:about="http://localhost:8080/part-uri/43/my_deposit/example.zip"&gt;
+        &lt;sword:packaging rdf:resource="http://purl.org/net/sword/package/default"/&gt;
+        &lt;sword:depositedOn rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"&gt;
+            2011-02-25T14:40:09Z
+        &lt;/sword:depositedOn&gt;
+        &lt;sword:depositedBy rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;
+            sword
+        &lt;/sword:depositedBy&gt;
+    &lt;/rdf:Description&gt;
+
+    &lt;rdf:Description rdf:about="http://purl.org/net/sword/state/archived"&gt;
+        &lt;sword:stateDescription&gt;
+            The work has passed through review and is now in the archive
+        &lt;/sword:stateDescription&gt;
+    &lt;/rdf:Description&gt;
+
+&lt;/rdf:RDF&gt;
+</pre>
+</div>
+
+<p>
 The client's responsibilities are:
+</p>
 
-* If no sword:packaging term is provided on sword:originalDeposit, the client MUST assume only the default packaging format
-* The client MUST ignore without error any terms in the document that it does not understand
-* The client SHOULD recognise parts of the resource map which are not identified with sword:originalDeposit terms as content of the item, and represent them appropriately
+<ul>
+<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only the default packaging format</li>
+<li>The client MUST ignore without error any terms in the document that it does not understand</li>
+<li>The client SHOULD recognise parts of the resource map which are not identified with <span class="code_inline">sword:originalDeposit</span> terms as content of the item, and represent them appropriately</li>
+</ul>
 
+<h3><a name="statement_atom">12.3. Atom Serialisation</a></h3>
 
-12.3 Atom Serialisation
+<p>
+The SWORD statement can be provided as an Atom Feed [<a href="#atom">Atom</a>] with sword extensions.  For an Atom Feed document to comply with the requirements of the SWORD statement it needs to meet the following requirements but is not constrained in any way as to what additional data is provided alongside.  As such, it is expected that the SWORD statement may be included with existing serialisations provided by the server, such as with any GData [<a href="#gdata">GData</a>] extensions.
+</p>
 
-The SWORD statement can be provided as an Atom Feed [AtomPub] with sword extensions.  For an Atom Feed document to comply with the requirements of the SWORD statement it needs to meet the following requirements but is not constrained in any way as to what additional data is provided alongside.  As such, it is expected that the SWORD statement may be included with existing serialisations provided by the server, such as with any GData [GData] extensions.
-
+<p>
 The responsibilities of the server are:
+</p>
 
-* The Feed MUST represent each file contained in the item as an atom:entry element
-* Each atom:entry which is an original deposit file MUST have an atom:category element with the term sword:originalDeposit (this does not mandate that all original deposits are listed as entries)
-* The Feed MAY specify a state for the item on the server with the sword:state term as foreign XML markup in the root atom:feed element
-* If present, the sword:state term SHOULD include a human readable description in the sword:stateDescription term
-* Each atom:entry which is an original deposit MAY include one or more sword:packaging terms as foreign markup in the atom:entry
-* Each atom:entry which is an original deposit MAY include the date the package was originally deposited in the sword:depositedOn term as foreign markup in the atom:entry
-* Each atom:entry which is an original deposit MAY include the depositor of the package in the sword:depositedBy term as foreign markup in the atom:entry
-* Each atom:entry which is an original deposit MAY include the user on whose behalf the deposit was made in the sword:depositedOnBehalfOf term as foreign markup in the atom:entry
-* The statement MAY include any other foreign markup and legitimate atom extensions
+<ul>
+<li>The Feed MUST represent each file contained in the item as an <span class="code_inline">atom:entry</span> element</li>
+<li>Each <span class="code_inline">atom:entry</span> which is an original deposit file MUST have an <span class="code_inline">atom:category</span> element with the term <span class="code_inline">sword:originalDeposit</span> (this does not mandate that all original deposits are listed as entries)</li>
+<li>The Feed MAY specify a state for the item on the server with the <span class="code_inline">sword:state</span> term as foreign XML markup in the root <span class="code_inline">atom:feed</span> element</li>
+<li>If present, the <span class="code_inline">sword:state</span> term SHOULD include a human readable description in the <span class="code_inline">sword:stateDescription</span> term</li>
+<li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include one or more <span class="code_inline">sword:packaging</span> terms as foreign markup in the <span class="code_inline">atom:entry</span></li>
+<li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include the date the package was originally deposited in the <span class="code_inline">sword:depositedOn</span> term as foreign markup in the <span class="code_inline">atom:entry</span></li>
+<li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include the depositor of the package in the <span class="code_inline">sword:depositedBy</span> term as foreign markup in the <span class="code_inline">atom:entry</span></li>
+<li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include the user on whose behalf the deposit was made in the <span class="code_inline">sword:depositedOnBehalfOf</span> term as foreign markup in the <span class="code_inline">atom:entry</span></li>
+<li>The statement MAY include any other foreign markup and legitimate atom extensions</li>
+</ul>
 
+<p>
 For example:
+</p>
 
-<atom:feed xmlns:sword="http://purl.org/net/sword/terms/" xmlns:atom="http://www.w3.org/2005/Atom">
-  <sword:state href="http://purl.org/net/sword/state/archived">
-    <sword:stateDescription>The work has passed through review and is now in the archive</sword:stateDescription>
-  </sword:state>
-  <atom:entry>
-    <atom:category scheme="http://purl.org/net/sword/terms/" 
-		term="http://purl.org/net/sword/terms/originalDeposit" 
-		label="Orignal Deposit"/>
-    <atom:content type="application/zip" src="http://localhost:8080/part-uri/43/13/example.zip"/>
-    <sword:packaging>http://purl.org/net/sword/package/default</sword:packaging>
-    <sword:depositedOn>2011-03-02T20:50:06Z</sword:depositedOn>
-    <sword:depositedBy>sword</sword:depositedBy>
-    <sword:depositedOnBehalfOf>jbloggs</sword:depositedBy>
-  </atom:entry>
-</atom:feed>
+<div class="code">
+<pre>
+&lt;atom:feed xmlns:sword="http://purl.org/net/sword/terms/" 
+            xmlns:atom="http://www.w3.org/2005/Atom"&gt;
 
+    &lt;sword:state href="http://purl.org/net/sword/state/archived"&gt;
+        &lt;sword:stateDescription&gt;
+            The work has passed through review and is now in the archive
+        &lt;/sword:stateDescription&gt;
+    &lt;/sword:state&gt;
 
+    &lt;atom:entry&gt;
+        &lt;atom:category scheme="http://purl.org/net/sword/terms/" 
+	        term="http://purl.org/net/sword/terms/originalDeposit" 
+	        label="Orignal Deposit"/&gt;
+        &lt;atom:content type="application/zip" 
+                    src="http://localhost:8080/part-uri/43/my_deposit/example.zip"/&gt;
+        &lt;sword:packaging&gt;http://purl.org/net/sword/package/default&lt;/sword:packaging&gt;
+        &lt;sword:depositedOn&gt;2011-03-02T20:50:06Z&lt;/sword:depositedOn&gt;
+        &lt;sword:depositedBy&gt;sword&lt;/sword:depositedBy&gt;
+        &lt;sword:depositedOnBehalfOf&gt;jbloggs&lt;/sword:depositedBy&gt;
+    &lt;/atom:entry&gt;
+
+&lt;/atom:feed&gt;
+</pre>
+</div>
+
+<p>
 The client's responsibilities are:
+</p>
 
-* If no sword:packaging term is provided on sword:originalDeposit, the client MUST assume only the default packaging format
-* The client MUST ignore without error any terms in the document that it does not understand
+<ul>
+<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only the default packaging format
+<li>The client MUST ignore without error any terms in the document that it does not understand</li>
+</ul>
 
+<h2><a name="errordocuments">13. Error Documents</a></h2>
 
-13. Error Documents
+<p>
+SWORD adds a new class of document to [<a href="#atompub">AtomPub</a>] that gives server implementations the ability to describe error conditions more fully than HTTP response codes allow, as per [<a href="#sword003">SWORD003</a>]. If a server is reporting an error condition in response to a resource POST, it SHOULD also return a document with a root element of sword:error. The sword:error element SHOULD have an href attribute containing a URI that identifies the error. Errors in the SWORD namespace are reserved and legal values are enumerated below. Implementations MAY define their own errors, but MUST use a different namespace to do so.
+</p>
 
-SWORD adds a new class of document to [AtomPub] that gives server implementations the ability to describe error conditions more fully than HTTP response codes allow. If a server is reporting an error condition in response to a resource POST, it SHOULD also return a document with a root element of sword:error. The sword:error element SHOULD have an href attribute containing a URI that identifies the error. Errors in the SWORD namespace are reserved and legal values are enumerated below. Implementations MAY define their own errors, but MUST use a different namespace to do so.
+<p>
+The <span class="code_inline">sword:error</span> element MAY contain any of the elements normally used in Entry Documents, but all fields are OPTIONAL
+</p>
 
-The sword:error element MAY contain any of the elements normally used in Entry Documents (See Part B Section 9.8), but does not to the meet the requirements of Entry Documents (e.g. an atom:id element is not required).
+<h3><a name="errordocuments_uris">13.1. Error URIs</a></h3>
 
-13.1 Error URIs
+<h4><a name="errordocuments_uris_content">13.1.1. sword:ErrorContent</a></h4>
 
-13.1.1 sword:ErrorContent
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/error/ErrorContent	
+</p>
 
-URI: http://purl.org/net/sword/error/ErrorContent	
+<p>
+The supplied format is not the same as that identified in the <span class="code_inline">Packaging</span> header and/or that supported by the server 
+</p>
 
-The supplied format is not the same as that identified in the Packaging header and/or that supported by the server 
+<h4><a name="errordocuments_uris_checksum">13.1.2. sword:ErrorChecksumMismatch</a></h4>
 
-13.1.2 sword:ErrorChecksumMismatch
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/error/ErrorChecksumMismatch	
+</p>
 
-URI: http://purl.org/net/sword/error/ErrorChecksumMismatch	
+<p>
+Checksum sent does not match the calculated checksum. The server MUST also return a status code of <span class="code_inline">412 Precondition Failed</span>
+</p>
 
-Checksum sent does not match the calculated checksum. The server MUST also return a status code of 412 Precondition Failed.
+<h4><a name="errordocuments_uris_badrequest">13.1.3. sword:ErrorBadRequest</a></h4>
 
-13.1.3 sword:ErrorBadRequest
- 
-URI: http://purl.org/net/sword/error/ErrorBadRequest	
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/error/ErrorBadRequest	
+</p>
 
-Some parameters sent with the POST were not understood. The server MUST also return a status code of 400 Bad Request.
+<p>
+Some parameters sent with the POST were not understood. The server MUST also return a status code of <span class="code_inline">400 Bad Request</span>.
+</p>
 
-13.1.4 sword:TargetOwnerUnknown
+<h4><a name="errordocuments_uris_unknown">13.1.4. sword:TargetOwnerUnknown</a></h4>
 
-URI: http://purl.org/net/sword/error/TargetOwnerUnknown	
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/error/TargetOwnerUnknown	
+</p>
 
-Used in mediated deposit when the server does not know the identity of the On-Behalf-Of user.
+<p>
+Used in mediated deposit when the server does not know the identity of the <span class="code_inline">On-Behalf-Of</span> user.
+</p>
 
-13.1.5 sword:MediationNotAllowed
+<h4><a name="errordocuments_uris_mediation">13.1.5. sword:MediationNotAllowed</a></h4>
 
-URI http://purl.org/net/sword/error/MediationNotAllowed	
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/error/MediationNotAllowed	
+</p>
 
-Used where a client has attempted a mediated deposit, but this is not supported by the server. The server MUST also return a status code of 412 Precondition Failed.
+<p>
+Used where a client has attempted a mediated deposit, but this is not supported by the server. The server MUST also return a status code of <span class="code_inline">412 Precondition Failed</span>.
+</p>
 
-13.1.6 sword:MethodNotAllowed
+<h4><a name="errordocuments_uris_notallowed">13.1.6. sword:MethodNotAllowed</a></h4>
 
-URI: http://purl.org/net/sword/error/MethodNotAllowed
+<p>
+<strong>URI</strong>: http://purl.org/net/sword/error/MethodNotAllowed
+</p>
 
-Used when the client has attempted one of the HTTP update verbs (POST, PUT, DELETE) but the server has decided not to respond to such requests on the specified resource at that time.  The server MUST also return a status code of 405 Method Not Allowed
+<p>
+Used when the client has attempted one of the HTTP update verbs (POST, PUT, DELETE) but the server has decided not to respond to such requests on the specified resource at that time.  The server MUST also return a status code of <span class="code_inline">405 Method Not Allowed</span>
+</p>
 
-5.2 Error Document Example
+<h3><a name="errordocuments_example">13.2. Error Document Example</a></h3>
 
+<div class="code">
+<pre>
 HTTP 1.1  400 Bad Request
-<?xml version="1.0" encoding="utf-8"?>
-<sword:error xmlns="http://www.w3.org/2005/Atom"
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;sword:error xmlns="http://www.w3.org/2005/Atom"
        xmlns:sword="http://purl.org/net/sword/"
        xmlns:arxiv="http://arxiv.org/schemas/atom"
-       href="http://example.org/errors/BadManifest">
-  <author>
-    <name>Example repository</name>
-  </author>
-  <title>ERROR</title>
-  <updated>2008-02-19T09:34:27Z</updated>
+       href="http://example.org/errors/BadManifest"&gt;
+    &lt;author&gt;
+        &lt;name&gt;Example repository&lt;/name&gt;
+    &lt;/author&gt;
+    &lt;title&gt;ERROR&lt;/title&gt;
+    &lt;updated&gt;2008-02-19T09:34:27Z&lt;/updated&gt;
 
-  <generator uri="https://example.org/sword-app/"
-               version="0.9">sword@example.org</generator>
+    &lt;generator uri="https://example.org/sword-app/"
+               version="0.9"&gt;sword@example.org&lt;/generator&gt;
 
-  <summary>The manifest could be parsed, but was not valid - 
-  no technical metadata was provided.</summary>
-  <sword:treatment>processing failed</sword:treatment>
-  <link rel="alternate" href="https://arxiv.org/help" type="text/html"/>
+    &lt;summary&gt;The manifest could be parsed, but was not valid - 
+    no technical metadata was provided.&lt;/summary&gt;
+    &lt;sword:treatment&gt;processing failed&lt;/sword:treatment&gt;
+    &lt;link rel="alternate" href="https://arxiv.org/help" type="text/html"/&gt;
 
-</sword:error>
+&lt;/sword:error&gt;
+</pre>
+</div>
 
-14. Auto-Discovery
+<h2><a name="autodiscovery">14. Auto-Discovery</a></h2>
 
-AtomPub makes no recommendations on the discovery of Service Documents. SWORD RECOMMENDS that server implementations use an <html:link rel="sword" href="[Service Document URL]"/> element in the head of a relevant HTML document to assist with service discovery.
+<p>
+AtomPub makes no recommendations on the discovery of Service Documents.  SWORD RECOMMENDS that server implementations use: 
+</p>
 
+<div class="code">
+<pre>
+&lt;html:link rel="sword" href="[Service Document URL]"/&gt;
+</pre>
+</div>
 
-15. References
+<p>
+in the head of a relevant HTML document to assist with service discovery.
+</p>
 
-[Atom] Nottingham, M. and R. Sayre, "The Atom Syndication Format", RFC 4287, December 2005. http://www.ietf.org/rfc/rfc4287.txt (see also non-normative html version at http://APP.org/rfc4287.html)
+<h2><a name="references">15. References</a></h2>
 
-[AtomPub] Gregario, J. and B. de hOra, "The Atom Publishing Protocol", RFC 5023, October 2007. http://www.ietf.org/rfc/rfc5023.txt (see also non-normative html version at http://bitworking.org/projects/atom/rfc5023.html) 
+<p>
+<a name="atom"><strong>[Atom]</strong></a> Nottingham, M. and R. Sayre, "The Atom Syndication Format", RFC 4287, December 2005. <a href="http://www.ietf.org/rfc/rfc4287.txt">http://www.ietf.org/rfc/rfc4287.txt</a>
+</p>
 
-[RFC2616] Fielding et al, "Hypertext Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999 http://www.w3.org/Protocols/rfc2616/rfc2616.html 
+<p>
+<a name="atommultipart"><strong>[AtomMultipart]</strong></a> Gregario, J, et al "AtomPub Multipart Media Resource Creation", September 2008. <a href="http://tools.ietf.org/html/draft-gregorio-atompub-multipart-04">http://tools.ietf.org/html/draft-gregorio-atompub-multipart-04</a>
+</p>
 
-[RFC2183] Troost, R., Dorner, S. and Moore, K., "Communicating Presentation Information in Internet Messages: The Content-Disposition Header Field", RFC 2183, August 1997 http://www.ietf.org/rfc/rfc2183.txt
+<p>
+<a name="atompub"><strong>[AtomPub]</strong></a> Gregario, J. and B. de hOra, "The Atom Publishing Protocol", RFC 5023, October 2007. <a href="http://www.ietf.org/rfc/rfc5023.txt">http://www.ietf.org/rfc/rfc5023.txt</a> (see also non-normative html version at <a href="http://bitworking.org/projects/atom/rfc5023.html">http://bitworking.org/projects/atom/rfc5023.html</a>) 
+</p>
 
-[OAUTH] Atwood, A., Conlan, R. et al OAuth Core 1.0 http://oauth.net/core/1.0/, December 2007
+<p>
+<a name="dublincore"><strong>[DublinCore]</strong></a> DCMI Metadata Terms. <a href="http://www.dublincore.org/documents/dcmi-terms/">http://www.dublincore.org/documents/dcmi-terms/</a>
+</p>
 
-[ORE] Lagoze, C., Van de Sompel, H et al, Open Archives Initiative Object Reuse and Exchange, http://www.openarchives.org/ore/, June 2008
+<p>
+<a name="gdata"><strong>[GData]</strong></a> Google Documents List API. <a href="http://code.google.com/apis/documents/docs/developers_guide.html">http://code.google.com/apis/documents/docs/developers_guide.html</a>
+</p>
 
-[RFC2617] Franks, J. et al, "HTTP Authentication: Basic and Digest Access Authentication". http://www.ietf.org/rfc/rfc2617.txt , June 1999 
+<p>
+<a name="oauth"><strong>[OAUTH]</strong></a> Atwood, A., Conlan, R. et al OAuth Core 1.0 <a href="http://oauth.net/core/1.0/">http://oauth.net/core/1.0/</a>, December 2007
+</p>
 
-[RFC2818] Rescorla, E. "HTTP over TLS". http://www.ietf.org/rfc/rfc2818.txt, May 2000.
+<p>
+<a name="oaiore"><strong>[OAIORE]</strong></a> Lagoze, C., Van de Sompel, H et al, Open Archives Initiative Object Reuse and Exchange, <a href="http://www.openarchives.org/ore/">http://www.openarchives.org/ore/</a>, June 2008
+</p>
 
-[RFC2119] Bradner, S. "Key words for use in RFCs to Indicate Requirement Levels". http://www.ietf.org/rfc/rfc2119.txt, March 1997.
+<p>
+<a name="rdf"><strong>[RDF]</strong></a> Resource Description Framework. <a href="http://www.w3.org/RDF/">http://www.w3.org/RDF/</a>
+</p>
 
-[SWORD001] Jones, R. "Packaged Content Delivery over HTTP", February 2011
+<p>
+<a name="rfc2119"><strong>[RFC2119]</strong></a> Bradner, S. "Key words for use in RFCs to Indicate Requirement Levels". <a href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a>, March 1997.
+</p>
 
-[SWORD002] Jones, R. "AtomPub Extensions for Packaged Content", February 2011
+<p>
+<a name="rfc2183"><strong>[RFC2183]</strong></a> Troost, R., Dorner, S. and Moore, K., "Communicating Presentation Information in Internet Messages: The Content-Disposition Header Field", RFC 2183, August 1997 <a href="http://www.ietf.org/rfc/rfc2183.txt">http://www.ietf.org/rfc/rfc2183.txt</a>
+</p>
 
-[SWORD003] Jones, R. "AtomPub Extensions for Scholarly Systems", February 2011
+<p>
+<a name="rfc2616"><strong>[RFC2616]</strong></a> Fielding et al, "Hypertext Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616.html">http://www.w3.org/Protocols/rfc2616/rfc2616.html</a>
+</p>
 
-[SWORD004] Jones, R. "Atom Multipart Extensions for Packaged Content", February 2011
+<p>
+<a name="rfc2617"><strong>[RFC2617]</strong></a> Franks, J. et al, "HTTP Authentication: Basic and Digest Access Authentication". <a href="http://www.ietf.org/rfc/rfc2617.txt">http://www.ietf.org/rfc/rfc2617.txt</a>, June 1999 
+</p>
 
-[AtomMultipart] Gregario, J, et al "AtomPub Multipart Media Resource Creation", September 2008
+<p>
+<a name="rfc2818"><strong>[RFC2818]</strong></a> Rescorla, E. "HTTP over TLS". <a href="http://www.ietf.org/rfc/rfc2818.txt">http://www.ietf.org/rfc/rfc2818.txt</a>, May 2000.
+</p>
 
-[DublinCore]
+<p>
+<a name="sword001"><strong>[SWORD001]</strong></a> Jones, R. "Packaged Content Delivery over HTTP", February 2011
+</p>
+
+<p>
+<a name="sword002"><strong>[SWORD002]</strong></a> Jones, R. "AtomPub Extensions for Packaged Content", February 2011
+</p>
+
+<p>
+<a name="sword003"><strong>[SWORD003]</strong></a> Jones, R. "AtomPub Extensions for Scholarly Systems", February 2011
+</p>
+
+<p>
+<a name="sword004"><strong>[SWORD004]</strong></a> Jones, R. "Atom Multipart Extensions for Packaged Content", February 2011
+</p>
+
+<h2><a name="credits">16. Credits</a></h2>
+
+<p>
+<strong>Author</strong>: Richard Jones
+</p>
+
+<p>
+<strong>Document Reviewers</strong>:<br/>
+Julie Allinson<br/>
+Tim Brody<br/>
+David Flanders<br/>
+Stuart Lewis<br/>
+Graham Klyne<br/>
+Alister Miles<br/>
+Ben O'Steen<br/>
+Rob Sanderson<br/>
+Nick Sheppard<br/>
+Ian Stuart<br/>
+Ed Summers<br/>
+David Tarrant<br/>
+Graham Triggs<br/>
+Scott Wilson<br/>
+</p>
 
 </body>
 </html>

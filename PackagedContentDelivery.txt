@@ -72,17 +72,17 @@ Table of Contents
       1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
       1.2 Notation . . . . . . . . . . . . . . . . . . . . . . . . . . 3
    2  Packaging  . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
-      2.1 During HTTP POST or HTTP PUT . . . . . . . . . . . . . . . . 3
-      2.2 During HTTP GET  . . . . . . . . . . . . . . . . . . . . . . 3
-   3 On-Behalf-Of  . . . . . . . . . . . . . . . . . . . . . . . . . . 4
-   4 In-Progress . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+   3 Accept-Packaging  . . . . . . . . . . . . . . . . . . . . . . . . 3
+   4 On-Behalf-Of  . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+   5 In-Progress . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
    6 Suppress-Metadata . . . . . . . . . . . . . . . . . . . . . . . . 4
    7  Security Considerations  . . . . . . . . . . . . . . . . . . . . 6
    8  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . . 6
       8.1 Packaging  . . . . . . . . . . . . . . . . . . . . . . . . . 6
-      8.2 On-Behalf-Of . . . . . . . . . . . . . . . . . . . . . . . . 6
+      8.2 Accept-Packaging . . . . . . . . . . . . . . . . . . . . . . 6
+      8.3 On-Behalf-Of . . . . . . . . . . . . . . . . . . . . . . . . 6
       8.3 In-Progress  . . . . . . . . . . . . . . . . . . . . . . . . 6
-      8.4 Suppress-Metadata  . . . . . . . . . . . . . . . . . . . . . 6
+      8.4 Suppress-Metadata  . . . . . . . . . . . . . . . . . . . . . 7
    9  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
       9.1  Normative References  . . . . . . . . . . . . . . . . . . . 7
    Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 7
@@ -136,7 +136,6 @@ SWORD 001              Packaged Content Delivery            January 2011
 
    The Packaging header is constructed as follows:
 
-
    	Packaging = "Packaging" ":" packaging-expression
 
    	packaging-expression = token | quoted-string | absoluteURI
@@ -148,8 +147,6 @@ SWORD 001              Packaged Content Delivery            January 2011
 
    	Packaging: http://purl.org/net/terms/package/default
 
-2.1 During HTTP POST or HTTP PUT
-
    The Packaging request header SHOULD be used by the user agent during
    HTTP POST to give information to the server about the packaging
    format used to construct the content being POSTed or PUT.  Servers
@@ -158,10 +155,13 @@ SWORD 001              Packaged Content Delivery            January 2011
    format it MUST either store the content as delivered without
    unpacking or respond with 415 (Unsupported Media Type).
 
-2.2 During HTTP GET
+3 Accept-Packaging
 
-   The Packaging request header SHOULD be used by the user agent during
-   HTTP GET to indicate to the server the package format that the
+   The Accept-Packaging header is constructed as follows:
+
+   	Accept-Packaging = "Accept-Packaging" ":" packaging-expression
+
+   	packaging-expression = token | quoted-string | absoluteURI
  
 
 
@@ -170,11 +170,20 @@ R Jones                    Expires July 2011                    [Page 3]
 SWORD 001              Packaged Content Delivery            January 2011
 
 
+   Note that token, quoted-string and absoluteURI are defined in
+   [RFC2068].
+
+   For example:
+
+   	Accept-Packaging: http://purl.org/net/terms/package/default
+
+   The Accept-Packaging request header SHOULD be used by the user agent
+   during HTTP GET to indicate to the server the package format that the
    content identified by the URI should be returned in.  Servers MUST
    either return the content in the specified format or return a 406 Not
    Acceptable.
 
-3 On-Behalf-Of
+4 On-Behalf-Of
 
    The On-Behalf-Of request header MAY be used by the user agent to
    alert the server as to the identity of the true owner of the content
@@ -192,7 +201,7 @@ SWORD 001              Packaged Content Delivery            January 2011
 
    	On-Behalf-Of: jbloggs
 
-4 In-Progress
+5 In-Progress
 
    The In-Progress request header MAY be used by the user agent to
    inform the server that the current content payload is not yet
@@ -209,6 +218,13 @@ SWORD 001              Packaged Content Delivery            January 2011
    	In-Progress = "In-Progress" ":" ("true" | "false")
 
 6 Suppress-Metadata
+ 
+
+
+R Jones                    Expires July 2011                    [Page 4]
+
+SWORD 001              Packaged Content Delivery            January 2011
+
 
    The Suppress-Metadata request header MAY be used by the user agent to
    instruct the server not to attempt to extract metadata from the
@@ -218,26 +234,10 @@ SWORD 001              Packaged Content Delivery            January 2011
    way which is meaningful to them.  This directive allows the user
    agent to suppress that behaviour for its own purposes.  Furthermore,
    a DELETE operation may be requested which removes content previously
- 
-
-
-R Jones                    Expires July 2011                    [Page 4]
-
-SWORD 001              Packaged Content Delivery            January 2011
-
-
    delivered from the server, and in this case the header instructs the
    server to retain a copy of the metadata while deleting the content.
 
    	Suppress-Metadata = "Suppress-Metadata" ":" ("true" | "false")
-
-
-
-
-
-
-
-
 
 
 
@@ -306,7 +306,18 @@ SWORD 001              Packaged Content Delivery            January 2011
    Author/Change controller: Richard Jones c/o UKOLN, University of
    Bath; richard@swordapp.org
 
-8.2 On-Behalf-Of
+8.2 Accept-Packaging
+
+   Header field name: Accept-Packaging
+
+   Applicable protocol: HTTP
+
+   Status: provisional
+
+   Author/Change controller: Richard Jones c/o UKOLN, University of
+   Bath; richard@swordapp.org
+
+8.3 On-Behalf-Of
 
    Header field name: On-Behalf-Of
 
@@ -319,6 +330,14 @@ SWORD 001              Packaged Content Delivery            January 2011
 
 8.3 In-Progress 
 
+ 
+
+
+R Jones                    Expires July 2011                    [Page 6]
+
+SWORD 001              Packaged Content Delivery            January 2011
+
+
    Header field name: In-Progress
 
    Applicable protocol: HTTP
@@ -329,14 +348,6 @@ SWORD 001              Packaged Content Delivery            January 2011
    Bath; richard@swordapp.org
 
 8.4 Suppress-Metadata
-
- 
-
-
-R Jones                    Expires July 2011                    [Page 6]
-
-SWORD 001              Packaged Content Delivery            January 2011
-
 
    Header field name: Packaging
 
@@ -375,6 +386,14 @@ Author's Addresses
                c/o UKOLN
                University of Bath
 
+ 
+
+
+R Jones                    Expires July 2011                    [Page 7]
+
+SWORD 001              Packaged Content Delivery            January 2011
+
+
                EMail: richard@swordapp.org
 
 
@@ -389,4 +408,41 @@ Author's Addresses
 
 
 
-R Jones                    Expires July 2011                    [Page 7]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+R Jones                    Expires July 2011                    [Page 8]
