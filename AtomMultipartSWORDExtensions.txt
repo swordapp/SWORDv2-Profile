@@ -4,7 +4,7 @@
 
 INTERNET-DRAFT                                                   R Jones
 Intended Status: Experimental                        (OneOverZero/SWORD)
-Expires: July 2011                                          January 2011
+Expires: September 2011                                       March 2011
 SWORD 004                                                               
 
 
@@ -53,9 +53,9 @@ Copyright and License Notice
  
 
 
-R Jones                    Expires July 2011                    [Page 1]
+R Jones                  Expires September 2011                 [Page 1]
 
-SWORD 004    Atom Multipart Extensions for Packaged Content January 2011
+SWORD 004    Atom Multipart Extensions for Packaged Content   March 2011
 
 
 Abstract
@@ -73,8 +73,8 @@ Table of Contents
       1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
       1.2 Namespaces . . . . . . . . . . . . . . . . . . . . . . . . . 3
    2  Multipart Representations Extensions . . . . . . . . . . . . . . 3
-   9  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
-      9.1  Normative References  . . . . . . . . . . . . . . . . . . . 4
+   3  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+      3.1  Normative References  . . . . . . . . . . . . . . . . . . . 4
    Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 4
 
 
@@ -109,9 +109,9 @@ Table of Contents
  
 
 
-R Jones                    Expires July 2011                    [Page 2]
+R Jones                  Expires September 2011                 [Page 2]
 
-SWORD 004    Atom Multipart Extensions for Packaged Content January 2011
+SWORD 004    Atom Multipart Extensions for Packaged Content   March 2011
 
 
 1  Introduction
@@ -165,9 +165,9 @@ SWORD 004    Atom Multipart Extensions for Packaged Content January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 3]
+R Jones                  Expires September 2011                 [Page 3]
 
-SWORD 004    Atom Multipart Extensions for Packaged Content January 2011
+SWORD 004    Atom Multipart Extensions for Packaged Content   March 2011
 
 
    	Content-Disposition: attachment; name=payload; filename=example.zip
@@ -175,9 +175,9 @@ SWORD 004    Atom Multipart Extensions for Packaged Content January 2011
    The Media Part MAY supply a Packaging header [SWORD001] providing the
    URI (or other allowed) of the packaging format used in the payload.
 
-9  References 
+3  References 
 
-9.1  Normative References
+3.1  Normative References
 
    [RFC2119]   S. Bradner, "Key words for use in RFCs to Indicate
                Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -221,4 +221,4 @@ Author's Addresses
 
 
 
-R Jones                    Expires July 2011                    [Page 4]
+R Jones                  Expires September 2011                 [Page 4]

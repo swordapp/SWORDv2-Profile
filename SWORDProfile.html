@@ -133,7 +133,7 @@ The practical details of the extensions used in the SWORD Profile are provided i
 <ol>
 <li>Packaged Content Delivery over HTTP [<a href="#sword001">SWORD001</a>]</li>
 <li>AtomPub Extensions for Packaged Content [<a href="#sword002">SWORD002</a>]</li>
-<li>AtomPub Extensions for SWORD [<a href="#sword003">SWORD003</a>]</li>
+<li>AtomPub Extensions for Scholarly Systems [<a href="#sword003">SWORD003</a>]</li>
 <li>Atom Multipart Extensions for Packaged Content [<a href="#sword004">SWORD004</a>]</li>
 </ol>
 
@@ -1162,7 +1162,7 @@ When describing packaged resources in Media Entry documents, servers MUST use th
 </p>
 
 <p>
-If the server does not supply any <span class="code_inline">sword:packaging<span> elements, the client MUST assume that the server only supports the default packaging format.
+If the server does not supply any <span class="code_inline">sword:packaging</span> elements, the client MUST assume that the server only supports the default packaging format.
 </p>
 
 <div class="code">
@@ -1316,8 +1316,8 @@ On successfully accepting a POST (deposit), implementers SHOULD return an Atom E
 <li>It MUST contain a Media Entry URI (<strong>Edit-URI</strong>)</li>
 <li>It MUST contain a Media Resource URI (<strong>EM-URI</strong>)</li>
 <li>It MAY contain an arbitrary number of <span class="code_inline">sword:packaging</span> elements declaring the formats that the Media Resource can be retrieved in</li>
-<li>It MUST contain a single <span class="code_inline">sword:treatment</span> element which contains either a human-readable statement describing treatment the deposited resource has received or a URI that dereferences to such a description.</li>
-<li>It MAY contain a single <span class="code_inline">sword:verboseDescription</span> element which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.</li>
+<li>It MUST contain a single <span class="code_inline">sword:treatment</span> element [<a href="#sword003">SWORD003</a>] which contains either a human-readable statement describing treatment the deposited resource has received or a URI that dereferences to such a description.</li>
+<li>It MAY contain a single <span class="code_inline">sword:verboseDescription</span> element [<a href="#sword003">SWORD003</a>] which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.</li>
 <li>It MAY contain the SWORD Statement (see <a href="#statement">Section 12: SWORD Statement</a>) embedded as foreign markup using its OAI-ORE [<a href="#oaiore">OAIORE</a>] serialisation (See <a href="#statement_oaiore">Section 12.1: OAI-ORE Serialisation</a>)</li>
 <li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a URI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
 <li>It MUST contain either at least one <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> or an embedded Statement document.</li>

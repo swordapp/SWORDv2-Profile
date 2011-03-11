@@ -7,9 +7,9 @@
 .ds LF R Jones 
 .ds RF FORMFEED[Page %]
 .ds LH SWORD 003
-.ds RH January 2011
+.ds RH March 2011
 .ds CH AtomPub Extensions for Scholarly Systems
-.ds CF Expires July 2011
+.ds CF Expires September 2011
 .hy 0
 .nh
 .ad l
@@ -18,7 +18,7 @@
 .nf
 .tl 'INTERNET-DRAFT''R Jones'
 .tl 'Intended Status: Experimental''(OneOverZero/SWORD)'
-.tl 'Expires: July 2011''January 2011'
+.tl 'Expires: September 2011''March 2011'
 .tl 'SWORD 003'''
 .fi
 
@@ -78,11 +78,12 @@ Table of Contents
       2.4 sword:treatment  . . . . . . . . . . . . . . . . . . . . . . 5
       2.5 sword:service  . . . . . . . . . . . . . . . . . . . . . . . 6
    3 Media Entry Extensions  . . . . . . . . . . . . . . . . . . . . . 6
-      3.1 ...  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
-   4 Error Documents . . . . . . . . . . . . . . . . . . . . . . . . . 7
-   9  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
-      9.1  Normative References  . . . . . . . . . . . . . . . . . . . 8
-   Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 8
+      3.1 sword:treatment  . . . . . . . . . . . . . . . . . . . . . . 6
+      3.2 sword:verboseDescription . . . . . . . . . . . . . . . . . . 7
+   4 Error Documents . . . . . . . . . . . . . . . . . . . . . . . . . 8
+   5 References  . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+      5.1  Normative References  . . . . . . . . . . . . . . . . . . . 9
+   Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 9
 .fi
 .in 3
 
@@ -271,47 +272,79 @@ For example:
 
 This section documents extensions to the Media Entry document which can be retrieved from the server from the Media Entry URI.
 
-
-
 .ti 0
-3.1 ...
+3.1 sword:treatment
 
-The sword:packaging element SHOULD be used by the server to indicate the packaging formats that it is capable of delivering the Media Resource to the user agent in.  If there is no sword:packaging element, the user agent MUST NOT assume any packaging format; instead it must rely on the atom:content@type as normal, per [RFC5023].  If a sword:packaging element is provided the user agent MAY request the atom:content@src URI with the Packaging HTTP header [SWORD001] containing the value of the sword:packaging element.
-
-The value of the sword:packaging element SHOULD contain a URI identifying the packaging format, but MAY contain any text string which can be understood by servers and user agents.
+The sword:treatment element SHOULD be included, as a child of the atom:entry element. Used for a human-readable statement about what treatment the deposited resource received.
 
 For example:
 
 .nf
   <entry xmlns="http://www.w3.org/2005/Atom"
-	 xmlns:sword="http://purl.org/net/sword/">
+        xmlns:sword="http://purl.org/net/sword/">
 
-     <title>My Deposit</title>
-     <id>info:something:1</id>
+    <title>My Deposit</title>
+    <id>info:something:1</id>
+    <updated>2008-08-18T14:27:08Z</updated>
+    <summary type="text">A summary</summary>
+    <generator uri="http://www.swordserver.ac.uk/sword-plugin" version="1.0"/>
 
-     <updated>2008-08-18T14:27:08Z</updated>
-     <author><name>jbloggs</name></author>
-     <summary type="text">A summary</summary>
-     <generator uri="http://www.appserver.org/engine" version="1.0"/>
+    <sword:treatment>Unpacked. JPEG contents converted to JPEG2000.</sword:treatment>
 
-     <content type="application/zip"
-        src="http://www.appserver.org/col1/deposit1.zip"/>	
-     <sword:packaging>
-        http://purl.org/net/sword/package/METSDSpaceSIP
-     </sword:packaging>
-     <link rel="edit"
-        href="http://www.appserver.org/col1/my_deposit.atom" />
+    <content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/>
+    <link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/>
+    <link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" />
+   
+  </entry>
+.fi
 
+.ti 0
+3.2 sword:verboseDescription
+
+The sword:verboseDescription element MAY be included, as a child of the atom:entry element. Used for a detailed description of the processes that the service has carried out while processing the deposit.  This differs from the sword:treatment element in that it is specifically for developers to provide extensive logging and other feedback to clients and client developers, and SHOULD NOT be used to enhance the user experience at the client end.
+
+For example:
+
+.nf
+  <entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/">
+
+    <title>My Deposit</title>
+    <id>info:something:1</id>
+    <updated>2008-08-18T14:27:08Z</updated>
+    <summary type="text">A summary</summary>
+    <generator uri="http://www.swordserver.ac.uk/sword-plugin" version="1.0"/>
+
+    <sword:verboseDescription>
+	Deposit Received 2011-01-14T04:45:32Z
+	Authenticated User: jbloggs ... success
+	Depositing Resource in Collection: col1
+	Created File: mypicture.jpg
+	Filtering files ... 
+	JPEG file found: mypicture.jpg
+	Converting JPEG file mypicture.jpg to mypicture_jpg2000.jpg
+	Deposit Complete 2011-01-14T04:45:34Z
+    </sword:verboseDescription>
+
+    <sword:treatment>Unpacked. JPEG contents converted to JPEG2000.</sword:treatment>
+
+    <content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/>
+    <link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/>
+    <link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" />
+   
   </entry>
 .fi
 
 .ti 0
 4 Error Documents
 
-Error documents are a new class of document in the AtomPub protocol that give server implementations the ability to describe error conditions more fully than HTTP response codes allow. If a server is reporting an error condition in response to a resource POST, it SHOULD also return a document with a root element of sword:error. The sword:error element SHOULD have an href attribute containing a URI that identifies the error.
+This extension describes a new class of document in the AtomPub protocol for error handling.  These give service implementations the ability to describe error conditions more fully than HTTP response codes allow.  If a server is reporting an error condition in response to a resource POST, PUT or DELETE, it SHOULD also return a document with a root element of sword:error. The sword:error element SHOULD have an href attribute containing a URI that identifies the error.
 
-The sword:error element MAY contain any of the elements normally used in Entry Documents, but all fields are OPTIONAL
+The sword:error element MAY contain any of the elements normally used in Atom Entry Documents, but all fields are OPTIONAL
 
+For example:
+
+.nf
 HTTP 1.1  400 Bad Request
 <?xml version="1.0" encoding="utf-8"?>
 <sword:error xmlns="http://www.w3.org/2005/Atom"
@@ -327,21 +360,21 @@ HTTP 1.1  400 Bad Request
   <generator uri="https://example.org/sword-app/"
                version="0.9">sword@example.org</generator>
 
-  <summary>The manifest could be parsed, but was not valid - 
-  no technical metadata was provided.</summary>
+  <summary>
+      The manifest could be parsed, but was not valid - 
+      no technical metadata was provided.
+  </summary>
 
   <sword:treatment>processing failed</sword:treatment>
 
-  <link rel="alternate" href="https://arxiv.org/help" type="text/html"/>
-
 </sword:error>
-
+.fi
 
 .ti 0
-9  References 
+5 References 
 
 .ti 0 
-9.1  Normative References
+5.1  Normative References
 
 .in 15
 .ti 3

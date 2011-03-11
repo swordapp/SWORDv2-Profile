@@ -4,7 +4,7 @@
 
 INTERNET-DRAFT                                                   R Jones
 Intended Status: Experimental                        (OneOverZero/SWORD)
-Expires: July 2011                                          January 2011
+Expires: September 2011                                      Marchs 2011
 SWORD 001                                                               
 
 
@@ -53,9 +53,9 @@ Copyright and License Notice
  
 
 
-R Jones                    Expires July 2011                    [Page 1]
+R Jones                  Expires September 2011                 [Page 1]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
 Abstract
@@ -109,9 +109,9 @@ Table of Contents
  
 
 
-R Jones                    Expires July 2011                    [Page 2]
+R Jones                  Expires September 2011                 [Page 2]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
 1  Introduction
@@ -165,9 +165,9 @@ SWORD 001              Packaged Content Delivery            January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 3]
+R Jones                  Expires September 2011                 [Page 3]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
    Note that token, quoted-string and absoluteURI are defined in
@@ -221,9 +221,9 @@ SWORD 001              Packaged Content Delivery            January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 4]
+R Jones                  Expires September 2011                 [Page 4]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
    The Suppress-Metadata request header MAY be used by the user agent to
@@ -277,9 +277,9 @@ SWORD 001              Packaged Content Delivery            January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 5]
+R Jones                  Expires September 2011                 [Page 5]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
 7  Security Considerations
@@ -333,9 +333,9 @@ SWORD 001              Packaged Content Delivery            January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 6]
+R Jones                  Expires September 2011                 [Page 6]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
    Header field name: In-Progress
@@ -389,9 +389,9 @@ Author's Addresses
  
 
 
-R Jones                    Expires July 2011                    [Page 7]
+R Jones                  Expires September 2011                 [Page 7]
 
-SWORD 001              Packaged Content Delivery            January 2011
+SWORD 001              Packaged Content Delivery              March 2011
 
 
                EMail: richard@swordapp.org
@@ -445,4 +445,4 @@ SWORD 001              Packaged Content Delivery            January 2011
 
 
 
-R Jones                    Expires July 2011                    [Page 8]
+R Jones                  Expires September 2011                 [Page 8]

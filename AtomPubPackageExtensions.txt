@@ -4,7 +4,7 @@
 
 INTERNET-DRAFT                                                   R Jones
 Intended Status: Experimental                        (OneOverZero/SWORD)
-Expires: July 2011                                          January 2011
+Expires: March 2011                                       September 2011
 SWORD 002                                                               
 
 
@@ -53,9 +53,9 @@ Copyright and License Notice
  
 
 
-R Jones                    Expires July 2011                    [Page 1]
+R Jones                  Expires September 2011                 [Page 1]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
 Abstract
@@ -109,9 +109,9 @@ Table of Contents
  
 
 
-R Jones                    Expires July 2011                    [Page 2]
+R Jones                  Expires September 2011                 [Page 2]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
 1  Introduction
@@ -165,9 +165,9 @@ SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 3]
+R Jones                  Expires September 2011                 [Page 3]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
    MUST take a "true" or "false" value, indicates whether the On-Behalf-
@@ -221,9 +221,9 @@ SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 4]
+R Jones                  Expires September 2011                 [Page 4]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
    	</sword:acceptPackaging>
@@ -277,9 +277,9 @@ SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 5]
+R Jones                  Expires September 2011                 [Page 5]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
            href="http://www.appserver.org/col1/my_deposit.atom" />
@@ -333,9 +333,9 @@ SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 6]
+R Jones                  Expires September 2011                 [Page 6]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
    http://purl.org/net/sword/package/BagIt    Content-Type:
@@ -389,9 +389,9 @@ SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
  
 
 
-R Jones                    Expires July 2011                    [Page 7]
+R Jones                  Expires September 2011                 [Page 7]
 
-SWORD 002       AtomPub Extensions for Packaged COntent     January 2011
+SWORD 002       AtomPub Extensions for Packaged Content       March 2011
 
 
    The server returns the Media Resource packaged as a BagIt zip file. 
@@ -445,4 +445,4 @@ Author's Addresses
 
 
 
-R Jones                    Expires July 2011                    [Page 8]
+R Jones                  Expires September 2011                 [Page 8]

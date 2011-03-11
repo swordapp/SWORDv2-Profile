@@ -7,9 +7,9 @@
 .ds LF R Jones 
 .ds RF FORMFEED[Page %]
 .ds LH SWORD 004
-.ds RH January 2011
+.ds RH March 2011
 .ds CH Atom Multipart Extensions for Packaged Content
-.ds CF Expires July 2011
+.ds CF Expires September 2011
 .hy 0
 .nh
 .ad l
@@ -18,7 +18,7 @@
 .nf
 .tl 'INTERNET-DRAFT''R Jones'
 .tl 'Intended Status: Experimental''(OneOverZero/SWORD)'
-.tl 'Expires: July 2011''January 2011'
+.tl 'Expires: September 2011''March 2011'
 .tl 'SWORD 004'''
 .fi
 
@@ -71,8 +71,8 @@ Table of Contents
       1.1  Terminology . . . . . . . . . . . . . . . . . . . . . . . . 3
       1.2 Namespaces . . . . . . . . . . . . . . . . . . . . . . . . . 3
    2  Multipart Representations Extensions . . . . . . . . . . . . . . 3
-   9  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
-      9.1  Normative References  . . . . . . . . . . . . . . . . . . . 4
+   3  References . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+      3.1  Normative References  . . . . . . . . . . . . . . . . . . . 4
    Author's Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 4
 .fi
 .in 3
@@ -127,10 +127,10 @@ The Media Part MUST include a Content-Disposition header of type "attachment" an
 The Media Part MAY supply a Packaging header [SWORD001] providing the URI (or other allowed) of the packaging format used in the payload.
 
 .ti 0
-9  References 
+3  References 
 
 .ti 0 
-9.1  Normative References
+3.1  Normative References
 
 .in 15
 .ti 3
