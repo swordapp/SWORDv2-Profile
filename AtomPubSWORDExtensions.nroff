@@ -155,7 +155,7 @@ For example:
 .ti 0
 2.2 sword:maxUploadSize
 
-The sword:maxUploadSize element MAY be used to indicate to the user agent what the maximum content size deliverable in one request is.  It is a direct child of the app:service element.  If the server does not supply an element, the client MUST assume that the server will support arbitrarily large files, although due consideration should be taken of limitations in other supporting technology.
+The sword:maxUploadSize element MAY be used to indicate to the user agent what the maximum content size deliverable in one request is, and MUST contain an integer if it is used.  It is a direct child of the app:service element.  If the server does not supply an element, the client MUST assume that the server will support arbitrarily large files, although due consideration should be taken of limitations in other supporting technology.
 
 For example:
 

@@ -42,7 +42,7 @@ body {
 <h1>SWORD 2.0 Profile</h1>
 
 <table cellspacing="20" class="toc">
-<tr><td>
+<tr><td valign="top">
 
 <strong><a href="#introduction">1. Introduction</a><br/></strong>
 <strong><a href="#notationalconventions">2. Notational Conventions</a></strong><br/>
@@ -50,33 +50,37 @@ body {
 <strong><a href="#namespaces">4. Namespaces</a></strong><br/>
 &nbsp;&nbsp;<a href="#namespaces_sword">4.1. SWORD Namespaces</a><br/>
 &nbsp;&nbsp;<a href="#namespaces_referenced">4.2. Referenced Namespaces</a><br/>
-<strong><a href="#uris">5. URIs</a></strong><br/>
+<strong><a href="#iris">5. IRIs</a></strong><br/>
 <strong><a href="#protocoloperations">6. Protocol Operations</a></strong><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_retreivingservicedocument">6.1 Retrieving a Service Document</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_listingcollections">6.2 Listing Collections</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_retreivingservicedocument">6.1. Retrieving a Service Document</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_listingcollections">6.2. Listing Collections</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_creatingresource">6.3. Creating a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_creatingresource_binary">6.3.1. Creating a Resource with a Binary File Deposit</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_creatingresource_multipart">6.3.2. Creating a Resource with a Multipart Deposit</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_retrievingcontent">6.4. Retrieving the content</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_editingcontent">6.4. Editing the Content of a Resource</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_deletingcontent">6.5. Deleting the Content of a Resource</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_addingcontent">6.6. Adding Content to a Resource</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_binary">6.6.1. Adding New Packages or Files to a Container</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_metadata">6.6.2. Adding New Metadata to a Resource</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.6.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_deleteconteiner">6.7. Delete the Container</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_statement">6.8. Retrieving the Statement</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_editingcontent">6.5. Replacing the Content of a Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_binary">6.5.1. Replacing the File Content of a Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_metadata">6.5.2. Replacing the Metadata of a Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_multipart">6.5.3. The Metadata and File Content of a Resource</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_deletingcontent">6.6. Deleting the Content of a Resource</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_addingcontent">6.7. Adding Content to a Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_binary">6.7.1. Adding New Packages or Files to a Container</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_deleteconteiner">6.8. Deleting the Container</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_statement">6.9. Retrieving the Statement</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a><br/>
 <strong><a href="#packaging">7. Packaging</a></strong><br/>
 &nbsp;&nbsp;<a href="#packaging_servicedescription">7.1. Package support in Service description</a><br/>
 &nbsp;&nbsp;<a href="#packaging_creation">7.2. Package support during resource creation</a><br/>
 &nbsp;&nbsp;<a href="#packaging_entrydocuments">7.3. Package description in Entry documents</a><br/>
 &nbsp;&nbsp;<a href="#packaging_registration">7.4. Registering packaging types under the SWORD namespace</a><br/>
+
+</td><td valign="top">
+
 <strong><a href="#authenticationmediateddeposit">8. Authentication and Mediated Deposit</a></strong><br/>
 &nbsp;&nbsp;<a href="#authenticationmediateddeposit_servicedescription">8.1. Mediation In Service Description</a><br/>
 &nbsp;&nbsp;<a href="#authenticatedmediateddeposit_recordingusers">8.2. Recording Depositing Users</a><br/>
-
-</td><td>
-
 <strong><a href="#metadatahandling">9. Metadata Handling</a></strong><br/>
 &nbsp;&nbsp;<a href="#metadatahandling_handle">9.1. Handle Metadata Updates</a><br/>
 &nbsp;&nbsp;<a href="#metadatahandling_suppress">9.2. Suppress Metadata Updates</a><br/>
@@ -105,26 +109,75 @@ body {
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_notallowed">13.1.6. sword:MethodNotAllowed</a><br/>
 &nbsp;&nbsp;<a href="#errordocuments_example">13.2. Error Document Example</a><br/>
 <strong><a href="#autodiscovery">14. Auto-Discovery</a></strong><br/>
-<strong><a href="#references">15. References</a></strong><br/>
-<strong><a href="#credits">16. Credits</a>
+<strong><a href="#references">15. References</a></strong>
 
 </td></tr></table>
 
-<h2><a name="introduction">1. Introduction</a></h2>
-
-<strong>FIXME: a longer, better introduction, including the graphic illustrating the outline of the SWORD 2.0 process</strong>
+<h2>Credits</h2>
 
 <p>
-The Atom Publishing Protocol ([<a href="#atompub">AtomPub</a>]) provides a simple, extensible mechanism for the creation of Web Resources. The SWORD profile builds upon AtomPub and HTTP ([<a href="#rfc2616">RFC2616</a>]) and incorporates a number of extensions to enable the following kinds of behaviours:
+<strong>SWORD 2.0 Technical Lead</strong>: Richard Jones, Cottage Labs
+</p>
+
+<p>
+<strong>SWORD 2.0 Community Manager</strong>: Stuart Lewis, University of Auckland
+</p>
+
+<p>
+<strong>SWORD 2.0 Technical Advisory Group</strong><br/>
+Julie Allinson, University of York<br/>
+Tim Brody, University of Southampton<br/>
+David Flanders, JISC<br/>
+Graham Klyne, University of Oxford<br/>
+Alister Miles, University of Oxford<br/>
+Ben O'Steen, Cottage Labs<br/>
+Rob Sanderson, LANL<br/>
+Nick Sheppard, Leeds Metropolitan University<br/>
+Ian Stuart, University of Edinburgh<br/>
+Ed Summers, Library of Congress<br/>
+David Tarrant, University of Southampton<br/>
+Graham Triggs, BioMed Central<br/>
+Scott Wilson, University of Bolton<br/>
+</p>
+
+<p>
+<strong>Further acknowledgements of input</strong><br/>
+Aaron Birkland, Tim Donohue, Jim Downing, Ross Gardler, Steve Midgley, Glen Robson, Peter Sefton, Adrian Stevenson, Paul Walk, Nigel Ward
+</p>
+
+<h2><a name="introduction">1. Introduction</a></h2>
+
+<p>
+The Atom Publishing Protocol ([<a href="#atompub">AtomPub</a>]) provides a simple, extensible mechanism for the creation of Web Resources.
+The first major version of SWORD [<a href="#sword13">SWORD 1.3</a>] built upon the Resouce creation aspects of AtomPub to enable package deposit onto a server.  
+</p>
+
+<p>
+This approach of fire-and-forget deposit, where the depositor has no further interaction with the server is of significant value in certain use cases, but there are others where this is insufficient. Consider, for example, that the depositor wishes to construct a digital artifact file by file over a period of time before deciding that it is time to archive it.  In these cases, a higher level of interactivity between the participating systems is required, and this is the role that SWORD 2.0 is intended to fulfil.
+</p>
+
+<p>
+The SWORD 2.0 profile continues to build upon AtomPub and HTTP ([<a href="#rfc2616">RFC2616</a>]) through the addition of Create, Retrieve, Update and Delete (CRUD) operations, in order to enable the following kinds of interactions:
 </p>
 
 <ul>
 <li>Clients may create resources by sending compound resources, such as archive files (tar, zip).</li>
 <li>Both non-interactive and 3rd party mediated operation are required.</li>
-<li>Workflows which may or may not include manual stages before deposited resources become available as web resources.</li>
-<li>Clients may update or delete parts of the compound resources or associated metadata</li>
-<li>Clients may display the state and server description of deposited resources to users</li>
+<li>Workflows which may or may not include manual stages before deposited resources become available as web resources, are acknowledged and supported</li>
+<li>Clients may update or delete the compound resources or associated metadata</li>
 </ul>
+
+<p>
+The role that SWORD aims to fulfil is that of a thin integration layer between any two scholarly systems aiming to exchange content, but not to provide tight integration between them.  For standards to integrate detailed content management operations it is recommended to look at OASIS CMIS [<a href="#cmis">CMIS</a>], or the GData API [<a href="#gdata">GData</a>].  In contrast to these, SWORD is a deposit lifecycle standard, which supports the users and the participating systems in effectively exchanging content.  Most of the enhancements in SWORD 2.0 over SWORD 1.3 are around closing the deposit loop to give the client software the opportunity to provider a richer environment to the user.
+</p>
+
+<p>
+The scope of SWORD v2 will be limited to the deposit process between any two scholarly systems or between a user facing system and a service provider. This deposit process is only a portion of the full content lifecycle and does not attempt to provide support for collaborative or distributed authoring environments or policy management; it is focused entirely on the process of moving content from one location to another.
+</p>
+
+<p>
+The deposit lifecycle encompasses the process of delivering content to a SWORD server which may have an ingest workflow in place. The content that has been deposited is then considered to be in the deposit process for the duration of that ingest workflow, during which time the client system may wish to interact with the submission. It may be that the client needs to make changes to the submission during the workflow process, either autonomously or when prompted for additional input by the server.  Or it may be that the client wants to track the progress of the submission, at its leisure.  Eventually the content will be formally accepted into the system and the client needs a way to know that this is happened and a route to follow to locate the deposited content.
+</p>
 
 <p>
 The practical details of the extensions used in the SWORD Profile are provided in the following Internet Drafts:
@@ -146,28 +199,36 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 <h2><a name="terminology">3. Terminology</a></h2>
 
 <p>
-Throughout this document we will regularly refer to identifiers which are used by SWORD.  The following URIs are part of the specification:
+Throughout this document we will regularly refer to identifiers which are used by SWORD.  The following IRIs are part of the specification:
 </p>
 
 <dl>
-<dt><strong>SD-URI</strong></dt>
-<dd>The <strong>Service Document URI</strong>. This is the URI from which the root service document can be located. If the server supports nesting of service documents, then these sub-service documents are also subject to the same rules as <strong>SD-URI</strong> and should be considered the same.</dd>
+<dt><strong>SD-IRI</strong></dt>
+<dd>The <strong>Service Document IRI</strong>. This is the IRI from which the root service document can be located. If the server supports nesting of service documents, then these sub-service documents are also subject to the same rules as <strong>SD-IRI</strong> and should be considered the same.</dd>
 
-<dt><strong>Col-URI</strong></dt>
-<dd>The URI of a <strong>SWORD Collection</strong>. This is the URI to which the initial deposit will take place, and which are listed in the <strong>Service Document</strong>.</dd>
+<dt><strong>Col-IRI</strong></dt>
+<dd>The IRI of a <strong>SWORD Collection</strong>. This is the IRI to which the initial deposit will take place, and which are listed in the <strong>Service Document</strong>.</dd>
 
-<dt><strong>Cont-URI</strong><dt>
-<dd>The <strong>Content URI</strong>. This is the URI from which the client will be able to retrieve representations of the object as it resides in the SWORD server (which representation is returned will be through package format negotiation, as discussed later).</dd>
+<dt><strong>Cont-IRI</strong><dt>
+<dd>The <strong>Content IRI</strong>. This is the IRI from which the client will be able to retrieve representations of the object as it resides in the SWORD server (which representation is returned will be through package format negotiation, as discussed later).</dd>
 
-<dt><strong>EM-URI</strong></dt>
-<dd>The <strong>Atom Edit Media URI</strong>. This is almost always going to be the same as the <strong>Cont-URI</strong>, but the Atom spec requires that these identifiers be allowed to differ [<a href="#atompub">AtomPub</a>].  Throughout this document we will mostly refer to the <strong>EM-URI</strong>.  An important thing to note about the <strong>EM-URI</strong> and the <strong>Cont-URI</strong> is that they do not refer to the resource as deposited by the client (e.g. the original zip), but to all the content stored in the item on the server, and the format that this URI returns is obtained by content negotiation.  This will be discussed in more detail in the <a href="#depositreceipt">Deposit Receipt section</a>.</dd>
+<dt><strong>EM-IRI</strong></dt>
+<dd>The <strong>Atom Edit Media IRI</strong>. This is almost always going to be the same as the <strong>Cont-IRI</strong>, but the Atom spec requires that these identifiers be allowed to differ [<a href="#atompub">AtomPub</a>].  Throughout this document we will mostly refer to the <strong>EM-IRI</strong>.  An important thing to note about the <strong>EM-IRI</strong> and the <strong>Cont-IRI</strong> is that they do not refer to the resource as deposited by the client (e.g. the original zip), but to all the content stored in the item on the server, and the format that this IRI returns is obtained by content negotiation.  This will be discussed in more detail in the <a href="#depositreceipt">Deposit Receipt section</a>.</dd>
 
-<dt><strong>Edit-URI</strong></dt>
-<dd>The <strong>Atom Media Edit URI</strong>. This is the URI of the Atom Entry of the object, and therefore also of the container within the SWORD server.</dd>
+<dt><strong>Edit-IRI</strong></dt>
+<dd>The <strong>Atom Entry Edit IRI</strong>. This is the IRI of the Atom Entry of the object, and therefore also of the container within the SWORD server.</dd>
 
-<dt><strong>State-URI</strong></dt>
-<dd>The <strong>SWORD Statement URI</strong>.  This is one of the URIs which can be used to retrieve a description of the object from the sword server, including the structure of the object and its state.</dd>
+<dt><strong>SE-IRI</strong</dt>
+<dd>The <strong>SWORD Edit IRI</strong>.  This is the IRI to which clients may POST additional content to an Atom Entry Resource.  This MAY be the same as the <strong>Edit-IRI</strong>, but is defined separately as it supports HTTP POST explicitly while the <strong>Edit-IRI</strong> is defined by [<a href="#atompub">AtomPub</a>] as limited to GET, PUT and DELETE operations.</dd>
+
+<dt><strong>State-IRI</strong></dt>
+<dd>The <strong>SWORD Statement IRI</strong>.  This is one of the IRIs which can be used to retrieve a description of the object from the sword server, including the structure of the object and its state.  This may be the same as the IRI used for content management operations that the server implements beyond the behaviours defined by SWORD.  See <a href="#statement">Setion 12: Statement</a> for more details.</dd>
+
 </dl>
+
+<p>
+Note that although there are 7 IRIs defined above, only 2 of them are added by SWORD: <strong>State-IRI</strong> and <strong>SE-IRI</strong>, the rest are replicated from [<a href="#atompub">AtomPub</a>] and are labelled here for convenience.  Furthermore, the <strong>SE-IRI</strong> MAY be the same as the <strong>Edit-IRI</strong>.  Meanwhile the <strong>EM-IRI</strong> may be the same as the <strong>Cont-IRI</strong>, so implementers can implement the entire specification with only 5 differentiable IRIs.
+</p>
 
 <h2><a name="namespaces">4. Namespaces</a></h2>
 
@@ -198,7 +259,7 @@ This document uses the prefix <strong>sword</strong> for this namespace name; fo
 </p>
 
 <p>
-Root registry for any SWORD recognised package formats including "default":
+Root registry for any SWORD recognised package formats including "zip" and "binary":
 </p>
 
 <div class="code">
@@ -285,22 +346,22 @@ This document uses the prefix <strong>ore</strong> for the namespace name; for e
 </p>
 
 
-<h2><a name="uris">5. URIs</a></h2>
-
-<p>
-The default packaging format, which represents a plain ZIP file during resource creation or update, or a ZIP file + Atom embedded DC metadata during Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] deposit
-</p>
-
-<div class="code">
-    http://purl.org/net/sword/package/default
-</div>
+<h2><a name="iris">5. IRIs</a></h2>
 
 <p>
 The packaging format which represents a binary file which should not be unpacked by the server
 </p>
 
 <div class="code">
-    http://purl.org/net/sword/package/binary
+http://purl.org/net/sword/package/Binary
+</div>
+
+<p>
+The primitive SWORD packaging format, which represents a plain ZIP file during resource creation or update, and in Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] deposit indicates that the Media Part is a plain ZIP file.
+</p>
+
+<div class="code">
+http://purl.org/net/sword/package/SimpleZip
 </div>
 
 <h2><a name="protocoloperations">6. Protocol Operations</a></h2>
@@ -309,22 +370,22 @@ The packaging format which represents a binary file which should not be unpacked
 While specific HTTP status codes are used below, a SWORD client should be prepared to handle any status code as per the HTTP status code definitions [<a href="#rfc2616">RFC2616</a>]
 </p>
 
-<h3><a name="protocoloperations_retreivingservicedocument">6.1 Retrieving a Service Document</a></h3>
+<h3><a name="protocoloperations_retreivingservicedocument">6.1. Retrieving a Service Document</a></h3>
 
 <em>See Sections 5.1 and 8 of [<a href="#atompub">AtomPub</a>], for details.</em>
 
 <ol>
-<li>The client sends a GET request to the URI of the Service Document.</li>
+<li>The client sends a GET request to the IRI of the Service Document.</li>
 <li>The server responds with a Service Document enumerating the IRIs of a group of Collections and the capabilities of those Collections supported by the server. The content of this document can vary based on aspects of the client request, including, but not limited to, authentication credentials.</li>
 </ol>
 
 <p>
-The client may also supply the <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] to provide the username of a target user on whose behalf a deposit will be made.  See <a href="#authenticationmediatedeposit">Section 8: Authentication and Mediated Deposit</a> for more details.
+The client may also supply the <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] to provide the username of a target user on whose behalf a deposit will be made.  See <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a> for more details.
 </p>
 
 <div class="code">
 <pre>
-GET SD-URI HTTP/1.1
+GET SD-IRI HTTP/1.1
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Host: example.org
 <strong>On-Behalf-Of: [username]</strong>
@@ -340,14 +401,14 @@ The service document supplied in response MUST meet the following criteria in ad
 </p>
 
 <ul>
-<li>The SWORD server MUST specify the <span class="code_inline">sword:version</span> element with a value of <span class="code_inline">2.0</span> [<a href="#sword003">SWORD003</a>]</li>
-<li>The SWORD server MAY specify the <span class="code_inline">sword:maxUploadSize</span> (in kB) of content that can be uploaded in one request [<a href="#sword003">SWORD003</a>]</li>
-<li>The SWORD server MUST specify the <span class="code_inline">app:accept</span> element.  If the Collection can take any format content type, it should specify <span class="code_inline">*/*</span> as its value [<a href="#atompub">AtomPub</a>].  It MUST also specify an <span class="code_inline">app:accept</span> element with an <span class="code_inline">alternate</span> attribute set to <span class="code_inline">multipart-related</span> as required by [<a href="#atommultipart">AtomMultipart</a>]</li>
-<li>The SWORD server MAY include <span class="code_inline">sword:collectionPolicy</span> [<a href="#sword003">SWORD003</a>]</li>
-<li>The SWORD server SHOULD include a <span class="code_inline">sword:mediation</span> element with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword002">SWORD002</a>]</li>
-<li>The SWORD server MAY include a <span class="code_inline">sword:treatment</span> element [<a href="#sword003">SWORD003</a>]</li>
-<li>The SWORD server MAY include zero or more <span class="code_inline">sword:acceptPackaging</span> elements [<a href="#sword002">SWORD002</a>].  The value SHOULD be a URI for a known packaging format (where such URIs exist)</li>
-<li>The SWORD server MAY include zero or more <span class="code_inline">sword:service</span> [<a href="#sword003">SWORD003</a>] elements containing references to nested service descriptions</li>
+<li>The SWORD server MUST specify the <span class="code_inline">sword:version</span> element with a value of <span class="code_inline">2.0</span> [<a href="#sword003">SWORD003</a>]</li> as a child of the <span class="code_inline">app:service</span> element.
+<li>The SWORD server MAY specify the <span class="code_inline">sword:maxUploadSize</span> (in kB) of content that can be uploaded in one request [<a href="#sword003">SWORD003</a>] as a child of the <span class="code_inline">app:service</span> element.  If provided this MUST contain an integer.</li>
+<li>The SWORD server MUST specify the <span class="code_inline">app:accept</span> element for the <span class="code_inline">app:collection</span> element.  If the Collection can take any format content type, it should specify <span class="code_inline">*/*</span> as its value [<a href="#atompub">AtomPub</a>].  It MUST also specify an <span class="code_inline">app:accept</span> element with an <span class="code_inline">alternate</span> attribute set to <span class="code_inline">multipart-related</span> as required by [<a href="#atommultipart">AtomMultipart</a>].  The formats specified by <span class="code_inline">app:accept</span> and <span class="code_inline">app:accept@alternate="multipart-related"</span> are RECOMMENDED to be the same.</li>
+<li>The SWORD server MAY include one <span class="code_inline">sword:collectionPolicy</span> [<a href="#sword003">SWORD003</a>] as a child of the <span class="code_inline">app:collection</span> element</li>
+<li>The SWORD server SHOULD include one <span class="code_inline">sword:mediation</span> element as a child of the <span class="code_inline">app:collection</span> element with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword002">SWORD002</a>]</li>
+<li>The SWORD server MAY include one <span class="code_inline">sword:treatment</span> element [<a href="#sword003">SWORD003</a>]as a child of the <span class="code_inline">app:collection</span> element</li>
+<li>The SWORD server MAY include zero or more <span class="code_inline">sword:acceptPackaging</span> elements [<a href="#sword002">SWORD002</a>] as a children of the <span class="code_inline">app:collection</span> element.  The value SHOULD be a IRI for a known packaging format (where such IRIs exist)</li>
+<li>The SWORD server MAY include zero or more <span class="code_inline">sword:service</span> [<a href="#sword003">SWORD003</a>] elements as children of the <span class="code_inline">app:collection</span> element containing references to nested service descriptions</li>
 </ul>
 
 <p>
@@ -371,7 +432,7 @@ Content-Type: text/xml
     &lt;workspace&gt;
         &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
 
-        &lt;collection href="http://swordapp.org/col-uri/43"&gt;
+        &lt;collection href="http://swordapp.org/col-iri/43"&gt;
             &lt;atom:title&gt;Collection 43&lt;/atom:title&gt;
             &lt;accept&gt;*/*&lt;/accept&gt;
             &lt;accept alternate="multipart-related"&gt;*/*&lt;/accept&gt;
@@ -379,9 +440,9 @@ Content-Type: text/xml
             &lt;dcterms:abstract&gt;Collection Description&lt;/dcterms:abstract&gt;
             &lt;sword:mediation&gt;false&lt;/sword:mediation&gt;
             &lt;sword:treatment&gt;Treatment description&lt;/sword:treatment&gt;
-            &lt;sword:acceptPackaging&gt;http://purl.org/net/sword/package/default&lt;/sword:acceptPackaging&gt;
+            &lt;sword:acceptPackaging&gt;http://purl.org/net/sword/package/SimpleZip&lt;/sword:acceptPackaging&gt;
             &lt;sword:acceptPackaging&gt;http://purl.org/net/sword/package/METSDSpaceSIP&lt;/sword:acceptPackaging&gt;
-            &lt;sword:service&gt;http://swordapp.org/sd-uri/e4&lt;/sword:service&gt;
+            &lt;sword:service&gt;http://swordapp.org/sd-iri/e4&lt;/sword:service&gt;
         &lt;/collection&gt;
     &lt;/workspace&gt;
 &lt;/service&gt;
@@ -396,9 +457,8 @@ The following requirements are placed on the client in receipt of a service docu
 <ul>
 <li>If no <span class="code_inline">sword:maxUploadSize</span> is specified, the client MUST assume that no size limit exists, but this specification RECOMMENDS that clients limit themselves to reasonably small file sizes unless special arrangements with the server have been made.</li>
 <li>If no <span class="code_inline">sword:mediation</span> element is specified, the client MUST assume a value of <span class="code_inline">false</span>.
-<li>If no <span class="code_inline">sword:acceptPackaging</span> element is specified, the client MUST assume that the server will only support the SWORD default packaging format (see <a href="#uris">Section 5: URIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details).</li>
-<li>The client MUST assume that the server supports the SWORD default packaging format (see <a href="#uris">Section 5: URIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details), irrespective of whether it is listed in the <span class="code_inline">sword:acceptPackaging</span> elements</li>
-<li>The client SHOULD NOT attempt to deposit files with a packaging format that is not in the <span class="code_inline">sword:acceptPackaging</span> elements, although the client MAY specify the default or binary package formats (see <a href="#uris">Section 5: URIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details) in order to deposit opaquely packaged content</li>
+<li>If no <span class="code_inline">sword:acceptPackaging</span> element is specified, the client MUST assume that the server will not formally support packaging formats (see <a href="#iris">Section 5: IRIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details).</li>
+<li>The client SHOULD NOT attempt to deposit files with a packaging format that is not in the <span class="code_inline">sword:acceptPackaging</span> elements, although the client MAY specify the binary package format (see <a href="#iris">Section 5: IRIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details) in order to deposit opaquely packaged content</li>
 </ul>
 
 <h3><a name="protocoloperations_listingcollections">6.2 Listing Collections</a></h3>
@@ -423,7 +483,7 @@ The client can create a resource by POSTing the binary content as the body of an
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
-<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the URI (or other allowed) of the packaging format used.  See <a href="#packaging">Section 7: Packaging</a> for more details.</li>
+<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used.  See <a href="#packaging">Section 7: Packaging</a> for more details.</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>].  See <a href="#continueddeposit">Section 10: Continued Deposit</a> for more details.</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>].  See <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a> for more details.</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>].  See <a href="#metadatahandling">Section 9: Metadata Handling</a> for more details.</li>
@@ -432,7 +492,7 @@ The client can create a resource by POSTing the binary content as the body of an
 
 <div class="code">
 <pre>
-POST col-uri/43 HTTP/1.1
+POST col-IRI/43 HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Type: application/zip
@@ -457,7 +517,7 @@ The requirements placed on the server here are:
 <li>If no <span class="code_inline">Content-Type</span> header is supplied the server MUST behave as per Section 7.2.1 in [<a href="#rfc2616">RFC2616</a>]</li>
 <li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header.</li>
-<li>If there is no <span class="code_inline">Packaging</span> header, the server MUST assume that it is the default packaging format
+<li>If there is no <span class="code_inline">Packaging</span> header, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs<a/></li>
 <li>Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [<a href="#atompub">AtomPub</a>] with respect to the <span class="code_inline">Slug</span> header.</li>
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a></li>
 <li>The server MUST carry out authentication and mediated deposit as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></li>
@@ -466,7 +526,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span> if the server has completed the deposit of the resource or <span class="code_inline">202 (Accepted)</span> if the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), as supplied in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), as supplied in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -476,7 +536,7 @@ For example:
 <div class="code">
 <pre>
 201 Created
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 </pre>
@@ -488,8 +548,11 @@ Location: [Edit-URI]
 <em>See [<a href="#atommultipart">AtomMultipart</a>] for details.</em>
 
 <p>
-In order to ensure that all SWORD clients and servers can exchange a full range of file content and metadata, the use of Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] is permitted to combine a default package with a set of Dublin Core metadata terms [<a href="#dublincore">DublinCore</a>] embedded in an Atom Entry.
+In order to ensure that all SWORD clients and servers can exchange a full range of file content and metadata, the use of Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] is permitted to combine a package (possibly a simple ZIP) with a set of Dublin Core metadata terms [<a href="#dublincore">DublinCore</a>] embedded in an Atom Entry.
 </p>
+
+<p>
+The SWORD server is not required to support packaging formats, but this profile RECOMMENDS that the server be able to accept a ZIP file as the Media Part of an Atom Multipart request (See <a href="#iris">Section 5: IRIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details).
 
 <p>
 The client can create a resource by POSTing a multipart mime message to the server with two parts: An Atom Entry containing the metadata for the deposit (known as the <strong>Entry Part</strong>), and the binary content as the second part (known as the <strong>Media Part</strong>), with the following requirements:
@@ -500,7 +563,7 @@ The client can create a resource by POSTing a multipart mime message to the serv
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment"</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</span>
-<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the URI (or other allowed) of the packaging format used on the Media Part</li>
+<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
@@ -515,7 +578,7 @@ For example:
 
 <div class="code">
 <pre>
-POST col-uri/43 HTTP/1.1
+POST col-IRI/43 HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Length: [content length]
@@ -566,7 +629,7 @@ MIME-Version: 1.0
 --===============1605871705==
 Content-Type: application/zip
 Content-Disposition: attachment; name=payload; filename=[filename]
-Packaging: http://purl.org/net/sword/package/default
+Packaging: http://purl.org/net/sword/package/SimpleZip
 Content-MD5: [md5-digest]
 MIME-Version: 1.0
 
@@ -582,7 +645,7 @@ The requirements placed on the server here are:
 <ul>
 <li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the Media Part.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header for the Media Part</li>
-<li>If there is no <span class="code_inline">Packaging</span> header on the Media Part, the server MUST assume that it is the default packaging format</li>
+<li>If there is no <span class="code_inline">Packaging</span> header on the Media Part, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
 <li>Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [<a href="#atompub">AtomPub</a>] with respect to the <span class="code_inline">Slug</span> header</li>
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a></li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></li>
@@ -592,7 +655,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span> if the server has completed the deposit of the resource or <span class="code_inline">202 (Accepted)</span> if the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), as supplied in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), as supplied in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -602,7 +665,7 @@ For example:
 <div class="code">
 <pre>
 201 Created
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 </pre>
@@ -613,7 +676,7 @@ Location: [Edit-URI]
 <em>See section 5.4 of [<a href="#atompub">AtomPub</a>] for details.</em>
 
 <p>
-The Deposit Receipt contains two URIs which can be used to retrieve content from the server: <strong>Cont-URI</strong> and <strong>EM-URI</strong>.  These are provided in the <span class="code_inline">atom:content@src</span> element and the <span class="code_inline">atom:link@rel="edit-media"</span> elements respectively.  Their only functional difference is that the client MUST NOT carry out any HTTP operations other than GET on the <strong>Cont-URI</strong>, while all operations are permitted on the <strong>EM-URI</strong>.  It is acceptable, but not required, that both URIs to be the same, and in this section we refer only to the <strong>EM-URI</strong> but in all cases it can be substituted for the <strong>Cont-URI</strong>.
+The Deposit Receipt contains two IRIs which can be used to retrieve content from the server: <strong>Cont-IRI</strong> and <strong>EM-IRI</strong>.  These are provided in the <span class="code_inline">atom:content@src</span> element and the <span class="code_inline">atom:link@rel="edit-media"</span> elements respectively.  Their only functional difference is that the client MUST NOT carry out any HTTP operations other than GET on the <strong>Cont-IRI</strong>, while all operations are permitted on the <strong>EM-IRI</strong>.  It is acceptable, but not required, that both IRIs to be the same, and in this section we refer only to the <strong>EM-IRI</strong> but in all cases it can be substituted for the <strong>Cont-IRI</strong>.
 </p>
 
 <p>
@@ -627,10 +690,10 @@ The Deposit Receipt contains zero or more <span class="code_inline">sword:packag
 
     [...]
 
-    &lt;content type="application/zip" src="http://swordapp.org/cont-uri/43/my_deposit"/&gt;
-    &lt;link rel="edit-media" href="http://swordapp.org/em-uri/43/my_deposit"/&gt;
+    &lt;content type="application/zip" src="http://swordapp.org/cont-IRI/43/my_deposit"/&gt;
+    &lt;link rel="edit-media" href="http://swordapp.org/em-IRI/43/my_deposit"/&gt;
 
-    &lt;sword:packaging&gt;http://purl.org/net/sword/package/default&lt;/sword:packaging&gt;
+    &lt;sword:packaging&gt;http://purl.org/net/sword/package/SimpleZip&lt;/sword:packaging&gt;
     &lt;sword:packaging&gt;http://purl.org/net/sword/package/METSDSpaceSIP&lt;/sword:packaging&gt;
     &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;
         
@@ -639,7 +702,7 @@ The Deposit Receipt contains zero or more <span class="code_inline">sword:packag
 </div>
 
 <p>
-To retrieve the content in the desired packaging format, the client makes an HTTP GET request to the <strong>EM-URI</strong> and MAY supply an <span class="code_inline">Accept-Packaging</span> header [<a href="#sword001">SWORD001</a>] with the URI from one of the <span class="code_inline">sword:packaging</span> elements.
+To retrieve the content in the desired packaging format, the client makes an HTTP GET request to the <strong>EM-IRI</strong> and MAY supply an <span class="code_inline">Accept-Packaging</span> header [<a href="#sword001">SWORD001</a>] with the IRI from one of the <span class="code_inline">sword:packaging</span> elements.
 </p>
 
 <p>
@@ -647,29 +710,30 @@ The server will respond in different ways depending on a number of conditions:
 </p>
 
 <ol>
-<li>If the <span class="code_inline">Accept-Packaging</span> header is not supplied, the server SHOULD assume the default packaging format, but MAY elect another format if it wishes.  The server MUST then supply the client with a package which meets these specifications.</li>
-<li>If the <span class="code_inline">Accept-Packaging</span> header is supplied, and contains the URI (or other allowed value) of a format that the server supports, the server MUST then supply the client with a package which meets these specifications.</li>
-<li>If the <span class="code_inline">Accept-Packaging</span> header is supplied but contains a URI (or other allowed value) for a format that the server does not support, the server MUST respond with 406 Not Acceptable and MAY include an error document as per <a href="#errordocuments">Section 13: Error Documents</a>.</li>
+<li>If the <span class="code_inline">Accept-Packaging</span> header is not supplied, the server SHOULD assume a simple ZIP packaging format (see <a href="#iris">Section 5: IRIs</a>), but MAY elect another format if it wishes.  The server MUST then supply the client with a package which meets these specifications.</li>
+<li>If the <span class="code_inline">Accept-Packaging</span> header is supplied, and contains the IRI (or other allowed value) of a format that the server supports, the server MUST then supply the client with a package which meets these specifications.</li>
+<li>If the <span class="code_inline">Accept-Packaging</span> header is supplied but contains a IRI (or other allowed value) for a format that the server does not support, the server MUST respond with 406 Not Acceptable and MAY include an error document as per <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 </ol>
 
 <p>
 For more details about the packaging process, see <a href="#packaging">Section 7: Packaging</a>
 </p>
 
-<h3><a name="protocoloperations_editingcontent">6.4. Editing the Content of a Resource</a></h3>
+<h3><a name="protocoloperations_editingcontent">6.5. Replacing the Content of a Resource</a></h3>
+
+<h4><a name="protocoloperations_editingcontent_binary">6.5.1. Replacing the File Content of a Resource</a></h4>
 
 <em>See section 5.4 and 9.3 of [<a href="#atompub">AtomPub</a>] for details.</em>
 
 <p>
-The client can replace the existing content of a resource by performing an HTTP PUT of some new binary content to the <strong>EM-URI</strong>, with the following requirements:
+The client can replace the existing content of a resource by performing an HTTP PUT of some new binary content to the <strong>EM-IRI</strong>, with the following requirements:
 </p>
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
-<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the URI (or other allowed) of the packaging format used</li>
-<li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>]</li>
+<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>]</li>
 </ul>
@@ -680,7 +744,7 @@ For example:
 
 <div class="code">
 <pre>
-POST em-uri/43/my_deposit HTTP/1.1
+POST em-IRI/43/my_deposit HTTP/1.1
 Host: example.org
 Content-Type: application/zip
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -688,7 +752,6 @@ Content-Length: [content length]
 Content-MD5: [md5-digest]
 Content-Disposition: attachment; filename=[filename]
 Packaging: http://purl.org/net/sword/package/METSDSpaceSIP
-In-Progress: true
 On-Behalf-Of: jbloggs
 Suppress-Metadata: true
 
@@ -703,15 +766,15 @@ The requirements placed on the server here are:
 <ul>
 <li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
-<li>If there is no <span class="code_inline">Packaging</span> header, the server MUST assume that it is the default packaging format
-<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
-<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</span>.</li>
+<li>If there is no <span class="code_inline">Packaging</span> header, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
+<li>If the container to which the deposit is being made has been previously marked as "in progress", the server SHOULD continue to respect that assertion as per <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></span>.</li>
 <li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a>.</li>
 <li>The server MUST effectively replace all the existing content in the item (subject to the rules associated with Metadata Handling), although implementations may choose to provide versioning or some other mechanism for retaining the overwritten content.</li>
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span> if the server has completed the deposit of the resource or <span class="code_inline">202 (Accepted)</span> if the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -721,22 +784,225 @@ For example:
 <div class="code">
 <pre>
 200 OK
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 </pre>
 </div>
 
-<h3><a name="protocoloperations_deletingcontent">6.5. Deleting the Content of a Resource</a></h3>
+<h4><a name="protocoloperations_editingcontent_metadata">6.5.2. Replacing the Metadata of a Resource</a></h4>
+
+<em>See section 5.4 and 9.3 of [<a href="#atompub">AtomPub</a>] for details.</em>
+
+<p>
+The client can replace the metadata of a resource by performing an HTTP PUT of a new Atom Entry on the <strong>Edit-IRI</strong>.  The client can only be sure that the server will support this process when using the default format supported by SWORD: Qualified Dublin Core XML embedded directly in the <span class="code_inline">atom:entry</span>.  Other metadata formats MAY be supported by a particular server, but this is not covered by the SWORD profile.
+</p>
+
+<ul>
+<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header with the value <span class="code_inline">application/atom+xml</span></li>
+<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
+<li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of true or false [<a href="#sword001">SWORD001</a>]. See <a href="#continueddeposit">Section 10: Continued Deposit</a> for more details.</li>
+</ul>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+POST Edit-IRI/43/my_deposit HTTP/1.1
+Host: example.org
+Content-Type: application/atom+xml
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+On-Behalf-Of: jbloggs
+
+&lt;?xml version="1.0"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:dcterms="http://purl.org/dc/terms/"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;id&gt;urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id&gt;
+    &lt;updated&gt;2005-10-07T17:17:08Z&lt;/updated&gt;
+    &lt;author&gt;&lt;name&gt;Contributor&lt;/name&gt;&lt;/author&gt;
+    &lt;summary type="text"&gt;The abstract&lt;/summary&gt;
+
+    &lt;!-- some embedded metadata --&gt;
+    &lt;dcterms:abstract&gt;The abstract&lt;/dcterms:abstract&gt;
+    &lt;dcterms:accessRights&gt;Access Rights&lt;/dcterms:accessRights&gt;
+    &lt;dcterms:alternative&gt;Alternative Title&lt;/dcterms:alternative&gt;
+    &lt;dcterms:available&gt;Date Available&lt;/dcterms:available&gt;
+    &lt;dcterms:bibliographicCitation&gt;Bibliographic Citation&lt;/dcterms:bibliographicCitation&gt;
+    &lt;dcterms:contributor&gt;Contributor&lt;/dcterms:contributor&gt;
+    &lt;dcterms:description&gt;Description&lt;/dcterms:description&gt;
+    &lt;dcterms:hasPart&gt;Has Part&lt;/dcterms:hasPart&gt;
+    &lt;dcterms:hasVersion&gt;Has Version&lt;/dcterms:hasVersion&gt;
+    &lt;dcterms:identifier&gt;Identifier&lt;/dcterms:identifier&gt;
+    &lt;dcterms:isPartOf&gt;Is Part Of&lt;/dcterms:isPartOf&gt;
+    &lt;dcterms:publisher&gt;Publisher&lt;/dcterms:publisher&gt;
+    &lt;dcterms:references&gt;References&lt;/dcterms:references&gt;
+    &lt;dcterms:rightsHolder&gt;Rights Holder&lt;/dcterms:rightsHolder&gt;
+    &lt;dcterms:source&gt;Source&lt;/dcterms:source&gt;
+    &lt;dcterms:title&gt;Title&lt;/dcterms:title&gt;
+    &lt;dcterms:type&gt;Type&lt;/dcterms:type&gt;
+
+&lt;/entry&gt;
+</pre>
+</div>
+
+<p>
+The requirements placed on the server here are:
+</p>
+
+<ul>
+<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a></li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></span>.</li>
+<li>The server MUST effectively replace all the existing metadata in the item, although implementations may choose to provide versioning or some other mechanism for retaining the overwritten metadata.</li>
+</ul>
+
+<p>
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+200 OK
+Location: [Edit-IRI]
+
+[optional Deposit Receipt]
+</pre>
+</div>
+
+<h4><a name="protocoloperations_editingcontent_multipart">6.5.3. The Metadata and File Content of a Resource</a></h4>
+
+<em>See [<a href="#atommultipart">AtomMultipart</a>] for details.</em>
+
+<p>
+The client can replace both the metadata and content of a resource by performing an HTTP PUT on the <strong>Edit-IRI</strong> with a multipart mime message, as per <a href="#protocoloperations_creatingresource_multipart">Section 6.3.2. Creating a Resource with a Multipart Deposit</a>
+</p>
+
+<ul>
+<li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment"</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
+<li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</span>
+<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
+<li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
+<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
+<li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
+<li>The client SHOULD add Dublin Core [<a href="#dublincore">DublinCore</a>] terms to the Atom Entry as foreign markup (if appropriate); the terms MUST be embedded as direct children of the <span class="code_inline">atom:entry</span> element, if present.</li>
+<li>The client MAY add any other metadata formats or foreign markup to the <span class="code_inline">atom:entry</span> element</li>
+</ul>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+PUT Edit-IRI/43 HTTP/1.1
+Host: example.org
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+Content-Type: multipart/related;
+            boundary="===============1605871705==";
+            type="application/atom+xml"
+In-Progress: true
+On-Behalf-Of: jbloggs
+Suppress-Metadata: true
+MIME-Version: 1.0
+
+Media Post
+--===============1605871705==
+Content-Type: application/atom+xml; charset="utf-8"
+Content-Disposition: attachment; name="atom"
+MIME-Version: 1.0
+
+&lt;?xml version="1.0"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:dcterms="http://purl.org/dc/terms/"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;id&gt;urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id&gt;
+    &lt;updated&gt;2005-10-07T17:17:08Z&lt;/updated&gt;
+    &lt;author&gt;&lt;name&gt;Contributor&lt;/name&gt;&lt;/author&gt;
+    &lt;summary type="text"&gt;The abstract&lt;/summary&gt;
+
+    &lt;!-- some embedded metadata --&gt;
+    &lt;dcterms:abstract&gt;The abstract&lt;/dcterms:abstract&gt;
+    &lt;dcterms:accessRights&gt;Access Rights&lt;/dcterms:accessRights&gt;
+    &lt;dcterms:alternative&gt;Alternative Title&lt;/dcterms:alternative&gt;
+    &lt;dcterms:available&gt;Date Available&lt;/dcterms:available&gt;
+    &lt;dcterms:bibliographicCitation&gt;Bibliographic Citation&lt;/dcterms:bibliographicCitation&gt;
+    &lt;dcterms:contributor&gt;Contributor&lt;/dcterms:contributor&gt;
+    &lt;dcterms:description&gt;Description&lt;/dcterms:description&gt;
+    &lt;dcterms:hasPart&gt;Has Part&lt;/dcterms:hasPart&gt;
+    &lt;dcterms:hasVersion&gt;Has Version&lt;/dcterms:hasVersion&gt;
+    &lt;dcterms:identifier&gt;Identifier&lt;/dcterms:identifier&gt;
+    &lt;dcterms:isPartOf&gt;Is Part Of&lt;/dcterms:isPartOf&gt;
+    &lt;dcterms:publisher&gt;Publisher&lt;/dcterms:publisher&gt;
+    &lt;dcterms:references&gt;References&lt;/dcterms:references&gt;
+    &lt;dcterms:rightsHolder&gt;Rights Holder&lt;/dcterms:rightsHolder&gt;
+    &lt;dcterms:source&gt;Source&lt;/dcterms:source&gt;
+    &lt;dcterms:title&gt;Title&lt;/dcterms:title&gt;
+    &lt;dcterms:type&gt;Type&lt;/dcterms:type&gt;
+
+&lt;/entry&gt;
+--===============1605871705==
+Content-Type: application/zip
+Content-Disposition: attachment; name=payload; filename=[filename]
+Packaging: http://purl.org/net/sword/package/SimpleZip
+Content-MD5: [md5-digest]
+MIME-Version: 1.0
+
+[...binary package data...]
+--===============1605871705==--
+</pre>
+</div>
+
+<p>
+The requirements placed on the server here are:
+</p>
+
+<ul>
+<li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the Media Part.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
+<li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header for the Media Part</li>
+<li>If there is no <span class="code_inline">Packaging</span> header on the Media Part, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
+<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a></li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></li>
+<li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a></li>
+<li>The server MUST overwrite the existing metadata and content with metadata and content equivalent to or derived from the deposited content, or return an error document.  Servers may choose to implement versioning to retain previous copies of the content.</li>
+<li>The server MUST be able to record and later reflect the Dublin Core [<a href="#dublincore">DublinCore</a>] foreign markup in the <span class="code_inline">atom:entry</span> element, but MAY NOT understand any other embedded formats.</li>
+</ul>
+
+<p>
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), as supplied in the <span class="code_inline">Location</span> header.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+200 OK
+Location: [Edit-IRI]
+
+[optional Deposit Receipt]
+</pre>
+</div>
+
+<h3><a name="protocoloperations_deletingcontent">6.6. Deleting the Content of a Resource</a></h3>
 
 <em>See Sections 5.4 and 9.4 of [<a href="#atompub">AtomPub</a>] for details.</em>
 
 <p>
-The client can remove all the content of a resource without removing the resource itself by issuing an HTTP DELETE request on the <strong>EM-URI</strong>, with the following requirements:
+The client can remove all the content of a resource without removing the resource itself by issuing an HTTP DELETE request on the <strong>EM-IRI</strong>, with the following requirements:
 </p>
 
 <ul>
-<li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>]</li>
 </ul>
@@ -747,10 +1013,9 @@ For example:
 
 <div class="code">
 <pre>
-DELETE em-uri/43/my_deposit HTTP/1.1
+DELETE em-IRI/43/my_deposit HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
-In-Progress: true
 On-Behalf-Of: jbloggs
 Suppress-Metadata: true
 </pre>
@@ -761,14 +1026,14 @@ The requirements placed on the server here are:
 </p>
 
 <ul>
-<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
+<li>If the container to which the deposit is being made has been previously marked as "in progress", the server SHOULD continue to respect that assertion as per <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a>.</li>
 <li>The server MUST effectively delete all the existing content in the item (subject to the rules associated with Metadata Handling), although implementations may choose to provide versioning or some other mechanism for retaining the deleted content.</li>
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span> if the server has completed the delete of the content or <span class="code_inline">202 (Accepted)</span> if the server has accepted the delete request but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -778,25 +1043,25 @@ For example:
 <div class="code">
 <pre>
 200 OK
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 </pre>
 </div>
 
-<h3><a name="protocoloperations_addingcontent">6.6. Adding Content to a Resource</a></h3>
+<h3><a name="protocoloperations_addingcontent">6.7. Adding Content to a Resource</a></h3>
 
-<h4><a name="protocoloperations_addingcontent_binary">6.6.1. Adding New Packages or Files to a Container</a></h4>
+<h4><a name="protocoloperations_addingcontent_binary">6.7.1. Adding New Packages or Files to a Container</a></h4>
 
 <p>
-The client can add further packaged or binary content to a container, adding to existing content rather than overwriting, by issuing an HTTP POST to the <strong>Edit-URI</strong>, with the following requirements:
+The client can add further packaged or binary content to a container, adding to existing content rather than overwriting, by issuing an HTTP POST to the <strong>SE-IRI</strong>, with the following requirements:
 </p>
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
-<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the URI (or other allowed) of the packaging format used</li>
+<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>]</li>
@@ -804,7 +1069,7 @@ The client can add further packaged or binary content to a container, adding to 
 
 <div class="code">
 <pre>
-POST em-uri/43/my_deposit HTTP/1.1
+POST SE-IRI/43/my_deposit HTTP/1.1
 Host: example.org
 Content-Type: application/zip
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -827,7 +1092,7 @@ The requirements placed on the server here are:
 <ul>
 <li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
-<li>If there is no <span class="code_inline">Packaging</span> header, the server MUST assume that it is the default packaging format</li>
+<li>If there is no <span class="code_inline">Packaging</span> header, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a>.</li>
@@ -835,7 +1100,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span> if the server has completed the deposit of the resource or <span class="code_inline">202 (Accepted)</span> if the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -845,16 +1110,16 @@ For example:
 <div class="code">
 <pre>
 200 OK
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 </pre>
 </div>
 
-<h4><a name="protocoloperations_addingcontent_metadata">6.6.2. Adding New Metadata to a Resource</a></h4>
+<h4><a name="protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Resource</a></h4>
 
 <p>
-The client can update the metadata attached to a resource by issuing an HTTP POST of a new Atom Entry document containing metadata embedded as foreign markup, with the following requirements:
+The client can update the metadata attached to a resource by issuing an HTTP POST of a new Atom Entry document containing metadata embedded as foreign markup, with the following requirements, to the <strong>SE-IRI</strong>:
 </p>
 
 <ul>
@@ -868,7 +1133,7 @@ The client can update the metadata attached to a resource by issuing an HTTP POS
 
 <div class="code">
 <pre>
-POST /edit-uri/43/my_deposit HTTP/1.1
+POST /SE-IRI/43/my_deposit HTTP/1.1
 Host: example.org
 Content-Type: application/atom+xml;type=entry
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -894,7 +1159,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span> if the server has completed the deposit of the resource or <span class="code_inline">202 (Accepted)</span> if the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -904,16 +1169,16 @@ For example:
 <div class="code">
 <pre>
 200 OK
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 </pre>
 </div>
 
-<h4><a name="protocoloperations_addingcontent_multipart">6.6.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a></h4>
+<h4><a name="protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a></h4>
 
 <p>
-The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document, with the following requirements, to the <strong>EM-URI</strong>:
+The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document, with the following requirements, to the <strong>SE-IRI</strong>:
 </p>
 
 <ul>
@@ -921,7 +1186,7 @@ The client can add new content and update the metadata attached to a resource by
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</li>
-<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the URI (or other allowed) of the packaging format used on the Media Part</li>
+<li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
 <li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
@@ -935,7 +1200,7 @@ For example:
 
 <div class="code">
 <pre>
-POST /em-uri/43/my_deposit HTTP/1.1
+POST /em-IRI/43/my_deposit HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Length: [content length]
@@ -987,7 +1252,7 @@ MIME-Version: 1.0
 --===============1605871705==
 Content-Type: application/zip
 Content-Disposition: attachment; name=payload; filename=[filename]
-Packaging: http://purl.org/net/sword/package/default
+Packaging: http://purl.org/net/sword/package/SimpleZip
 Content-MD5: [md5-digest]
 MIME-Version: 1.0
 
@@ -1003,7 +1268,7 @@ The requirements placed on the server here are:
 <ul>
 <li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the Media Part.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 <li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header for the Media Part.</li>
-<li>If there is no <span class="code_inline">Packaging</span> header on the Media Part, the server MUST assume that it is the default packaging format</li>
+<li>If there is no <span class="code_inline">Packaging</span> header on the Media Part, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
 <li>Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [<a href="#atompub">AtomPub</a>] with respect to the <span class="code_inline">Slug</span> header</li>
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
@@ -1012,7 +1277,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span> if the server has completed the deposit of the resource or <span class="code_inline">202 (Accepted)</span> if the server has accepted the resource but still has deposit workflows to run before finally accepting it.  The Deposit Receipt MUST be available under the <strong>Edit-URI</strong> (Member Entry URI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -1022,16 +1287,16 @@ For example:
 <div class="code">
 <pre>
 201 Created
-Location: [Edit-URI]
+Location: [Edit-IRI]
 
 [optional Deposit Receipt]
 <pre>
 </div>
 
-<h3><a name="protocoloperations_deleteconteiner">6.7. Delete the Container</a></h3>
+<h3><a name="protocoloperations_deleteconteiner">6.8. Deleting the Container</a></h3>
 
 <p>
-The client can delete the entire object on the server by issuing an HTTP DELETE request on the <strong>Edit-URI</strong>, with the following requirements:
+The client can delete the entire object on the server by issuing an HTTP DELETE request on the <strong>Edit-IRI</strong>, with the following requirements:
 </p>
 
 <ul>
@@ -1040,7 +1305,7 @@ The client can delete the entire object on the server by issuing an HTTP DELETE 
 
 <div class="code">
 <pre>
-DELETE /edit-uri/43/my_deposit HTTP/1.1
+DELETE /edit-IRI/43/my_deposit HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 On-Behalf-Of: jbloggs
@@ -1054,25 +1319,47 @@ The requirements placed on the server here are:
 <ul>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>The server MUST effectively remove the Container and all its content, although implementations may choose to provide versioning or some other mechanism for retaining the deleted content.</li>
-<li>The <strong>Edit-URI</strong> MUST return a 404 Not Found on any future requests.</li>
+<li>The <strong>Edit-IRI</strong> MUST return a 404 Not Found on any future requests.</li>
 </ul>
 
 <p>
 Once the server has processed the request is MUST respond with an HTTP status code 204 (No Content) and leave the response body empty.
 </p>
 
-<h3><a name="protocoloperations_statement">6.8. Retrieving the Statement</a></h3>
+<h3><a name="protocoloperations_statement">6.9. Retrieving the Statement</a></h3>
 
 <p>
-The Statement can be found either embedded as foreign markup inside the Deposit Receipt, or can be retrieved by requesting the URI provided in the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element.  The format of the statement is identified by the <span class="code_inline">type</span> attribute of the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element and MUST be <span class="code_inline">application/rdf+xml</span> for an OAI-ORE Resource Map, or <span class="code_inline">application/atom+xml;type=feed</span> for an Atom Feed.
+The Statement can be found either embedded as foreign markup inside the Deposit Receipt, or can be retrieved by requesting the IRI provided in the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element.  The format of the statement is identified by the <span class="code_inline">type</span> attribute of the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element and MUST be <span class="code_inline">application/rdf+xml</span> for an OAI-ORE Resource Map, or <span class="code_inline">application/atom+xml;type=feed</span> for an Atom Feed.
 </p>
 
 <p>
-It MAY also be possible to content negotiate for the statement on the <strong>Edit-URI</strong>.  All negotiable formats MUST also be available as <span class="code_inline">atom:link</span> elements with <span class="code_inline">@rel="http://purl.org/net/sword/terms/statement"</span>.
+It MAY also be possible to content negotiate for the statement on the <strong>Edit-IRI</strong>.  All negotiable formats MUST also be available as <span class="code_inline">atom:link</span> elements with <span class="code_inline">@rel="http://purl.org/net/sword/terms/statement"</span>.
 </p>
 
 <p>
 For details on these serialisations see <a href="#statement">Section 12: SWORD Statement</a>.
+</p>
+
+<h3><a name="protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a></h3>
+
+<p>
+During normal operation the SWORD server may respond to requests by the client with documents (such as the Statement) which contain IRIs for resources which are not formally covered by this profile.  For example, the Statement may include IRIs to files unpacked from an original deposit package and made available independently.  Or an implementation of a content management protocol such as CMIS [<a href="#cmis">CMIS</a>] or GData [<a href="#gdata">GData</a>] may provide IRIs for resources or collections of resources.
+</p>
+
+<p>
+The following headers MAY be used by the client under the following conditions on any IRI outside of the scope of this profile, where the meanings of the headers are as defined in [<a href="#sword001">SWORD001</a>]:
+</p>
+
+<table>
+<tr><th>Header</th><th>HTTP Method</th></tr>
+<tr><td>Packaging</td><td>POST, PUT</td></tr>
+<tr><td>Suppress-Metadata</td><td>POST, PUT, DELETE</td></tr>
+<tr><td>Accept-Packaging</td><td>GET</td></tr>
+<tr><td>On-Behalf-Of</td><td>GET, POST, PUT, DELETE</td></tr>
+</table>
+
+<p>
+The client MUST NOT assume that a SWORD server will support these headers for arbitrary IRIs.  It is likely that the use of these headers by the client will be through explicit agreement between client and server implementation pairs that these headers will be supported alongside any content management API implemented in addition to SWORD.
 </p>
 
 <h2><a name="packaging">7. Packaging</a></h2>
@@ -1096,8 +1383,11 @@ Clients should refer to the <span class="code_inline">sword:treatment</span> des
 </p>
 
 <p>
-Packages formats SHOULD be identified by a URI (as per [<a href="#sword002">SWORD002</a>]), but MAY be identified by an arbitrary string.
+Packages formats SHOULD be identified by a IRI (as per [<a href="#sword002">SWORD002</a>]), but MAY be identified by an arbitrary string.
 </p>
+
+<p>
+If no <span class="code_inline">sword:acceptPackaging</span> element is supplied the client MUST assume that the server does not formally support any package formats, and should expect everything to be treated as per the server's policies with regard to the mimetype as per the <span class="code_inline">app:accept</span> element.
 
 <div class="code">
 <pre>
@@ -1143,7 +1433,7 @@ If a server receives a POST with an unacceptable <span class="code_inline">Packa
 
 <div class="code">
 <pre>
-POST /col-uri/43 HTTP/1.1
+POST /col-IRI/43 HTTP/1.1
 Host: example.org
 Content-Type: application/zip
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -1162,7 +1452,7 @@ When describing packaged resources in Media Entry documents, servers MUST use th
 </p>
 
 <p>
-If the server does not supply any <span class="code_inline">sword:packaging</span> elements, the client MUST assume that the server only supports the default packaging format.
+If the server does not supply any <span class="code_inline">sword:packaging</span> elements, the client MUST assume that the server only supports a simple zip file packaging format (See <a href="#iris">Section 5: IRIs</a>).
 </p>
 
 <div class="code">
@@ -1178,10 +1468,10 @@ If the server does not supply any <span class="code_inline">sword:packaging</spa
     &lt;summary type="text"&gt;A summary&lt;/summary
     &lt;generator uri="http://www.swordserver.org/engine" version="1.0"/&gt;
 
-<strong>    &lt;content type="application/zip" src="http://swordapp.org/col-uri/43/my_deposit/package.zip"/&gt;</strong>
+<strong>    &lt;content type="application/zip" src="http://swordapp.org/col-IRI/43/my_deposit/package.zip"/&gt;</strong>
 <strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/METSDSpaceSIP&lt;/sword:packaging&gt;</strong>
 <strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;</strong>
-    &lt;link rel="edit" href="http://swordapp.org/col-uri/43/my_deposit.atom" /&gt;
+    &lt;link rel="edit" href="http://swordapp.org/col-IRI/43/my_deposit.atom" /&gt;
 &lt;/entry&gt;
 </pre>
 </div>
@@ -1189,7 +1479,7 @@ If the server does not supply any <span class="code_inline">sword:packaging</spa
 <h3><a name="packaging_registration">7.4. Registering packaging types under the SWORD namespace</a></h3>
 
 <p>
-Clients and servers SHOULD use URIs to communicate about package types, and MAY use URIs registered under the SWORD namespace (such as the default package).  To register a new URI in the SWORD namespace, please contact the SWORD team at the contact details at the bottom of this document.  Registration of package URIs under the SWORD namespace is strictly OPTIONAL.
+Clients and servers SHOULD use IRIs to communicate about package types, and MAY use IRIs registered under the SWORD namespace.  To register a new IRI in the SWORD namespace, please contact the SWORD team at the contact details at the bottom of this document.  Registration of package IRIs under the SWORD namespace is strictly OPTIONAL.
 </p>
 
 <h2><a name="authenticationmediateddeposit">8. Authentication and Mediated Deposit</a></h2>
@@ -1228,7 +1518,7 @@ Clients SHOULD use the  <span class="code_inline">On-Behalf-Of</span> header whe
 
     &lt;workspace&gt;
         &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
-        &lt;collection href="http://swordapp.org/col-uri/43" &gt;
+        &lt;collection href="http://swordapp.org/col-IRI/43" &gt;
             &lt;atom:title&gt;Collection 43&lt;/atom:title&gt;
 
             &lt;accept&gt;application/xml&lt;/accept&gt;
@@ -1256,7 +1546,15 @@ In all cases (mediated or not) where a user has authenticated to make a deposit,
 <h2><a name="metadatahandling">9. Metadata Handling</a></h2>
 
 <p>
-The Atom Publishing Protocol [<a href="#atompub">AtomPub</a>] has good default support for metadata and the packaging formats that are used to exchange data between scholarly systems often support rich metadata formats.  Therefore, handling metadata well is an important aspect to SWORD.
+Good handling of metadata is critical to scholarly systems, and support in the Atom Publishing Protocol [<a href="#atompub">AtomPub</a>] is limited to supporting metadata embedded in Atom Entry documents.  Scholarly systems are more likely to exchange packaging formats with embedded metadata documents, or rich file formats which can have metadata embedded in them or extracted from them (for example Open Documents).  Therefore, appropriate handling of metadata is an important aspect to SWORD.
+</p>
+
+<p>
+This profile uses the <span class="code_inline">Suppress-Metadata</span> HTTP header [<a href="#sword001">SWORD001</a>] so that the client can indicate to the server whether the current operation should affect the metadata of the containing resource.  A use case for this might be that in the first instance the client supplies to the server a document from which the metadata associated with the document can be extracted (a title, author list, keywords, etc).  Later the client adds a new document to the container in the form of a spreadsheet with the supporting data for the original document, and indicates using <span class="code_inline">Suppress-Metadata</span> that this object should not be used as a source of metadata.  This prevents the previously correctly extracted data from being overwritten with potentially spurious or non-authoritative data from the spreadsheet.
+</p>
+
+<p>
+This process gives the client the option, effectively, of defining which content item contains the correct metadata when dealing with complex multi-media document types.
 </p>
 
 <p>
@@ -1266,7 +1564,7 @@ Requests that come into a SWORD server MAY contain a <span class="code_inline">S
 <h3><a name="metadatahandling_handle">9.1. Handle Metadata Updates</a></h3>
 
 <p>
-If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inline">false</span>, then the server SHOULD consider the metadata supplied in the deposit for inclusion in its  metadata record for the object being deposited.  There are several conditions in which the server may find itself needing to look at the incoming metadata as a source for its records:
+If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inline">false</span>, then the server SHOULD consider the metadata supplied in the deposit for inclusion in its metadata record for the container that the content is being deposited into.  There are several conditions in which the server may find itself needing to look at the incoming metadata as a source for its records:
 </p>
 
 <ol>
@@ -1278,19 +1576,23 @@ If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inlin
 <h3><a name="metadatahandling_suppress">9.2. Suppress Metadata Updates</a></h3>
 
 <p>
-If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inline">true</span>, then the server SHOULD consider that any metadata supplied in the deposit be ignored or at least not used in any way to overwrite existing metadata.  There are several conditions in which the server may find itself needing to suppress metadata hanlding:
+If <span class="code_inline">Suppress-Metadata</span> is <span class="code_inline">true</span>, then the server SHOULD consider that any metadata supplied in the deposit be ignored or at least not used in any way to overwrite existing metadata associated with the container being deposited into.  There are several conditions in which the server may find itself needing to suppress metadata handling:
 </p>
 
 <ol>
 <li>The object is a new deposit: In this case the server SHOULD NOT extract the metadata from the deposit and use it to populate a metadata record, but this does not preclude the server generating metadata from other sources or processes.</li>
 <li>The object is being updated with new content and optionally metadata: the server SHOULD NOT extract metadata from the deposit and use it to overwrite any existing metadata record.</li>
-<li>The object is having its content deleted: the server SHOULD NOT remove any metadata associated with the item, although the content itself is being removed.</li>
+<li>The object is having its content deleted: the server SHOULD NOT remove any metadata associated with the object, although the content itself is being removed.</li>
 </ol>
 
 <h2><a name="continueddeposit">10. Continued Deposit</a></h2>
 
 <p>
 As scholarly systems may wish to give the client more control over the publishing process, SWORD uses the <span class="code_inline">In-Progress</span> HTTP header [<a href="#sword001">SWORD001</a>] to allow the client to indicate that a deposit should not yet be injected into any post-submission or pre-publication workflow.  The <span class="code_inline">In-Progress</span> header MUST take the value <span class="code_inline">true</span> or <span class="code_inline">false</span>, and if it is not present the  server MUST assume that it is <span class="code_inline">false</span> and behave as described below.
+</p>
+
+<p>
+An example use case for this is that the client may be embedded into a system which uses the SWORD server as a storage layer, but which cannot acquire all of the content for a "finished" item in one deposit operation.  Consider a user-facing system which encourages users to upload files one at a time through some web interface, which causes each file to be directly deposited onto the SWORD server.  In each case, the client would assert the deposit is still <span class="code_inline">In-Progress</span> until the user confirms that they have uploaded all the relevant files, or navigates away from the page.  At that stage, the client can issue a blank HTTP POST request to the SWORD server, with <span class="code_inline">In-Progress: false</span> to complete the deposit.
 </p>
 
 <h3><a name="continueddeposit_complete">10.1. Deposit Complete</a></h3>
@@ -1305,6 +1607,27 @@ If <span class="code_inline">In-Progress</span> is <span class="code_inline">fal
 If <span class="code_inline">In-Progress</span> is <span class="code_inline">true</span>, the server SHOULD expect the client to provide further updates to the item some undetermined time in the future.  Details of how this is implemented is dependent on the server's purpose.  For example, a repository system may hold items which are marked <span class="code_inline">In-Progress</span> in a workspace until such time as a client request indicates that the deposit is complete.
 </p>
 
+<h3><a name="continueddeposit_complete">10.3. Completing a Previously Incomplete Deposit</a></h3>
+
+<p>
+The client can assert that a deposit process has completed by issuing an HTTP POST to the <strong>Edit-IRI</strong> with a blank message body and with the <span class="code_inline">In-Progress</span> header set to false (it may simply omit the header altogether too, as this is treated as <span class="code_inline">In-Progress: false</span> by the server).
+</p>
+
+<div class="code">
+<pre>
+POST /edit-IRI/43 HTTP/1.1
+Host: example.org
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: 0
+User-Agent: MyJavaClient/0.1 Restlet/2.0
+In-Progress: false
+</pre>
+</div>
+
+<p>
+If <span class="code_inline">In-Progress</span> is <span class="code_inline">false</span>, the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.
+</p>
+
 <h2><a name="depositreceipt">11. Deposit Receipt</a></h2>
 
 <p>
@@ -1313,13 +1636,14 @@ On successfully accepting a POST (deposit), implementers SHOULD return an Atom E
 
 <ul>
 <li>It MAY contain information about the metadata associated with the deposit as it is stored on the server.  If it does, it SHOULD provide this metadata in extended Dublin Core [<a href="#dublincore">DublinCore</a>], although it MAY also provide it in other formats.  Any Dublin Core markup should be in Dublin Core XML and embedded directly in the <span class="code_inline">atom:entry</span> element, not in a <span class="code_inline">dcterms:metadata</span> element.</li>
-<li>It MUST contain a Media Entry URI (<strong>Edit-URI</strong>)</li>
-<li>It MUST contain a Media Resource URI (<strong>EM-URI</strong>)</li>
+<li>It MUST contain a Media Entry IRI (<strong>Edit-IRI</strong>), defined by <span class="code_inline">atom:link@rel="edit"</span></li>
+<li>It MUST contain a Media Resource IRI (<strong>EM-IRI</strong>), defined by <span class="code_inline">atom:link@rel="edit-media"</span></li>
+<li>It MUST contain a SWORD Edit IRI (<strong>SE-IRI</strong>), defined by <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/add"</span> which MAY be the same as the <strong>Edit-IRI</strong></li>
 <li>It MAY contain an arbitrary number of <span class="code_inline">sword:packaging</span> elements declaring the formats that the Media Resource can be retrieved in</li>
-<li>It MUST contain a single <span class="code_inline">sword:treatment</span> element [<a href="#sword003">SWORD003</a>] which contains either a human-readable statement describing treatment the deposited resource has received or a URI that dereferences to such a description.</li>
+<li>It MUST contain a single <span class="code_inline">sword:treatment</span> element [<a href="#sword003">SWORD003</a>] which contains either a human-readable statement describing treatment the deposited resource has received or a IRI that dereferences to such a description.</li>
 <li>It MAY contain a single <span class="code_inline">sword:verboseDescription</span> element [<a href="#sword003">SWORD003</a>] which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.</li>
 <li>It MAY contain the SWORD Statement (see <a href="#statement">Section 12: SWORD Statement</a>) embedded as foreign markup using its OAI-ORE [<a href="#oaiore">OAIORE</a>] serialisation (See <a href="#statement_oaiore">Section 12.1: OAI-ORE Serialisation</a>)</li>
-<li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a URI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
+<li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a IRI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
 <li>It MUST contain either at least one <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> or an embedded Statement document.</li>
 <li>It MAY contain an <span class="code_inline">atom:link@rel="alternate"</span> element with an <span class="code_inline">href</span> attribute which points to the splash page of the item on the server</li>
 </ul>
@@ -1365,6 +1689,7 @@ For example:
     &lt;content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;
 <strong>    &lt;link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;</strong>
 <strong>    &lt;link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" /&gt;</strong>
+<strong>    &lt;link rel="http://purl.org/net/sword/terms/add" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" /&gt;</strong>
 <strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;</strong>
 <strong>
     &lt;link rel="http://purl.org/net/sword/terms/statement" 
@@ -1406,11 +1731,11 @@ http://purl.org/net/sword/terms/
 <h4><a name="statement_predicates_originaldeposit">12.1.1. sword:originalDeposit</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/originalDeposit
+<strong>IRI</strong>: http://purl.org/net/sword/terms/originalDeposit
 </p>
 
 <p>
-This is used to indicate the URI of a resource on the server which was an original deposit package.  This allows the client to easily identify any packages which form the basis of the original deposit among other parts of the object which may be derived from the original.
+This is used to indicate the IRI of a resource on the server which was an original deposit package.  This allows the client to easily identify any packages which form the basis of the original deposit among other parts of the object which may be derived from the original.
 </p>
 
 <p>
@@ -1432,11 +1757,11 @@ In RDF/XML this can be serialised as as:
 <h4><a name="statement_predicates_state">12.1.2. sword:state</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/state
+<strong>IRI</strong>: http://purl.org/net/sword/terms/state
 </p>
 
 <p>
-This is used to supply the URI representing the state of an item on the server.  This can be any URI, and is not constrained to any ontology.  This can be used in combination with <span class="code_inline">sword:stateDescription</span> to provide more details to the client.
+This is used to supply the IRI representing the state of an item on the server.  This can be any IRI, and is not constrained to any ontology.  This can be used in combination with <span class="code_inline">sword:stateDescription</span> to provide more details to the client.
 </p>
 
 <p>
@@ -1458,7 +1783,7 @@ In RDF/XML this can be serialised as:
 <h4><a name="statement_predicates_packaging">12.1.3. sword:packaging</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/packaging
+<strong>IRI</strong>: http://purl.org/net/sword/terms/packaging
 </p>
 
 <p>
@@ -1493,7 +1818,7 @@ In RDF/XML this can be serialised as:
 <h4><a name="statement_predicates_depositedon">12.1.4. sword:depositedOn</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/depositedOn
+<strong>IRI</strong>: http://purl.org/net/sword/terms/depositedOn
 </p>
 
 <p>
@@ -1528,7 +1853,7 @@ In RDF/XML this may be serialised as
 <h4><a name="statement_predicates_depositedby">12.1.5. sword:depositedBy</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/depositedBy
+<strong>IRI</strong>: http://purl.org/net/sword/terms/depositedBy
 </p>
 
 <p>
@@ -1563,7 +1888,7 @@ In RDF/XML this may be serialised as
 <h4><a name="statement_predicates_obo">12.1.6. sword:depositedOnBehalfOf</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/depositedOnBehalfOf
+<strong>IRI</strong>: http://purl.org/net/sword/terms/depositedOnBehalfOf
 </p>
 
 <p>
@@ -1598,7 +1923,7 @@ In RDF/XML this may be serialised as
 <h3><a name="statement_predicates_description">12.1.7. sword:stateDescription</a></h3>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/terms/stateDescription
+<strong>IRI</strong>: http://purl.org/net/sword/terms/stateDescription
 </p>
 
 <p>
@@ -1660,19 +1985,19 @@ For example:
 &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
         xmlns:ore="http://www.openarchives.org/ore/terms/"&gt;
 
-    &lt;rdf:Description rdf:about="http://localhost:8080/edit-uri/43/my_deposit"&gt;
-        &lt;ore:describes rdf:resource="http://localhost:8080/agg-uri/43/my_deposit"/&gt;
+    &lt;rdf:Description rdf:about="http://localhost:8080/edit-IRI/43/my_deposit"&gt;
+        &lt;ore:describes rdf:resource="http://localhost:8080/agg-IRI/43/my_deposit"/&gt;
     &lt;/rdf:Description&gt;
 
-    &lt;rdf:Description rdf:about="http://localhost:8080/agg-uri/43/my_deposit"&gt;
-        &lt;ore:isDescribedBy rdf:resource="http://localhost:8080/edit-uri/43/my_deposit"/&gt;
-        &lt;ore:aggregates rdf:resource="http://localhost:8080/part-uri/43/my_deposit/example.zip"/&gt;
-        &lt;sword:originalDeposit rdf:resource="http://localhost:8080/part-uri/43/my_deposit/example.zip"/&gt;
+    &lt;rdf:Description rdf:about="http://localhost:8080/agg-IRI/43/my_deposit"&gt;
+        &lt;ore:isDescribedBy rdf:resource="http://localhost:8080/edit-IRI/43/my_deposit"/&gt;
+        &lt;ore:aggregates rdf:resource="http://localhost:8080/part-IRI/43/my_deposit/example.zip"/&gt;
+        &lt;sword:originalDeposit rdf:resource="http://localhost:8080/part-IRI/43/my_deposit/example.zip"/&gt;
         &lt;sword:state rdf:resource="http://purl.org/net/sword/state/archived"/&gt;
     &lt;/rdf:Description&gt;
 
-    &lt;rdf:Description rdf:about="http://localhost:8080/part-uri/43/my_deposit/example.zip"&gt;
-        &lt;sword:packaging rdf:resource="http://purl.org/net/sword/package/default"/&gt;
+    &lt;rdf:Description rdf:about="http://localhost:8080/part-IRI/43/my_deposit/example.zip"&gt;
+        &lt;sword:packaging rdf:resource="http://purl.org/net/sword/package/SimpleZip"/&gt;
         &lt;sword:depositedOn rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"&gt;
             2011-02-25T14:40:09Z
         &lt;/sword:depositedOn&gt;
@@ -1696,7 +2021,7 @@ The client's responsibilities are:
 </p>
 
 <ul>
-<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only the default packaging format</li>
+<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only a simple zip packaging format (See <a href="#iris">Section 5: IRIs</a>).</li>
 <li>The client MUST ignore without error any terms in the document that it does not understand</li>
 <li>The client SHOULD recognise parts of the resource map which are not identified with <span class="code_inline">sword:originalDeposit</span> terms as content of the item, and represent them appropriately</li>
 </ul>
@@ -1743,8 +2068,8 @@ For example:
 	        term="http://purl.org/net/sword/terms/originalDeposit" 
 	        label="Orignal Deposit"/&gt;
         &lt;atom:content type="application/zip" 
-                    src="http://localhost:8080/part-uri/43/my_deposit/example.zip"/&gt;
-        &lt;sword:packaging&gt;http://purl.org/net/sword/package/default&lt;/sword:packaging&gt;
+                    src="http://localhost:8080/part-IRI/43/my_deposit/example.zip"/&gt;
+        &lt;sword:packaging&gt;http://purl.org/net/sword/package/SimpleZip&lt;/sword:packaging&gt;
         &lt;sword:depositedOn&gt;2011-03-02T20:50:06Z&lt;/sword:depositedOn&gt;
         &lt;sword:depositedBy&gt;sword&lt;/sword:depositedBy&gt;
         &lt;sword:depositedOnBehalfOf&gt;jbloggs&lt;/sword:depositedBy&gt;
@@ -1759,14 +2084,14 @@ The client's responsibilities are:
 </p>
 
 <ul>
-<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only the default packaging format
+<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only the a simple zip packaging format (see <a href="#iris">Section 5: IRIs</a>).</li>
 <li>The client MUST ignore without error any terms in the document that it does not understand</li>
 </ul>
 
 <h2><a name="errordocuments">13. Error Documents</a></h2>
 
 <p>
-SWORD adds a new class of document to [<a href="#atompub">AtomPub</a>] that gives server implementations the ability to describe error conditions more fully than HTTP response codes allow, as per [<a href="#sword003">SWORD003</a>]. If a server is reporting an error condition in response to a resource POST, it SHOULD also return a document with a root element of sword:error. The sword:error element SHOULD have an href attribute containing a URI that identifies the error. Errors in the SWORD namespace are reserved and legal values are enumerated below. Implementations MAY define their own errors, but MUST use a different namespace to do so.
+SWORD adds a new class of document to [<a href="#atompub">AtomPub</a>] that gives server implementations the ability to describe error conditions more fully than HTTP response codes allow, as per [<a href="#sword003">SWORD003</a>]. If a server is reporting an error condition in response to a resource POST, it SHOULD also return a document with a root element of sword:error. The sword:error element SHOULD have an href attribute containing a IRI that identifies the error. Errors in the SWORD namespace are reserved and legal values are enumerated below. Implementations MAY define their own errors, but MUST use a different namespace to do so.
 </p>
 
 <p>
@@ -1778,7 +2103,7 @@ The <span class="code_inline">sword:error</span> element MAY contain any of the 
 <h4><a name="errordocuments_uris_content">13.1.1. sword:ErrorContent</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/error/ErrorContent	
+<strong>IRI</strong>: http://purl.org/net/sword/error/ErrorContent	
 </p>
 
 <p>
@@ -1788,7 +2113,7 @@ The supplied format is not the same as that identified in the <span class="code_
 <h4><a name="errordocuments_uris_checksum">13.1.2. sword:ErrorChecksumMismatch</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/error/ErrorChecksumMismatch	
+<strong>IRI</strong>: http://purl.org/net/sword/error/ErrorChecksumMismatch	
 </p>
 
 <p>
@@ -1798,7 +2123,7 @@ Checksum sent does not match the calculated checksum. The server MUST also retur
 <h4><a name="errordocuments_uris_badrequest">13.1.3. sword:ErrorBadRequest</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/error/ErrorBadRequest	
+<strong>IRI</strong>: http://purl.org/net/sword/error/ErrorBadRequest	
 </p>
 
 <p>
@@ -1808,7 +2133,7 @@ Some parameters sent with the POST were not understood. The server MUST also ret
 <h4><a name="errordocuments_uris_unknown">13.1.4. sword:TargetOwnerUnknown</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/error/TargetOwnerUnknown	
+<strong>IRI</strong>: http://purl.org/net/sword/error/TargetOwnerUnknown	
 </p>
 
 <p>
@@ -1818,7 +2143,7 @@ Used in mediated deposit when the server does not know the identity of the <span
 <h4><a name="errordocuments_uris_mediation">13.1.5. sword:MediationNotAllowed</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/error/MediationNotAllowed	
+<strong>IRI</strong>: http://purl.org/net/sword/error/MediationNotAllowed	
 </p>
 
 <p>
@@ -1828,7 +2153,7 @@ Used where a client has attempted a mediated deposit, but this is not supported 
 <h4><a name="errordocuments_uris_notallowed">13.1.6. sword:MethodNotAllowed</a></h4>
 
 <p>
-<strong>URI</strong>: http://purl.org/net/sword/error/MethodNotAllowed
+<strong>IRI</strong>: http://purl.org/net/sword/error/MethodNotAllowed
 </p>
 
 <p>
@@ -1895,6 +2220,10 @@ in the head of a relevant HTML document to assist with service discovery.
 </p>
 
 <p>
+<a name="cmis"><strong>[CMIS]</strong></a> Content Management Interoperability Services (CMIS) Version 1.0. <a href="http://docs.oasis-open.org/cmis/CMIS/v1.0/cs01/cmis-spec-v1.0.html">http://docs.oasis-open.org/cmis/CMIS/v1.0/cs01/cmis-spec-v1.0.html</a>
+</p>
+
+<p>
 <a name="dublincore"><strong>[DublinCore]</strong></a> DCMI Metadata Terms. <a href="http://www.dublincore.org/documents/dcmi-terms/">http://www.dublincore.org/documents/dcmi-terms/</a>
 </p>
 
@@ -1935,6 +2264,10 @@ in the head of a relevant HTML document to assist with service discovery.
 </p>
 
 <p>
+<a name="sword13"><strong>[SWORD 1.3]</strong></a> Downing, J. "SWORD AtomPub Profile version 1.3", 2008. <a href="http://www.swordapp.org/docs/sword-profile-1.3.html">http://www.swordapp.org/docs/sword-profile-1.3.html</a>
+</p>
+
+<p>
 <a name="sword001"><strong>[SWORD001]</strong></a> Jones, R. "Packaged Content Delivery over HTTP", February 2011
 </p>
 
@@ -1948,30 +2281,6 @@ in the head of a relevant HTML document to assist with service discovery.
 
 <p>
 <a name="sword004"><strong>[SWORD004]</strong></a> Jones, R. "Atom Multipart Extensions for Packaged Content", February 2011
-</p>
-
-<h2><a name="credits">16. Credits</a></h2>
-
-<p>
-<strong>Author</strong>: Richard Jones
-</p>
-
-<p>
-<strong>Document Reviewers</strong>:<br/>
-Julie Allinson<br/>
-Tim Brody<br/>
-David Flanders<br/>
-Stuart Lewis<br/>
-Graham Klyne<br/>
-Alister Miles<br/>
-Ben O'Steen<br/>
-Rob Sanderson<br/>
-Nick Sheppard<br/>
-Ian Stuart<br/>
-Ed Summers<br/>
-David Tarrant<br/>
-Graham Triggs<br/>
-Scott Wilson<br/>
 </p>
 
 </body>
