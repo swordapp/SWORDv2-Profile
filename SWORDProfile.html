@@ -560,7 +560,7 @@ The client can create a resource by POSTing a multipart mime message to the serv
 
 <ul>
 <li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment"</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</span>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
@@ -1610,7 +1610,7 @@ If <span class="code_inline">In-Progress</span> is <span class="code_inline">tru
 <h3><a name="continueddeposit_complete">10.3. Completing a Previously Incomplete Deposit</a></h3>
 
 <p>
-The client can assert that a deposit process has completed by issuing an HTTP POST to the <strong>Edit-IRI</strong> with a blank message body and with the <span class="code_inline">In-Progress</span> header set to false (it may simply omit the header altogether too, as this is treated as <span class="code_inline">In-Progress: false</span> by the server).
+The client can assert that a deposit process has completed by issuing an HTTP POST to the <strong>SE-IRI</strong> with a blank message body and with the <span class="code_inline">In-Progress</span> header set to false (it may simply omit the header altogether too, as this is treated as <span class="code_inline">In-Progress: false</span> by the server).
 </p>
 
 <div class="code">
