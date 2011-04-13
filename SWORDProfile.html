@@ -57,7 +57,9 @@ body {
 &nbsp;&nbsp;<a href="#protocoloperations_creatingresource">6.3. Creating a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_creatingresource_binary">6.3.1. Creating a Resource with a Binary File Deposit</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_creatingresource_multipart">6.3.2. Creating a Resource with a Multipart Deposit</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_creatingresource_entry">6.3.3. Creating a Resource with an Atom Entry</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_retrievingcontent">6.4. Retrieving the content</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_retrievingcontent_feed">6.4.1. Atom Feed Representations of Media Resources</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_editingcontent">6.5. Replacing the Content of a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_binary">6.5.1. Replacing the File Content of a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_metadata">6.5.2. Replacing the Metadata of a Resource</a><br/>
@@ -157,7 +159,7 @@ This approach of fire-and-forget deposit, where the depositor has no further int
 </p>
 
 <p>
-The SWORD 2.0 profile continues to build upon AtomPub and HTTP ([<a href="#rfc2616">RFC2616</a>]) through the addition of Create, Retrieve, Update and Delete (CRUD) operations, in order to enable the following kinds of interactions:
+The SWORD 2.0 profile continues to build upon AtomPub and HTTP ([<a href="#rfc2616">RFC2616</a>]) through the inclusion of the Create, Retrieve, Update and Delete (CRUD) operations of AtomPub, in order to enable the following kinds of interactions:
 </p>
 
 <ul>
@@ -476,7 +478,7 @@ AtomPub states that Collection Resources MUST provide representations in the for
 <em>See Sections 5.3 and 9.2 of [<a href="#atompub">AtomPub</a>] for details.</em>
 
 <p>
-The client can create a resource by POSTing the binary content as the body of an HTTP request, with the <span class="code_inline">Content-Type</span>, <span class="code_inline">Content-Disposition</span>, and <span class="code_inline">Packaging</span> headers, with the following requirements:
+The client can create a resource by POSTing the binary content as the body of an HTTP request to the <strong>Col-IRI</strong>, with the <span class="code_inline">Content-Type</span>, <span class="code_inline">Content-Disposition</span>, and <span class="code_inline">Packaging</span> headers, with the following requirements:
 </p>
 
 <ul>
@@ -492,7 +494,7 @@ The client can create a resource by POSTing the binary content as the body of an
 
 <div class="code">
 <pre>
-POST col-IRI/43 HTTP/1.1
+POST Col-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Type: application/zip
@@ -555,7 +557,7 @@ In order to ensure that all SWORD clients and servers can exchange a full range 
 The SWORD server is not required to support packaging formats, but this profile RECOMMENDS that the server be able to accept a ZIP file as the Media Part of an Atom Multipart request (See <a href="#iris">Section 5: IRIs</a> and <a href="#packaging">Section 7: Packaging</a> for more details).
 
 <p>
-The client can create a resource by POSTing a multipart mime message to the server with two parts: An Atom Entry containing the metadata for the deposit (known as the <strong>Entry Part</strong>), and the binary content as the second part (known as the <strong>Media Part</strong>), with the following requirements:
+The client can create a resource by POSTing a multipart mime message to the <strong>Col-IRI</strong> with two parts: An Atom Entry containing the metadata for the deposit (known as the <strong>Entry Part</strong>), and the binary content as the second part (known as the <strong>Media Part</strong>), with the following requirements:
 </p>
 
 <ul>
@@ -578,7 +580,7 @@ For example:
 
 <div class="code">
 <pre>
-POST col-IRI/43 HTTP/1.1
+POST Col-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Length: [content length]
@@ -671,6 +673,103 @@ Location: [Edit-IRI]
 </pre>
 </div>
 
+<h4><a name="protocoloperations_creatingresource_entry">6.3.3. Creating a Resource with an Atom Entry</a></h4>
+
+<em>See Sections 5.3 and 9.2 of [<a href="#atompub">AtomPub</a>] for details.</em>
+
+<p>
+Clients can create a container within a SWORD server and optionally provide it with metadata without adding any binary content to it.  This is done by POSTing an Atom Entry to the <strong>Col-IRI</strong> with the following requirements:
+</p>
+
+<ul>
+<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header with the value <span class="code_inline">application/atom+xml;type=entry</span></li>
+<li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>].  See <a href="#continueddeposit">Section 10: Continued Deposit</a> for more details.</li>
+<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>].  See <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a> for more details.</li>
+<li>The client MAY provide a <span class="code_inline">Suppress-Metadata</span> header [<a href="#sword001">SWORD001</a>].  See <a href="#metadatahandling">Section 9: Metadata Handling</a> for more details.</li>
+<li>The client MAY supply a <span class="code_inline">Slug</span> header providing a suggested identifier for the deposited content</li>
+<li>The client SHOULD add Dublin Core [<a href="#dublincore">DublinCore</a>] terms to the Atom Entry as foreign markup (if appropriate); the terms MUST be embedded as direct children of the <span class="code_inline">atom:entry</span> element, if present.</li>
+<li>The client MAY add any other metadata formats or foreign markup to the <span class="code_inline">atom:entry</span> element</li>
+</ul>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+POST Col-IRI HTTP/1.1
+Host: example.org
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+Content-Type: application/atom+xml;type=entry
+In-Progress: true
+On-Behalf-Of: jbloggs
+Suppress-Metadata: true
+Slug: [suggested identifier]
+
+&lt;?xml version="1.0"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:dcterms="http://purl.org/dc/terms/"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;id&gt;urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id&gt;
+    &lt;updated&gt;2005-10-07T17:17:08Z&lt;/updated&gt;
+    &lt;author&gt;&lt;name&gt;Contributor&lt;/name&gt;&lt;/author&gt;
+    &lt;summary type="text"&gt;The abstract&lt;/summary&gt;
+
+    &lt;!-- some embedded metadata --&gt;
+    &lt;dcterms:abstract&gt;The abstract&lt;/dcterms:abstract&gt;
+    &lt;dcterms:accessRights&gt;Access Rights&lt;/dcterms:accessRights&gt;
+    &lt;dcterms:alternative&gt;Alternative Title&lt;/dcterms:alternative&gt;
+    &lt;dcterms:available&gt;Date Available&lt;/dcterms:available&gt;
+    &lt;dcterms:bibliographicCitation&gt;Bibliographic Citation&lt;/dcterms:bibliographicCitation&gt;
+    &lt;dcterms:contributor&gt;Contributor&lt;/dcterms:contributor&gt;
+    &lt;dcterms:description&gt;Description&lt;/dcterms:description&gt;
+    &lt;dcterms:hasPart&gt;Has Part&lt;/dcterms:hasPart&gt;
+    &lt;dcterms:hasVersion&gt;Has Version&lt;/dcterms:hasVersion&gt;
+    &lt;dcterms:identifier&gt;Identifier&lt;/dcterms:identifier&gt;
+    &lt;dcterms:isPartOf&gt;Is Part Of&lt;/dcterms:isPartOf&gt;
+    &lt;dcterms:publisher&gt;Publisher&lt;/dcterms:publisher&gt;
+    &lt;dcterms:references&gt;References&lt;/dcterms:references&gt;
+    &lt;dcterms:rightsHolder&gt;Rights Holder&lt;/dcterms:rightsHolder&gt;
+    &lt;dcterms:source&gt;Source&lt;/dcterms:source&gt;
+    &lt;dcterms:title&gt;Title&lt;/dcterms:title&gt;
+    &lt;dcterms:type&gt;Type&lt;/dcterms:type&gt;
+
+&lt;/entry&gt;
+</pre>
+</div>
+
+<p>
+The requirements placed on the server here are:
+</p>
+
+<ul>
+<li>Server implementations MUST adopt the behaviour and requirements in Section 9.7 of [<a href="#atompub">AtomPub</a>] with respect to the <span class="code_inline">Slug</span> header</li>
+<li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 10: Continued Deposit</a></li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></li>
+<li>If there is no <span class="code_inline">Suppress-Metadata</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#metadatahandling">Section 9: Metadata Handling</a></li>
+<li>The server MUST create a new resource, or return an error document.</li>
+<li>The server MUST be able to record and later reflect the Dublin Core [<a href="#dublincore">DublinCore</a>] foreign markup in the <span class="code_inline">atom:entry</span> element, but MAY NOT understand any other embedded formats.</li>
+<li>The server MUST supply an <strong>EM-IRI</strong> for the client to use in future update operations, even though this EM-IRI may at this stage not return any content under HTTP GET.</li>
+</ul>
+
+<p>
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), as supplied in the <span class="code_inline">Location</span> header.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+201 Created
+Location: [Edit-IRI]
+
+[optional Deposit Receipt]
+</pre>
+</div>
+
 <h3><a name="protocoloperations_retrievingcontent">6.4. Retrieving the content</a></h3>
 
 <em>See section 5.4 of [<a href="#atompub">AtomPub</a>] for details.</em>
@@ -702,6 +801,10 @@ The Deposit Receipt contains zero or more <span class="code_inline">sword:packag
 </div>
 
 <p>
+Requests to retrieve the Media Resource here refer to the Media Resource <em>as a whole</em>, as per [<a href="#atompub">AtomPub</a>], and not to any of the component parts of a complex Media Resource.  That is, the response to a request for the Media Resource should be considered a representation of the entire content of the object on the server, and it is not permissable to attempt to content negotiate for a particular part of the Media Resource.  Implementers who wish to access the parts of a Media Resource should see <a href="#protocoloperations_retrievingcontent_feed">Section 6.4.1. Atom Feed Representations of Media Resources</a> below.
+</p>
+
+<p>
 To retrieve the content in the desired packaging format, the client makes an HTTP GET request to the <strong>EM-IRI</strong> and MAY supply an <span class="code_inline">Accept-Packaging</span> header [<a href="#sword001">SWORD001</a>] with the IRI from one of the <span class="code_inline">sword:packaging</span> elements.
 </p>
 
@@ -717,6 +820,14 @@ The server will respond in different ways depending on a number of conditions:
 
 <p>
 For more details about the packaging process, see <a href="#packaging">Section 7: Packaging</a>
+</p>
+
+<h4><a name="protocoloperations_retrievingcontent_feed">6.4.1. Atom Feed Representations of Media Resources</a></h4>
+
+<em>See sections 11.2 and 12.1 of [<a href="#atompub">AtomPub</a>] for details.</em>
+
+<p>
+<strong>FIXME</strong>: is this section strictly necessary?  It is covered by AtomPub, and it will only be a MAY requirement.  Lists of contents of the container is handled by the Statement, which also deals with the State of the item.
 </p>
 
 <h3><a name="protocoloperations_editingcontent">6.5. Replacing the Content of a Resource</a></h3>
@@ -744,7 +855,7 @@ For example:
 
 <div class="code">
 <pre>
-POST em-IRI/43/my_deposit HTTP/1.1
+PUT EM-IRI HTTP/1.1
 Host: example.org
 Content-Type: application/zip
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -774,21 +885,9 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span>, or an appropriate error code.
 </p>
 
-<p>
-For example:
-</p>
-
-<div class="code">
-<pre>
-200 OK
-Location: [Edit-IRI]
-
-[optional Deposit Receipt]
-</pre>
-</div>
 
 <h4><a name="protocoloperations_editingcontent_metadata">6.5.2. Replacing the Metadata of a Resource</a></h4>
 
@@ -810,7 +909,7 @@ For example:
 
 <div class="code">
 <pre>
-POST Edit-IRI/43/my_deposit HTTP/1.1
+PUT Edit-IRI HTTP/1.1
 Host: example.org
 Content-Type: application/atom+xml
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -860,21 +959,8 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span> or <span class="code_inline">204 (No Content)</span>, or an appropriate error code.
 </p>
-
-<p>
-For example:
-</p>
-
-<div class="code">
-<pre>
-200 OK
-Location: [Edit-IRI]
-
-[optional Deposit Receipt]
-</pre>
-</div>
 
 <h4><a name="protocoloperations_editingcontent_multipart">6.5.3. The Metadata and File Content of a Resource</a></h4>
 
@@ -903,7 +989,7 @@ For example:
 
 <div class="code">
 <pre>
-PUT Edit-IRI/43 HTTP/1.1
+PUT Edit-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Length: [content length]
@@ -978,21 +1064,8 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), as supplied in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span> or <span class="code_inline">204 (No Content)</span>, or an appropriate error code.
 </p>
-
-<p>
-For example:
-</p>
-
-<div class="code">
-<pre>
-200 OK
-Location: [Edit-IRI]
-
-[optional Deposit Receipt]
-</pre>
-</div>
 
 <h3><a name="protocoloperations_deletingcontent">6.6. Deleting the Content of a Resource</a></h3>
 
@@ -1013,7 +1086,7 @@ For example:
 
 <div class="code">
 <pre>
-DELETE em-IRI/43/my_deposit HTTP/1.1
+DELETE EM-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 On-Behalf-Of: jbloggs
@@ -1033,21 +1106,8 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span> or <span class="code_inline">204 (No Content)</span>, or an appropriate error code.
 </p>
-
-<p>
-For example:
-</p>
-
-<div class="code">
-<pre>
-200 OK
-Location: [Edit-IRI]
-
-[optional Deposit Receipt]
-</pre>
-</div>
 
 <h3><a name="protocoloperations_addingcontent">6.7. Adding Content to a Resource</a></h3>
 
@@ -1069,7 +1129,7 @@ The client can add further packaged or binary content to a container, adding to 
 
 <div class="code">
 <pre>
-POST SE-IRI/43/my_deposit HTTP/1.1
+POST SE-IRI HTTP/1.1
 Host: example.org
 Content-Type: application/zip
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -1133,7 +1193,7 @@ The client can update the metadata attached to a resource by issuing an HTTP POS
 
 <div class="code">
 <pre>
-POST /SE-IRI/43/my_deposit HTTP/1.1
+POST SE-IRI HTTP/1.1
 Host: example.org
 Content-Type: application/atom+xml;type=entry
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -1200,7 +1260,7 @@ For example:
 
 <div class="code">
 <pre>
-POST /em-IRI/43/my_deposit HTTP/1.1
+POST SE-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Length: [content length]
@@ -1305,7 +1365,7 @@ The client can delete the entire object on the server by issuing an HTTP DELETE 
 
 <div class="code">
 <pre>
-DELETE /edit-IRI/43/my_deposit HTTP/1.1
+DELETE Edit-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 On-Behalf-Of: jbloggs
@@ -1323,7 +1383,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request is MUST respond with an HTTP status code 204 (No Content) and leave the response body empty.
+Once the server has processed the request is MUST respond with an HTTP status code <span class="code_inline">204 (No Content)</span> and leave the response body empty.
 </p>
 
 <h3><a name="protocoloperations_statement">6.9. Retrieving the Statement</a></h3>
@@ -1433,7 +1493,7 @@ If a server receives a POST with an unacceptable <span class="code_inline">Packa
 
 <div class="code">
 <pre>
-POST /col-IRI/43 HTTP/1.1
+POST Col-IRI HTTP/1.1
 Host: example.org
 Content-Type: application/zip
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
@@ -1615,7 +1675,7 @@ The client can assert that a deposit process has completed by issuing an HTTP PO
 
 <div class="code">
 <pre>
-POST /edit-IRI/43 HTTP/1.1
+POST SE-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
 Content-Length: 0
@@ -1920,7 +1980,7 @@ In RDF/XML this may be serialised as
 </pre>
 </div>
 
-<h3><a name="statement_predicates_description">12.1.7. sword:stateDescription</a></h3>
+<h4><a name="statement_predicates_description">12.1.7. sword:stateDescription</a></h4>
 
 <p>
 <strong>IRI</strong>: http://purl.org/net/sword/terms/stateDescription
