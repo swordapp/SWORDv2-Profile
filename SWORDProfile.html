@@ -67,8 +67,9 @@ body {
 &nbsp;&nbsp;<a href="#protocoloperations_deletingcontent">6.6. Deleting the Content of a Resource</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_addingcontent">6.7. Adding Content to a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_binary">6.7.1. Adding New Packages or Files to a Container</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Resource</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Container</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Container with Multipart</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_mediaresource">6.7.4. Adding New Files to the Media Resource</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_deleteconteiner">6.8. Deleting the Container</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_statement">6.9. Retrieving the Statement</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a><br/>
@@ -133,8 +134,10 @@ David Flanders, JISC<br/>
 Graham Klyne, University of Oxford<br/>
 Alister Miles, University of Oxford<br/>
 Ben O'Steen, Cottage Labs<br/>
+Mark MacGillivray, Cottage Labs<br/>
 Rob Sanderson, LANL<br/>
 Nick Sheppard, Leeds Metropolitan University<br/>
+Eddie Shin, MediaShelf<br/>
 Ian Stuart, University of Edinburgh<br/>
 Ed Summers, Library of Congress<br/>
 David Tarrant, University of Southampton<br/>
@@ -144,7 +147,7 @@ Scott Wilson, University of Bolton<br/>
 
 <p>
 <strong>Further acknowledgements of input</strong><br/>
-Aaron Birkland, Tim Donohue, Jim Downing, Ross Gardler, Steve Midgley, Glen Robson, Peter Sefton, Adrian Stevenson, Paul Walk, Nigel Ward
+Aaron Birkland (Cornell University), Tim Donohue (DuraSpace), Jim Downing (University of Cambridge), Ross Gardler (OSS Watch), Steve Midgley (US Department of Education), Glen Robson (National Library of Wales), Peter Sefton (University Of Southern Queensland), Adrian Stevenson (UKOLN), Paul Walk (UKOLN), Nigel Ward (University of Queensland)
 </p>
 
 <h2><a name="introduction">1. Introduction</a></h2>
@@ -809,14 +812,22 @@ To retrieve the content in the desired packaging format, the client makes an HTT
 </p>
 
 <p>
+If the content is not in a publicly available space on the server, the user agent may be required to authenticate.  In these cases the client MAY supply the <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>] for informational purposes.
+</p>
+
+<p>
 The server will respond in different ways depending on a number of conditions:
 </p>
 
 <ol>
-<li>If the <span class="code_inline">Accept-Packaging</span> header is not supplied, the server SHOULD assume a simple ZIP packaging format (see <a href="#iris">Section 5: IRIs</a>), but MAY elect another format if it wishes.  The server MUST then supply the client with a package which meets these specifications.</li>
-<li>If the <span class="code_inline">Accept-Packaging</span> header is supplied, and contains the IRI (or other allowed value) of a format that the server supports, the server MUST then supply the client with a package which meets these specifications.</li>
+<li>If the <span class="code_inline">Accept-Packaging</span> header is not supplied, the server SHOULD assume a simple ZIP packaging format (see <a href="#iris">Section 5: IRIs</a>), but MAY elect another format if it wishes.  The server MUST then supply the client with a package which meets these specifications, and SHOULD provide the SimpleZip IRI in a <span class="code_inline">Packaging</span> header on the response.</li>
+<li>If the <span class="code_inline">Accept-Packaging</span> header is supplied, and contains the IRI (or other allowed value) of a format that the server supports, the server MUST then supply the client with a package which meets these specifications, and SHOULD provide an IRI (or other allowed value) of the format being returned in a <span class="code_inline">Packaging</span> header on the response.</li>
 <li>If the <span class="code_inline">Accept-Packaging</span> header is supplied but contains a IRI (or other allowed value) for a format that the server does not support, the server MUST respond with 406 Not Acceptable and MAY include an error document as per <a href="#errordocuments">Section 13: Error Documents</a>.</li>
 </ol>
+
+<p>
+Upon receiving a successful response, if no <span class="code_inline">Packaging</span> header is provided in the response the client SHOULD assume that it is a SimpleZip.
+</p>
 
 <p>
 For more details about the packaging process, see <a href="#packaging">Section 7: Packaging</a>
@@ -827,8 +838,35 @@ For more details about the packaging process, see <a href="#packaging">Section 7
 <em>See sections 11.2 and 12.1 of [<a href="#atompub">AtomPub</a>] for details.</em>
 
 <p>
-<strong>FIXME</strong>: is this section strictly necessary?  It is covered by AtomPub, and it will only be a MAY requirement.  Lists of contents of the container is handled by the Statement, which also deals with the State of the item.
+It is RECOMMENDED that implementations provide an EM-IRI in the Deposit Receipt with a type of <span class="code_inline">application/atom+xml;type=feed</span> in addition to any other types available.
 </p>
+
+<p>For example:</p>
+
+<div class="code">
+<pre>
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+        xmlns:sword="http://purl.org/net/sword/"&gt;
+
+    [...]
+
+    &lt;link rel="edit-media" href="http://swordapp.org/em-IRI/43/my_deposit"/&gt;
+    &lt;link rel="edit-media" type="application/atom+xml;type=feed" href="http://swordapp.org/em-IRI/43/my_deposit.feed"/&gt;
+
+    [...]
+        
+&lt;/entry&gt;
+</pre>
+</div>
+
+<p>
+The exact contents of the Feed representation are unspecified, but it is RECOMMENDED that this is a list of atom:entry elements which represent the individual media items which together form the Media Resource.
+</p>
+
+<p>
+NOTE that this is not the same as the Statement, which is a representation of the entire object on the server, not just the Media Resource.  See <a href="#statement">Section 12: The SWORD Statement</a> for details
+</p>
+
 
 <h3><a name="protocoloperations_editingcontent">6.5. Replacing the Content of a Resource</a></h3>
 
@@ -1176,7 +1214,7 @@ Location: [Edit-IRI]
 </pre>
 </div>
 
-<h4><a name="protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Resource</a></h4>
+<h4><a name="protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Container</a></h4>
 
 <p>
 The client can update the metadata attached to a resource by issuing an HTTP POST of a new Atom Entry document containing metadata embedded as foreign markup, with the following requirements, to the <strong>SE-IRI</strong>:
@@ -1235,7 +1273,7 @@ Location: [Edit-IRI]
 </pre>
 </div>
 
-<h4><a name="protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a></h4>
+<h4><a name="protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Container with Multipart</a></h4>
 
 <p>
 The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document, with the following requirements, to the <strong>SE-IRI</strong>:
@@ -1352,6 +1390,73 @@ Location: [Edit-IRI]
 [optional Deposit Receipt]
 <pre>
 </div>
+
+<h4><a name="protocoloperations_addingcontent_mediaresource">6.7.4. Adding Files to the Media Resource</a></h4>
+
+<p>The client can add more content to the Media Resource itself by performing an HTTP POST request on the <strong>EM-IRI</strong>.  This has the effect of placing new files into the Media Resource itself.</p>
+
+<p>This feature is for use when clients wish to send individual files to the server and to receive back the IRI for the created resource.  POSTing to the <strong>SE-IRI</strong> will not give back the location of the deposited resource in the HTTP <span class="code_inline">Location</span> header, so in cases where the server does not provide the (optional) Deposit Receipt, it is not possible for the client to ascertain the location of the file actually deposited - the <span class="code_inline">Location</span> header in that operation is the <strong>Edit-IRI</strong>.  By POSTing to the <strong>EM-IRI</strong>, the <span class="code_inline">Location</span> header will return the IRI of the deposited file itself, rather than that of the container.</p>
+
+<p>
+As the <strong>EM-IRI</strong> represents the Media Resource itself, rather than the Container, this operation will not formally support metadata handling, and therefore also offers no explicit support for packaging either since packages may be both content and metadata.
+</p>
+
+<p>
+When depositing packages, the best approach is to POST to the <strong>SE-IRI</strong> (See Sections 6.7.1, 6.7.2, 6.7.3), as POST to <strong>EM-IRI</strong> has undefined behaviour for metadata handling and unpackaging.
+</p>
+
+<p>When carrying out this operation, the requirements for the client are:</p>
+
+<ul>
+<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
+<li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
+<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
+</ul>
+
+<div class="code">
+<pre>
+POST EM-IRI HTTP/1.1
+Host: example.org
+Content-Type: application/pdf
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+Content-MD5: [md5-digest]
+Content-Disposition: attachment; filename=[filename]
+On-Behalf-Of: jbloggs
+
+[request entity]
+</pre>
+</div>
+
+<p>
+The requirements placed on the server here are:
+</p>
+
+<ul>
+<li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed, and MAY return a SWORD Error document.  See <a href="#errordocuments">Section 13: Error Documents</a>.</li>
+<li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
+<li>The server SHOULD NOT overwrite any existing content, and MUST add content equivalent to or derived from the deposited content to the existing container or respond with an error document.</li>
+</ul>
+
+<p>
+Once the server has processed the request it is RECOMMENDED that it returns a Deposit Receipt as described in <a href="#depositreceipt">Section 11: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The server MAY, though, return any response which it feels appropriate, and this profile does not limit the response types in any way.  Nonetheless, the server MUST include an HTTP <span class="code_inline">Location</span> header with the IRI of the created resource.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+201 Created
+Location: [File-IRI]
+
+[optional Deposit Receipt]
+</pre>
+</div>
+
 
 <h3><a name="protocoloperations_deleteconteiner">6.8. Deleting the Container</a></h3>
 
@@ -1706,6 +1811,8 @@ On successfully accepting a POST (deposit), implementers SHOULD return an Atom E
 <li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a IRI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
 <li>It MUST contain either at least one <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> or an embedded Statement document.</li>
 <li>It MAY contain an <span class="code_inline">atom:link@rel="alternate"</span> element with an <span class="code_inline">href</span> attribute which points to the splash page of the item on the server</li>
+<li>It SHOULD contain a single <span class="code_inlin">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/originalDeposit</span> which provides the IRI identifying the package or file deposited in the current request.  This information is transient and will only be present when responding to a deposit, it is not required that it be available in the Entry Document retreived from the <stong>EM-IRI</strong>.</li>
+<li>It SHOULD, if relevant, contain an <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org.net/sword/terms/derivedResource</span> which provides the IRI identifying any content resources which were derived or extracted from the originally deposited resource (e.g. the files unpacked from a zip file).</li>
 </ul>
 
 <p>
@@ -1752,6 +1859,16 @@ For example:
 <strong>    &lt;link rel="http://purl.org/net/sword/terms/add" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" /&gt;</strong>
 <strong>    &lt;sword:packaging&gt;http://purl.org/net/sword/package/BagIt&lt;/sword:packaging&gt;</strong>
 <strong>
+    &lt;link rel="http://purl.org/net/sword/terms/originalDeposit" 
+            type="application/zip" 
+            href="http://www.swordserver.ac.uk/col1/mydeposit/package.zip"/&gt;
+    &lt;link rel="http://purl.org/net/sword/terms/derivedResource" 
+            type="application/pdf" 
+            href="http://www.swordserver.ac.uk/col1/mydeposit/file1.pdf"/&gt;
+    &lt;link rel="http://purl.org/net/sword/terms/derivedResource" 
+            type="application/pdf" 
+            href="http://www.swordserver.ac.uk/col1/mydeposit/file2.pdf"/&gt;
+
     &lt;link rel="http://purl.org/net/sword/terms/statement" 
             type="application/atom+xml;type=feed" 
             href="http://www.swordserver.ac.uk/col1/mydeposit.feed"/&gt;
