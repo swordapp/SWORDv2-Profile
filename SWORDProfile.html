@@ -395,7 +395,7 @@ Host: example.org
 </div>
 
 <p>
-When a server that supports mediated deposit receives an <span class="code_inline">On-Behalf-Of header</span> [<a href="#sword001">SWORD001</a>], the returned Service Document SHOULD identify only those collections to which the combination of mediated user and authenticated user might successfully deposit. If the target server does not support mediated deposit, the returned Service Document SHOULD contain a <span class="code_inline">sword:mediation</span> [<a href="#sword002">SWORD002</a>] extension element with a value of <span class="code_inline">false</span>.
+When a server that supports mediated deposit receives an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>], the returned Service Document SHOULD identify only those collections to which the combination of mediated user and authenticated user might successfully deposit. If the target server does not support mediated deposit, the returned Service Document SHOULD contain a <span class="code_inline">sword:mediation</span> [<a href="#sword002">SWORD002</a>] extension element with a value of <span class="code_inline">false</span>.
 </p>
 
 <p>
@@ -420,7 +420,7 @@ Example:
 <div class="code">
 <pre>
 HTTP 1.1  200 OK
-Content-Type: text/xml
+Content-Type: application/atomserv+xml
 
 &lt;?xml version="1.0" ?&gt;
 &lt;service xmlns:dcterms="http://purl.org/dc/terms/"
@@ -1672,6 +1672,10 @@ Clients SHOULD use the  <span class="code_inline">On-Behalf-Of</span> header whe
 &lt;/service&gt;
 </pre>
 </div>
+
+<p>
+If the authentication credentials supplied fail, the server SHOULD respond with an HTTP status <span class="code_inline">401 (Unauthorized)</span>.  If the authentication is successful but the user in the <span class="code_inline">On-Behalf-Of</span> header is not recognised the server SHOULD respond with an HTTP status <span class="code_inline">403 (Forbidden)</span> and SHOULD include a SWORD Error document with the URI <span class="code_inline">http://purl.org/net/sword/error/TargetOwnerUnknown</span> (see <a href="#errordocuments">Section 12: Error Documents</a> for details).
+</p>
 
 <h3><a name="authenticatedmediateddeposit_recordingusers">8.2. Recording Depositing Users</a></h3>
 
