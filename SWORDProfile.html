@@ -483,7 +483,7 @@ The client can create a resource by POSTing the binary content as the body of an
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used.  See <a href="#packaging">Section 7: Packaging</a> for more details.</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>].  See <a href="#continueddeposit">Section 9: Continued Deposit</a> for more details.</li>
@@ -560,7 +560,7 @@ The client can create a resource by POSTing a multipart mime message to the <str
 <ul>
 <li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>] (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</span>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
@@ -868,7 +868,7 @@ The client can replace the existing content of a resource by performing an HTTP 
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
@@ -996,7 +996,7 @@ The client can replace both the metadata and content of a resource by performing
 <ul>
 <li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment"</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>] (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</span>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
@@ -1136,7 +1136,7 @@ The client can add further packaged or binary content to a container, adding to 
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>]</li>
@@ -1166,7 +1166,7 @@ The requirements placed on the server here are:
 
 <ul>
 <li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed.  See <a href="#errordocuments">Section 12: Error Documents</a>.</li>
-<li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
+<li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header (note that this requires the filename be expressed in ASCII).</li>
 <li>If there is no <span class="code_inline">Packaging</span> header, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 9: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
@@ -1255,7 +1255,7 @@ The client can add new content and update the metadata attached to a resource by
 <ul>
 <li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>] (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</li>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>] on the main HTTP header</li>
@@ -1379,7 +1379,7 @@ When depositing packages, the best approach is to POST to the <strong>SE-IRI</st
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide a <span class="code_inline">Metadata-Relevant</span> header, with the value <span class="code_inline">true</span> or <span class="code_inline">false</span>.  This should be set to <span class="code_inline">true</span> if the server should consider the file a potential source of metadata extraction, or <span class="code_inline">false</span> if the server should not attempt to extract any metadata from the deposit.</li>
