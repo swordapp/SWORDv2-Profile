@@ -908,7 +908,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span>, or an appropriate error code.
+Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">204 (No Content)</span>, or an appropriate error code.
 </p>
 
 
@@ -921,7 +921,7 @@ The client can replace the metadata of a resource by performing an HTTP PUT of a
 </p>
 
 <ul>
-<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header with the value <span class="code_inline">application/atom+xml</span></li>
+<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header with the value <span class="code_inline">application/atom+xml</span> or <span class="code_inline">application/atom+xml;type=entry</span></li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
 <li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of true or false [<a href="#sword001">SWORD001</a>]. See <a href="#continueddeposit">Section 9: Continued Deposit</a> for more details.</li>
 </ul>
@@ -1123,7 +1123,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span> or <span class="code_inline">204 (No Content)</span>, or an appropriate error code.
+Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">204 (No Content)</span> upon success, or an appropriate error code.
 </p>
 
 <h3><a name="protocoloperations_addingcontent">6.7. Adding Content to a Resource</a></h3>
@@ -1345,7 +1345,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
 </p>
 
 <p>
@@ -1466,7 +1466,7 @@ Once the server has processed the request is MUST respond with an HTTP status co
 <h3><a name="protocoloperations_statement">6.9. Retrieving the Statement</a></h3>
 
 <p>
-The Statement can be found either embedded as foreign markup inside the Deposit Receipt, or can be retrieved by requesting the IRI provided in the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element.  The format of the statement is identified by the <span class="code_inline">type</span> attribute of the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element and MUST be <span class="code_inline">application/rdf+xml</span> for an OAI-ORE Resource Map, or <span class="code_inline">application/atom+xml;type=feed</span> for an Atom Feed.
+The Statement can be found retrieved by requesting the IRI provided in the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element.  The format of the statement is identified by the <span class="code_inline">type</span> attribute of the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element and MUST be <span class="code_inline">application/rdf+xml</span> for an OAI-ORE Resource Map, or <span class="code_inline">application/atom+xml;type=feed</span> for an Atom Feed.
 </p>
 
 <p>
@@ -1492,6 +1492,7 @@ The following headers MAY be used by the client under the following conditions o
 <tr><td>Packaging</td><td>POST, PUT</td></tr>
 <tr><td>Accept-Packaging</td><td>GET</td></tr>
 <tr><td>On-Behalf-Of</td><td>GET, POST, PUT, DELETE</td></tr>
+<tr><td>Metadata-Relevant</td><td>POST, PUT</td></tr>
 </table>
 
 <p>
@@ -1511,7 +1512,7 @@ In order to support package deposit and retrieval, SWORD uses the mechanisms des
 <h3><a name="packaging_servicedescription">7.1. Package support in Service description</a></h3>
 
 <p>
-The SWORD Service Document uses the <span class="code_inline">sword:acceptPackaging</span> element from [<a href="#sword002">SWORD002</a>] to indicate that a SWORD collection will accept deposits of a particular packaging format.
+The SWORD Service Document uses the <span class="code_inline">sword:acceptPackaging</span> element from [<a href="#sword002">SWORD002</a>] to indicate that a SWORD collection will accept deposits of a particular packaging format.  The client SHOULD assume that all packaging formats identified in this element apply to both binary and multipart deposits, and make reasonable requests based on this information.  Content Negotiation is an inexact process where multiple "accept" fields are concerned, and this profile RECOMMENDS that server implementations provide as coherent a set of rules as possible.
 </p>
 
 <p>
