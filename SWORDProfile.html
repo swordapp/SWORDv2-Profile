@@ -77,7 +77,7 @@ body {
 &nbsp;&nbsp;<a href="#packaging_servicedescription">7.1. Package support in Service description</a><br/>
 &nbsp;&nbsp;<a href="#packaging_creation">7.2. Package support during resource creation</a><br/>
 &nbsp;&nbsp;<a href="#packaging_entrydocuments">7.3. Package description in Entry documents</a><br/>
-&nbsp;&nbsp;<a href="#packaging_registration">7.4. Registering packaging types under the SWORD namespace</a><br/>
+&nbsp;&nbsp;<a href="#packaging_negotiation">7.4. Negotiating for package formats</a><br/>
 
 </td><td valign="top">
 
@@ -1512,7 +1512,7 @@ In order to support package deposit and retrieval, SWORD uses the mechanisms des
 <h3><a name="packaging_servicedescription">7.1. Package support in Service description</a></h3>
 
 <p>
-The SWORD Service Document uses the <span class="code_inline">sword:acceptPackaging</span> element from [<a href="#sword002">SWORD002</a>] to indicate that a SWORD collection will accept deposits of a particular packaging format.  The client SHOULD assume that all packaging formats identified in this element apply to both binary and multipart deposits, and make reasonable requests based on this information.  Content Negotiation is an inexact process where multiple "accept" fields are concerned, and this profile RECOMMENDS that server implementations provide as coherent a set of rules as possible.
+The SWORD Service Document uses the <span class="code_inline">sword:acceptPackaging</span> element from [<a href="#sword002">SWORD002</a>] to indicate that a SWORD collection will accept deposits of a particular packaging format.  The client SHOULD assume that all packaging formats identified in this element apply to both binary and multipart deposits, and make reasonable requests based on this information.  Content Negotiation is an inexact process where multiple "accept" fields are concerned, and it is RECOMMENDED that server implementations provide as coherent a set of rules as possible.
 </p>
 
 <p>
@@ -1557,7 +1557,7 @@ If no <span class="code_inline">sword:acceptPackaging</span> element is supplied
 <h3><a name="packaging_creation">7.2. Package support during resource creation</a></h3>
 
 <p>
-When creating Media Resources, the client SHOULD indicate the archive file MIME type using the HTTP <span class="code_inline">Content-Type</span> header, and SHOULD also give information about content packaging using the <span class="code_inline">Packaging HTTP</span> header [<a href="#sword001">SWORD001</a>].
+When creating Media Resources, the client SHOULD indicate the archive file MIME type using the HTTP <span class="code_inline">Content-Type</span> header, and SHOULD also give information about content packaging using the <span class="code_inline">Packaging</span> HTTP header [<a href="#sword001">SWORD001</a>].
 </p>
 
 <p>
@@ -1565,7 +1565,7 @@ The value of the <span class="code_inline">Packaging</span> header SHOULD match 
 </p>
 
 <p>
-If a server receives a POST with an unacceptable <span class="code_inline">Packaging</span> header value, it MUST reject the POST by returning an HTTP response with a status code of <span class="code_inline">415 (Unsupported Media Type)</span>, or store the content without further processing (as per [<a href="#sword001">SWORD001</a>]).
+If a server receives a POST with an unacceptable <span class="code_inline">Packaging</span> header value, it MUST reject the POST by returning an HTTP response with a status code of <span class="code_inline">415 (Unsupported Media Type)</span> and a SWORD Error document with URI <span class="code_inline">http://purl.net/org/sword/terms/ErrorContent</span> (See <a href="#errordocuments">Section 12: Error Documents</a>), or store the content without further processing (as per [<a href="#sword001">SWORD001</a>]).
 </p>
 
 <div class="code">
@@ -1613,10 +1613,25 @@ If the server does not supply any <span class="code_inline">sword:packaging</spa
 </pre>
 </div>
 
-<h3><a name="packaging_registration">7.4. Registering packaging types under the SWORD namespace</a></h3>
+<h3><a name="packaging_negotiation">7.4. Negotiating for package formats</a></h3>
+
+When retrieving a package identified in the <span class="code_inline">atom:content</span> element, the client MAY specify an <span class="code_inline">Accept-Packaging</span> HTTP header [<a href="#sword001">SWORD001</a>] indicating its desired package format.  The value of this header SHOULD be one of the formats identified in the <span class="code_inline">sword:packaging</span> elements in the Deposit Receipt.  If a packaging format is requested which is not available, the server MUST reject the GET by returning an HTTP response with a status code of <span class="code_inline">415 (Unsupported Media Type)</span> and a SWORD Error document with URI <span class="code_inline">http://purl.net/org/sword/terms/ErrorContent</span> (See <a href="#errordocuments">Section 12: Error Documents</a>).
+
+<p>For example:</p>
+
+<div class="code">
+<pre>
+GET /43/my_deposit/package.zip HTTP/1.1
+Host: example.org
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+<strong>Accept-Packaging: http://purl.org/net/sword/package/METSDSpaceSIP</strong>
+User-Agent: MyJavaClient/0.1 Restlet/2.0
+</pre>
+</div>
 
 <p>
-Clients and servers SHOULD use IRIs to communicate about package types, and MAY use IRIs registered under the SWORD namespace.  To register a new IRI in the SWORD namespace, please contact the SWORD team at the contact details at the bottom of this document.  Registration of package IRIs under the SWORD namespace is strictly OPTIONAL.
+If there are multiple <span class="code_inline">atom:content</span> elements then it will not be clear which support which package formats.  Servers are RECOMMENDED to provide as coherent a set of contents as possible.
 </p>
 
 <h2><a name="authenticationmediateddeposit">8. Authentication and Mediated Deposit</a></h2>
@@ -2222,6 +2237,8 @@ The <span class="code_inline">sword:error</span> element MAY contain any of the 
 The supplied format is not the same as that identified in the <span class="code_inline">Packaging</span> header and/or that supported by the server 
 </p>
 
+<p><strong>Associated HTTP Status</strong>: 415 (Unsupported Media Type)</p>
+
 <h4><a name="errordocuments_uris_checksum">12.1.2. sword:ErrorChecksumMismatch</a></h4>
 
 <p>
@@ -2251,6 +2268,8 @@ Some parameters sent with the POST were not understood. The server MUST also ret
 <p>
 Used in mediated deposit when the server does not know the identity of the <span class="code_inline">On-Behalf-Of</span> user.
 </p>
+
+<p><strong>Associated HTTP Status</strong>: 403 (Forbidden)</p>
 
 <h4><a name="errordocuments_uris_mediation">12.1.5. sword:MediationNotAllowed</a></h4>
 
