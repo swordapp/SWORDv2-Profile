@@ -1707,7 +1707,11 @@ As scholarly systems may wish to give the client more control over the publishin
 </p>
 
 <p>
-An example use case for this is that the client may be embedded into a system which uses the SWORD server as a storage layer, but which cannot acquire all of the content for a "finished" item in one deposit operation.  Consider a user-facing system which encourages users to upload files one at a time through some web interface, which causes each file to be directly deposited onto the SWORD server.  In each case, the client would assert the deposit is still <span class="code_inline">In-Progress</span> until the user confirms that they have uploaded all the relevant files, or navigates away from the page.  At that stage, the client can issue a blank HTTP POST request to the SWORD server, with <span class="code_inline">In-Progress: false</span> to complete the deposit.
+An example use case for this is that the client may be embedded into a system which uses the SWORD server as a storage layer, but which cannot acquire all of the content for a "finished" item in one deposit operation.  Consider a user-facing system which encourages users to upload files one at a time through some web interface, which causes each file to be directly deposited onto the SWORD server.  At the start of the deposit the client asserts that deposit is <span class="code_inline">In-Progress</span>, and then proceeds to upload files.  If uploading them to the <strong>SE-IRI</strong> the client continues to assert <span class="code_inline">In-Progress: true</span> on each request (if depositing to <strong>EM-IRI</strong> this is not necessary).  This goes on until the user confirms that they have uploaded all the relevant files, or navigates away from the page.  At that stage, the client can issue a blank HTTP POST request to the SWORD server, with <span class="code_inline">In-Progress: false</span> to complete the deposit.
+</p>
+
+<p>
+Note that the <span class="code_inline">In-Progress</span> header is intended to indicate to the server that further content will be coming in which is associated with the existing content, before it can be considered "complete".  It is not intended to provide workflow control, and clients MUST NOT assume that asserting <span class="code_inline">In-Progress: true</span> will have any specific effect on the state of the item.
 </p>
 
 <h3><a name="continueddeposit_complete">9.1. Deposit Complete</a></h3>
@@ -1725,7 +1729,7 @@ If <span class="code_inline">In-Progress</span> is <span class="code_inline">tru
 <h3><a name="continueddeposit_complete">9.3. Completing a Previously Incomplete Deposit</a></h3>
 
 <p>
-The client can assert that a deposit process has completed by issuing an HTTP POST to the <strong>SE-IRI</strong> with a blank message body and with the <span class="code_inline">In-Progress</span> header set to false (it may simply omit the header altogether too, as this is treated as <span class="code_inline">In-Progress: false</span> by the server).
+The client can assert that a deposit process has completed by issuing an HTTP POST to the <strong>SE-IRI</strong> with a blank message body and with the <span class="code_inline">In-Progress</span> header set to false (it may simply omit the header altogether too, as this is treated as <span class="code_inline">In-Progress: false</span> by the server).  The client SHOULD specify a <span class="code_inline">Content-Length: 0</span> HTTP header.
 </p>
 
 <div class="code">
@@ -1733,9 +1737,9 @@ The client can assert that a deposit process has completed by issuing an HTTP PO
 POST SE-IRI HTTP/1.1
 Host: example.org
 Authorization: Basic ZGFmZnk6c2VjZXJldA==
-Content-Length: 0
+<strong>Content-Length: 0</strong>
 User-Agent: MyJavaClient/0.1 Restlet/2.0
-In-Progress: false
+<strong>In-Progress: false</strong>
 </pre>
 </div>
 
