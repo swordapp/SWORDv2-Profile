@@ -2224,7 +2224,15 @@ SWORD adds a new class of document to [<a href="#atompub">AtomPub</a>] that give
 </p>
 
 <p>
-The <span class="code_inline">sword:error</span> element MAY contain any of the elements normally used in Entry Documents, but all fields are OPTIONAL
+The <span class="code_inline">sword:error</span> element MAY contain any of the elements normally used in the Deposit Receipt, but all fields are OPTIONAL.
+</p>
+
+<p>
+The error document SHOULD contain an <span class="code_inline">atom:summary</span> element with a short description of the error.
+</p>
+
+<p>
+The error document MAY contain a <span class="code_inline">sword:verboseDescription</span> element with a long description of the problem or any other appropriate software-level debugging output (e.g. a stack trace).  Server implementations may wish to provide this for client developers' convenience, but may wish to disable such output in any production systems.
 </p>
 
 <h3><a name="errordocuments_uris">12.1. Error URIs</a></h3>
@@ -2316,6 +2324,9 @@ HTTP 1.1  400 Bad Request
     &lt;summary&gt;The manifest could be parsed, but was not valid - 
     no technical metadata was provided.&lt;/summary&gt;
     &lt;sword:treatment&gt;processing failed&lt;/sword:treatment&gt;
+    &lt;sword:verboseDescription&gt;
+        Exception at [ ... ]
+    &lt;/sword:verboseDescription&gt;
     &lt;link rel="alternate" href="https://arxiv.org/help" type="text/html"/&gt;
 
 &lt;/sword:error&gt;
