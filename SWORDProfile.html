@@ -1839,7 +1839,7 @@ For example:
 <h2><a name="statement">11. The SWORD Statement</a></h2>
 
 <p>
-The Statement is a document or region of the Deposit Receipt which describes two features of the object as it appears on the server:
+The Statement is a document which describes two features of the object as it appears on the server:
 </p>
 
 <ol>
@@ -2096,7 +2096,7 @@ The responsibilities of the server are:
 
 <ul>
 <li>The aggregation SHOULD identify any original deposit packages with the <span class="code_inline">sword:originalDeposit</span> term</li>
-<li>The aggregation MAY specify a state for the item on the server with the <span class="code_inline">sword:state</span> term</li>
+<li>The aggregation MAY specify one or more states for the item on the server with the <span class="code_inline">sword:state</span> term</li>
 <li>If present, the <span class="code_inline">sword:state</span> term SHOULD include a human readable description in the <span class="code_inline">sword:stateDescription</span> term</li>
 <li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include one or more <span class="code_inline">sword:packaging</span> terms</li>
 <li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include the date the package was originally deposited in the <span class="code_inline">sword:depositedOn</span> term</li>
@@ -2166,10 +2166,10 @@ The responsibilities of the server are:
 </p>
 
 <ul>
-<li>The Feed MUST represent each file contained in the item as an <span class="code_inline">atom:entry</span> element</li>
+<li>The Feed MUST represent files contained in the item as an <span class="code_inline">atom:entry</span> element (this does not mandate that all files in the item are listed, though)</li>
 <li>Each <span class="code_inline">atom:entry</span> which is an original deposit file MUST have an <span class="code_inline">atom:category</span> element with the term <span class="code_inline">sword:originalDeposit</span> (this does not mandate that all original deposits are listed as entries)</li>
-<li>The Feed MAY specify a state for the item on the server with the <span class="code_inline">sword:state</span> term as foreign XML markup in the root <span class="code_inline">atom:feed</span> element</li>
-<li>If present, the <span class="code_inline">sword:state</span> term SHOULD include a human readable description in the <span class="code_inline">sword:stateDescription</span> term</li>
+<li>The Feed MAY specify one more more states for the item on the server with an <span class="code_inline">atom:category</span> element with the term <span class="code_inline">http://purl.org/net/sword/terms/state</span> root <span class="code_inline">atom:feed</span> element</li>
+<li>If present, the <span class="code_inline">sword:state</span> category term SHOULD include a human readable description in the body of the <span class="code_inline">atom:category</span> element.</li>
 <li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include one or more <span class="code_inline">sword:packaging</span> terms as foreign markup in the <span class="code_inline">atom:entry</span></li>
 <li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include the date the package was originally deposited in the <span class="code_inline">sword:depositedOn</span> term as foreign markup in the <span class="code_inline">atom:entry</span></li>
 <li>Each <span class="code_inline">atom:entry</span> which is an original deposit MAY include the depositor of the package in the <span class="code_inline">sword:depositedBy</span> term as foreign markup in the <span class="code_inline">atom:entry</span></li>
@@ -2186,11 +2186,11 @@ For example:
 &lt;atom:feed xmlns:sword="http://purl.org/net/sword/terms/" 
             xmlns:atom="http://www.w3.org/2005/Atom"&gt;
 
-    &lt;sword:state href="http://purl.org/net/sword/state/archived"&gt;
-        &lt;sword:stateDescription&gt;
+    &lt;atom:category scheme="http://purl.org/net/sword/terms/"
+        term="http://purl.org/net/sword/terms/state"
+        label="State"&gt;
             The work has passed through review and is now in the archive
-        &lt;/sword:stateDescription&gt;
-    &lt;/sword:state&gt;
+    &lt;/atom:category&gt;
 
     &lt;atom:entry&gt;
         &lt;atom:category scheme="http://purl.org/net/sword/terms/" 
