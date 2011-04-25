@@ -1747,7 +1747,7 @@ User-Agent: MyJavaClient/0.1 Restlet/2.0
 If <span class="code_inline">In-Progress</span> is <span class="code_inline">false</span>, the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.
 </p>
 
-<h2><a name="depositreceipt"> Deposit Receipt</a></h2>
+<h2><a name="depositreceipt">10. Deposit Receipt</a></h2>
 
 <p>
 On successfully accepting a POST (deposit), implementers SHOULD return an Atom Entry Document with the HTTP response.  The Atom Entry Document is known in SWORD as the Deposit Receipt must conform to the following conditions:
@@ -1761,12 +1761,10 @@ On successfully accepting a POST (deposit), implementers SHOULD return an Atom E
 <li>It MAY contain an arbitrary number of <span class="code_inline">sword:packaging</span> elements declaring the formats that the Media Resource can be retrieved in</li>
 <li>It MUST contain a single <span class="code_inline">sword:treatment</span> element [<a href="#sword003">SWORD003</a>] which contains either a human-readable statement describing treatment the deposited resource has received or a IRI that dereferences to such a description.</li>
 <li>It MAY contain a single <span class="code_inline">sword:verboseDescription</span> element [<a href="#sword003">SWORD003</a>] which should contain a verbose description of the deposit process.  This MUST only be used for debugging and development purposes, and clients MUST NOT rely on this field to contain anything in particular.</li>
-<li>It MAY contain the SWORD Statement (see <a href="#statement">Section 11: The SWORD Statement</a>) embedded as foreign markup using its OAI-ORE [<a href="#oaiore">OAIORE</a>] serialisation (See <a href="#statement_oaiore">Section 12.1: OAI-ORE Serialisation</a>)</li>
 <li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a IRI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
-<li>It MUST contain either at least one <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> or an embedded Statement document.</li>
 <li>It MAY contain an <span class="code_inline">atom:link@rel="alternate"</span> element with an <span class="code_inline">href</span> attribute which points to the splash page of the item on the server</li>
 <li>It SHOULD contain a single <span class="code_inlin">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/originalDeposit</span> which provides the IRI identifying the package or file deposited in the current request.  This information is transient and will only be present when responding to a deposit, it is not required that it be available in the Entry Document retreived from the <stong>EM-IRI</strong>.</li>
-<li>It SHOULD, if relevant, contain an <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org.net/sword/terms/derivedResource</span> which provides the IRI identifying any content resources which were derived or extracted from the originally deposited resource (e.g. the files unpacked from a zip file).</li>
+<li>It SHOULD, if relevant, contain zero or more <span class="code_inline">atom:link</span> elements with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org.net/sword/terms/derivedResource</span> which provides the IRIs identifying any content resources which were derived or extracted from the originally deposited resource (e.g. the files unpacked from a zip file).</li>
 </ul>
 
 <p>
