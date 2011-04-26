@@ -1828,9 +1828,6 @@ For example:
             type="application/rdf+xml" 
             href="http://www.swordserver.ac.uk/col1/mydeposit.rdf"/&gt;
 
-    &lt;rdf:RDF&gt;
-      &lt;!-- OAI-ORE serialisation of Statement here --&gt;
-    &lt;/rdf:RDF&gt;
 </strong>
 &lt;/entry&gt;
 </pre>
@@ -2186,8 +2183,8 @@ For example:
 &lt;atom:feed xmlns:sword="http://purl.org/net/sword/terms/" 
             xmlns:atom="http://www.w3.org/2005/Atom"&gt;
 
-    &lt;atom:category scheme="http://purl.org/net/sword/terms/"
-        term="http://purl.org/net/sword/terms/state"
+    &lt;atom:category scheme="http://purl.org/net/sword/terms/state"
+        term="[state identifier]"
         label="State"&gt;
             The work has passed through review and is now in the archive
     &lt;/atom:category&gt;
