@@ -66,10 +66,10 @@ body {
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_multipart">6.5.3. The Metadata and File Content of a Resource</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_deletingcontent">6.6. Deleting the Content of a Resource</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_addingcontent">6.7. Adding Content to a Resource</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_binary">6.7.1. Adding New Packages or Files to a Container</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Container</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Container with Multipart</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_mediaresource">6.7.4. Adding New Files to the Media Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_mediaresource">6.7.1. Adding New Files to the Media Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_binary">6.7.2. Adding New Packages or Files to a Container</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_metadata">6.7.3. Adding New Metadata to a Container</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.7.4. Adding New Metadata and Packages or Files to a Container with Multipart</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_deleteconteiner">6.8. Deleting the Container</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_statement">6.9. Retrieving the Statement</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a><br/>
@@ -220,7 +220,7 @@ Throughout this document we will regularly refer to identifiers which are used b
 <dt><strong>Edit-IRI</strong></dt>
 <dd>The <strong>Atom Entry Edit IRI</strong>. This is the IRI of the Atom Entry of the object, and therefore also of the container within the SWORD server.</dd>
 
-<dt><strong>SE-IRI</strong</dt>
+<dt><strong>SE-IRI</strong></dt>
 <dd>The <strong>SWORD Edit IRI</strong>.  This is the IRI to which clients may POST additional content to an Atom Entry Resource.  This MAY be the same as the <strong>Edit-IRI</strong>, but is defined separately as it supports HTTP POST explicitly while the <strong>Edit-IRI</strong> is defined by [<a href="#atompub">AtomPub</a>] as limited to GET, PUT and DELETE operations.</dd>
 
 <dt><strong>State-IRI</strong></dt>
@@ -872,6 +872,7 @@ The client can replace the existing content of a resource by performing an HTTP 
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used</li>
 <li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
+<li>The client MAY provide a <span class="code_inline">Metadata Relevant</span> header [<a href="#sword001">SWORD001</a>] with the value <span class="code_inline">true</span> or <span class="code_inline">false</span>. This should be set to <span class="code_inline">true</span> if the server should consider the file a potential source of metadata extraction, or <span class="code_inline">false</span> if the server should not attempt to extract any metadata from the deposit.
 </ul>
 
 <p>
@@ -1128,15 +1129,87 @@ Once the server has processed the request it MUST return an HTTP status code <sp
 
 <h3><a name="protocoloperations_addingcontent">6.7. Adding Content to a Resource</a></h3>
 
-TODO: differentiating between the different media resources (what about differnet hreflangs).  Point people to 6.7.4 first and also be clear about what the server is expected to do.
+<h4><a name="protocoloperations_addingcontent_mediaresource">6.7.1. Adding Files to the Media Resource</a></h4>
 
-Should degrade to atom spec on lack of clarity
+<p>The client can add more content to the Media Resource itself by performing an HTTP POST request on the <strong>EM-IRI</strong>.  This has the effect of placing new files into the Media Resource itself.</p>
 
-<h4><a name="protocoloperations_addingcontent_binary">6.7.1. Adding New Packages or Files to a Container</a></h4>
+<p>This feature is for use when clients wish to send individual files to the server and to receive back the IRI for the created resource.  POSTing to the <strong>SE-IRI</strong> will not give back the location of the deposited resource in the HTTP <span class="code_inline">Location</span> header, so in cases where the server does not provide the (optional) Deposit Receipt, it is not possible for the client to ascertain the location of the file actually deposited - the <span class="code_inline">Location</span> header in that operation is the <strong>Edit-IRI</strong>.  By POSTing to the <strong>EM-IRI</strong>, the <span class="code_inline">Location</span> header will return the IRI of the deposited file itself, rather than that of the container.</p>
 
 <p>
-The client can add further packaged or binary content to a container, adding to existing content rather than overwriting, by issuing an HTTP POST to the <strong>SE-IRI</strong>, with the following requirements:
+As the <strong>EM-IRI</strong> represents the Media Resource itself, rather than the Container, this operation will not formally support metadata handling, and therefore also offers no explicit support for packaging either since packages may be both content and metadata.  Nonetheless, for files which may contain extractable metadata, there is a <span class="code_inline">Metadata-Relevant</span> header which can be defined to indicate whether the deposit can be used to augment the metadata of the container.
 </p>
+
+<p>
+When depositing packages, the best approach is to POST to the <strong>SE-IRI</strong> (See Sections 6.7.1, 6.7.2, 6.7.3), as POST to <strong>EM-IRI</strong>.
+</p>
+
+<p>When carrying out this operation, the requirements for the client are:</p>
+
+<ul>
+<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter (note that this requires the filename be expressed in ASCII).</li>
+<li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
+<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
+<li>The client MAY provide a <span class="code_inline">Metadata-Relevant</span> header, with the value <span class="code_inline">true</span> or <span class="code_inline">false</span>.  This should be set to <span class="code_inline">true</span> if the server should consider the file a potential source of metadata extraction, or <span class="code_inline">false</span> if the server should not attempt to extract any metadata from the deposit.</li>
+</ul>
+
+<div class="code">
+<pre>
+POST EM-IRI HTTP/1.1
+Host: example.org
+Content-Type: application/pdf
+Authorization: Basic ZGFmZnk6c2VjZXJldA==
+Content-Length: [content length]
+Content-MD5: [md5-digest]
+Content-Disposition: attachment; filename=[filename]
+On-Behalf-Of: jbloggs
+
+[request entity]
+</pre>
+</div>
+
+<p>
+The requirements placed on the server here are:
+</p>
+
+<ul>
+<li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed, and MAY return a SWORD Error document.  See <a href="#errordocuments">Section 12: Error Documents</a>.</li>
+<li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
+<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
+<li>The server SHOULD NOT overwrite any existing content, and MUST add content equivalent to or derived from the deposited content to the existing container or respond with an error document.</li>
+<li>If there is no <span class="code_inline">Metadata-Relevant</span> header, the server MAY assume that it is <span class="code_inline">true</span> and MAY attempt to extract metadata from the deposit.  If the <span class="code_inline">Metadata-Relevant</span> is <span class="code_inline">false</span> the server SHOULD NOT attempt to extract metadata from the deposit.
+</ul>
+
+<p>
+Once the server has processed the request it is RECOMMENDED that it returns a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The server MAY, though, return any response which it feels appropriate, and this profile does not limit the response types in any way.  Nonetheless, the server MUST include an HTTP <span class="code_inline">Location</span> header with the IRI of the created resource.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+201 Created
+Location: [File-IRI]
+
+[optional Deposit Receipt]
+</pre>
+</div>
+
+<h4><a name="protocoloperations_addingcontent_binary">6.7.2. Adding New Packages or Files to a Container</a></h4>
+
+<p>
+The client can add further packaged or binary content to a container, adding to existing content rather than overwriting, by issuing an HTTP POST to the <strong>SE-IRI</strong>.
+</p>
+
+<p><strong>Note: this operation leaves some of the server behaviours explicitly undefined.  If the client wishes to add files directly to the Media Resource, with certainty as to how they will be treated, see <a href="#protocoloperations_addingcontent_mediaresource">Section 6.7.1.</a></strong></p>
+
+<p>
+This operation is intended to allow the client to send a single binary object which may be a single file or a package containing files and/or metadata to the server.  The conditions under which the client does this are when the objective is to add all of the content to the existing resource (with constraints as defined below) but to leave the exact interpretation as to how to unpack and represent the resource down to the server.  This operation is precisely analagous to <a href="#protocoloperations_creatingresource_binary">Section 6.3.1</a> except that the container already exists and may already contain content.  Clients looking for precise control over the deposit of individual files should consider implementing <a href="#protocoloperations_addingcontent_mediaresource">Section 6.7.1.</a> for such operations.
+</p>
+
+<p>The client must fulfill the following requirements:</p>
 
 <ul>
 <li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
@@ -1175,6 +1248,7 @@ The requirements placed on the server here are:
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 9: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>The server SHOULD NOT overwrite any existing content, and MUST add content equivalent to or derived from the deposited content to the existing container or respond with an error document.</li>
+<li>The server SHOULD add all of the content delivered in this operation to the pre-existing Media Resource, although it MAY take advantage of instructions in the packaging format as to how to structure the content appropriately; for example if the packaging format indicates multiple representations of the resource in different languages, these may be described as separate Media Resources with their <span class="code_inline">hreflang</span> attribute set appropriately in the Deposit Receipt</li>
 </ul>
 
 <p>
@@ -1194,11 +1268,19 @@ Location: [Edit-IRI]
 </pre>
 </div>
 
-<h4><a name="protocoloperations_addingcontent_metadata">6.7.2. Adding New Metadata to a Container</a></h4>
+<h4><a name="protocoloperations_addingcontent_metadata">6.7.3. Adding New Metadata to a Container</a></h4>
 
 <p>
-The client can update the metadata attached to a resource by issuing an HTTP POST of a new Atom Entry document containing metadata embedded as foreign markup, with the following requirements, to the <strong>SE-IRI</strong>:
+The client can update the metadata attached to a resource by issuing an HTTP POST of a new Atom Entry document containing metadata embedded as foreign markup to the <strong>SE-IRI</strong>.
 </p>
+
+<p><strong>Note: this section does not instruct the server on the best way to handle metadata, only that metadata SHOULD be added and not overwritten; in certain circumstances this may not produce the desired behaviour.  Clients who wish to have full control over the metadata content should refer to <a href="#protocoloperations_editingcontent_metadata">Section 6.5.2.</a> instead.</strong></p>
+
+<p>
+This operation is intended to allow the client to add metadata to an existing resource without overwriting existing metadata.  This could be used, for example, by a self-claim system which allows authors to identify their items and to send to the server metadata pertaining to that particular user without affecting any of the other metadata already associated with the item.  This operation is analagous to <a href="#protocoloperations_creatingresource_entry">Section 6.3.3.</a>, although not all metadata sent in this case will necessarily be acted upon.  Clients looking for precise control over the metadata record associated with an entry should refer to <a href="#protocoloperations_editingcontent_metadata">Section 6.5.2.</a> instead.
+</p>
+
+<p>The client must fulfill the following requirements:</p>
 
 <ul>
 <li>The client MUST supply a <span class="code_inline">Content-Type</span> header with the value <span class="code_inline">application/atom+xml</span> or <span class="code_inline">application/atom+xml;type=entry</span></li>
@@ -1230,7 +1312,7 @@ The requirements placed on the server here are:
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 9: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>The server MUST be able to interpret and later reflect the Dublin Core [<a href="#dublincore">DublinCore</a>] foreign markup in the <span class="code_inline">atom:entry</span> element, but MAY NOT understand any other embedded formats, but MUST NOT generate an error on the presence of not-understood markup.</li>
-<li>The server SHOULD only add metadata and not overwrite any existing metadata, but exact implementation will depend on the functions of the server.</li>
+<li>The server SHOULD only add metadata and not overwrite any existing metadata, but exact implementation will depend on the functions of the server.  For example, if the server's metadata schema permits only a single instance a particular field, then the original value should be kept and the new value discarded; wheras if the schema permits multiple instances of a field the server may add the new values to the existing values without overwriting.</li>
 </ul>
 
 <p>
@@ -1250,11 +1332,21 @@ Location: [Edit-IRI]
 </pre>
 </div>
 
-<h4><a name="protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Container with Multipart</a></h4>
+<h4><a name="protocoloperations_addingcontent_multipart">6.7.4. Adding New Metadata and Packages or Files to a Container with Multipart</a></h4>
 
 <p>
-The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document, with the following requirements, to the <strong>SE-IRI</strong>:
+The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document to the <strong>SE-IRI</strong>.
 </p>
+
+
+<p><strong>Note: this section does not instruct the server on the best way to handle metadata or content: only that metadata SHOULD be added and not overwritten and that the content SHOULD be added to the existing Media Resource.  If the client requires detailed control over metadata and content see <a href="#protocoloperations_editingcontent_metadata">Section 6.5.2</a> and <a href="#protocoloperations_addingcontent_mediaresource">Section 6.7.1</a> instead.</strong></p>
+
+<p>
+This operation is intended to allow the client to add metadata and content to an existing resource without overwriting existing metadata.  The client would do this, perhaps, in a collaborative authoring environment when both files and metadata associated with them are coming from multiple sources.  This operation is analagous to <a href="#protocoloperations_creatingresource_multipart">Section 6.3.2.</a> except that the container already exists and may already contain content and metadata.  Clients looking for detailed control over metadata and content should see <a href="#protocoloperations_editingcontent_metadata">Section 6.5.2</a> and <a href="#protocoloperations_addingcontent_mediaresource">Section 6.7.1</a> instead.</strong>
+</p>
+
+<p>The client must fulfill the following requirements:</p>
+
 
 <ul>
 <li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
@@ -1346,6 +1438,8 @@ The requirements placed on the server here are:
 <li>If there is no <span class="code_inline">In-Progress</span> header, the server MUST assume that it is <span class="code_inline">false</span>, and MUST behave as described in <a href="#continueddeposit">Section 9: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
 <li>The server MUST be able to interpret the Dublin Core [<a href="#dublincore">DublinCore</a>] foreign markup in the <span class="code_inline">atom:entry</span> element, but MAY NOT understand any other embedded formats, but MUST NOT generate an error on encountering not-understood foreign markup.</li>
+<li>The server SHOULD only add metadata and not overwrite any existing metadata, but exact implementation will depend on the functions of the server.  For example, if the server's metadata schema permits only a single instance a particular field, then the original value should be kept and the new value discarded; wheras if the schema permits multiple instances of a field the server may add the new values to the existing values without overwriting.</li>
+<li>The server SHOULD add all of the content delivered in this operation to the pre-existing Media Resource, although it MAY take advantage of instructions in the packaging format as to how to structure the content appropriately; for example if the packaging format indicates multiple representations of the resource in different languages, these may be described as separate Media Resources with their <span class="code_inline">hreflang</span> attribute set appropriately in the Deposit Receipt
 </ul>
 
 <p>
@@ -1364,75 +1458,6 @@ Location: [Edit-IRI]
 [optional Deposit Receipt]
 <pre>
 </div>
-
-<h4><a name="protocoloperations_addingcontent_mediaresource">6.7.4. Adding Files to the Media Resource</a></h4>
-
-<p>The client can add more content to the Media Resource itself by performing an HTTP POST request on the <strong>EM-IRI</strong>.  This has the effect of placing new files into the Media Resource itself.</p>
-
-<p>This feature is for use when clients wish to send individual files to the server and to receive back the IRI for the created resource.  POSTing to the <strong>SE-IRI</strong> will not give back the location of the deposited resource in the HTTP <span class="code_inline">Location</span> header, so in cases where the server does not provide the (optional) Deposit Receipt, it is not possible for the client to ascertain the location of the file actually deposited - the <span class="code_inline">Location</span> header in that operation is the <strong>Edit-IRI</strong>.  By POSTing to the <strong>EM-IRI</strong>, the <span class="code_inline">Location</span> header will return the IRI of the deposited file itself, rather than that of the container.</p>
-
-<p>
-As the <strong>EM-IRI</strong> represents the Media Resource itself, rather than the Container, this operation will not formally support metadata handling, and therefore also offers no explicit support for packaging either since packages may be both content and metadata.  Nonetheless, for files which may contain extractable metadata, there is a <span class="code_inline">Metadata-Relevant</span> header which can be defined to indicate whether the deposit can be used to augment the metadata of the container.
-</p>
-
-<p>
-When depositing packages, the best approach is to POST to the <strong>SE-IRI</strong> (See Sections 6.7.1, 6.7.2, 6.7.3), as POST to <strong>EM-IRI</strong>.
-</p>
-
-<p>When carrying out this operation, the requirements for the client are:</p>
-
-<ul>
-<li>The client SHOULD supply a <span class="code_inline">Content-Type</span> header</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header with a <span class="code_inline">filename</span> parameter (note that this requires the filename be expressed in ASCII).</li>
-<li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content</li>
-<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</span> header [<a href="#sword001">SWORD001</a>]</li>
-<li>The client MAY provide a <span class="code_inline">Metadata-Relevant</span> header, with the value <span class="code_inline">true</span> or <span class="code_inline">false</span>.  This should be set to <span class="code_inline">true</span> if the server should consider the file a potential source of metadata extraction, or <span class="code_inline">false</span> if the server should not attempt to extract any metadata from the deposit.</li>
-</ul>
-
-<div class="code">
-<pre>
-POST EM-IRI HTTP/1.1
-Host: example.org
-Content-Type: application/pdf
-Authorization: Basic ZGFmZnk6c2VjZXJldA==
-Content-Length: [content length]
-Content-MD5: [md5-digest]
-Content-Disposition: attachment; filename=[filename]
-On-Behalf-Of: jbloggs
-
-[request entity]
-</pre>
-</div>
-
-<p>
-The requirements placed on the server here are:
-</p>
-
-<ul>
-<li>The server SHOULD verify the <span class="code_inline">Content-MD5</span> header against the content.  If the check fails, the server MUST respond with 412 Precondition Failed, and MAY return a SWORD Error document.  See <a href="#errordocuments">Section 12: Error Documents</a>.</li>
-<li>Server implementations MUST adopt the behaviour and requirements in [<a href="#rfc2183">RFC2183</a>] with respect to the <span class="code_inline">Content-Disposition</span> header</li>
-<li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a>.</li>
-<li>The server SHOULD NOT overwrite any existing content, and MUST add content equivalent to or derived from the deposited content to the existing container or respond with an error document.</li>
-<li>If there is no <span class="code_inline">Metadata-Relevant</span> header, the server MAY assume that it is <span class="code_inline">true</span> and MAY attempt to extract metadata from the deposit.  If the <span class="code_inline">Metadata-Relevant</span> is <span class="code_inline">false</span> the server SHOULD NOT attempt to extract metadata from the deposit.
-</ul>
-
-<p>
-Once the server has processed the request it is RECOMMENDED that it returns a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The server MAY, though, return any response which it feels appropriate, and this profile does not limit the response types in any way.  Nonetheless, the server MUST include an HTTP <span class="code_inline">Location</span> header with the IRI of the created resource.
-</p>
-
-<p>
-For example:
-</p>
-
-<div class="code">
-<pre>
-201 Created
-Location: [File-IRI]
-
-[optional Deposit Receipt]
-</pre>
-</div>
-
 
 <h3><a name="protocoloperations_deleteconteiner">6.8. Deleting the Container</a></h3>
 
