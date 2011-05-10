@@ -905,7 +905,8 @@ The requirements placed on the server here are:
 <li>If there is no <span class="code_inline">Packaging</span> header, the server SHOULD assume that it is the binary packaging format (See <a href="#iris">Section 5: IRIs</a>)</li>
 <li>If the container to which the deposit is being made has been previously marked as "in progress", the server SHOULD continue to respect that assertion as per <a href="#continueddeposit">Section 9: Continued Deposit</a>.</li>
 <li>If there is an <span class="code_inline">On-Behalf-Of</span> header, the server MUST behave as described in <a href="#authenticationmediateddeposit">Section 8: Authentication and Mediated Deposit</a></span>.</li>
-<li>The server MUST effectively replace all the existing content in the item (subject to the rules associated with Metadata Handling), although implementations may choose to provide versioning or some other mechanism for retaining the overwritten content.</li>
+<li>If no <span class="code_inline">Metadata-Relevant</span> header is provided the server MAY assume that it is <span class="code_inline">true</span> and MAY attempt to extract metadata from the deposit. If <span class="code_inline">Metadata-Relevant</span> is <span class="code_inline">false</span> the server SHOULD NOT attempt to extract metadata from the deposit.</li>
+<li>The server MUST effectively replace all the existing content in the item, although implementations may choose to provide versioning or some other mechanism for retaining the overwritten content.</li>
 </ul>
 
 <p>
