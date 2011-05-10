@@ -997,7 +997,7 @@ The client can replace both the metadata and content of a resource by performing
 
 <ul>
 <li>The client MUST comply with the rules laid out in [<a href="#atommultipart">AtomMultipart</a>]</li>
-<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment"</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
+<li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Entry Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">atom</span> [<a href="#sword004">SWORD004</a>]</li>
 <li>The client MUST supply a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span> on the Media Part with a <span class="code_inline">name</span> parameter set to <span class="code_inline">payload</span> and a <span class="code_inline">filename</span> parameter [<a href="#sword004">SWORD004</a>] (note that this requires the filename be expressed in ASCII).</li>
 <li>The client SHOULD supply a <span class="code_inline">Content-MD5</span> header with the MD5 checksum hex encoded for the binary content on the Media Part</span>
 <li>The client SHOULD supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the IRI (or other allowed) of the packaging format used on the Media Part</li>
