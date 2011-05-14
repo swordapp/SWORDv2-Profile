@@ -1496,7 +1496,7 @@ Once the server has processed the request is MUST respond with an HTTP status co
 <h3><a name="protocoloperations_statement">6.9. Retrieving the Statement</a></h3>
 
 <p>
-The Statement can be found retrieved by requesting the IRI provided in the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element.  The format of the statement is identified by the <span class="code_inline">type</span> attribute of the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element and MUST be <span class="code_inline">application/rdf+xml</span> for an OAI-ORE Resource Map, or <span class="code_inline">application/atom+xml;type=feed</span> for an Atom Feed.
+The Statement can be retrieved by requesting the IRI provided in the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element.  The format of the statement is identified by the <span class="code_inline">type</span> attribute of the <span class="code_inline">atom:link@rel="http://purl.org/net/sword/terms/statement"</span> element and MUST be <span class="code_inline">application/rdf+xml</span> for an OAI-ORE Resource Map, or <span class="code_inline">application/atom+xml;type=feed</span> for an Atom Feed.
 </p>
 
 <p>
@@ -1506,6 +1506,8 @@ It MAY also be possible to content negotiate for the statement on the <strong>Ed
 <p>
 For details on these serialisations see <a href="#statement">Section 11: The SWORD Statement</a>.
 </p>
+
+<p>Servers MAY restrict access to the statement to authenticated users.  In either case, the client MAY supply an <span class="code_inline">On-Behalf-Of</span> header for the purposes of indicating provenance to the server.</p>
 
 <h3><a name="protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a></h3>
 
@@ -1645,7 +1647,7 @@ If the server does not supply any <span class="code_inline">sword:packaging</spa
 
 <h3><a name="packaging_negotiation">7.4. Negotiating for package formats</a></h3>
 
-When retrieving a package identified in the <span class="code_inline">atom:content</span> element, the client MAY specify an <span class="code_inline">Accept-Packaging</span> HTTP header [<a href="#sword001">SWORD001</a>] indicating its desired package format.  The value of this header SHOULD be one of the formats identified in the <span class="code_inline">sword:packaging</span> elements in the Deposit Receipt.  If a packaging format is requested which is not available, the server MUST reject the GET by returning an HTTP response with a status code of <span class="code_inline">415 (Unsupported Media Type)</span> and a SWORD Error document with URI <span class="code_inline">http://purl.net/org/sword/terms/ErrorContent</span> (See <a href="#errordocuments">Section 12: Error Documents</a>).
+When retrieving a package identified in the <span class="code_inline">atom:content</span> element, the client MAY specify an <span class="code_inline">Accept-Packaging</span> HTTP header [<a href="#sword001">SWORD001</a>] indicating its desired package format.  The value of this header SHOULD be one of the formats identified in the <span class="code_inline">sword:packaging</span> elements in the Deposit Receipt.  If a packaging format is requested which is not available, the server MUST reject the GET by returning an HTTP response with a status code of <span class="code_inline">406 (Not Acceptable)</span> and a SWORD Error document with URI <span class="code_inline">http://purl.net/org/sword/terms/ErrorContent</span> (See <a href="#errordocuments">Section 12: Error Documents</a>).
 
 <p>For example:</p>
 
@@ -2262,6 +2264,8 @@ The error document SHOULD contain an <span class="code_inline">atom:summary</spa
 The error document MAY contain a <span class="code_inline">sword:verboseDescription</span> element with a long description of the problem or any other appropriate software-level debugging output (e.g. a stack trace).  Server implementations may wish to provide this for client developers' convenience, but may wish to disable such output in any production systems.
 </p>
 
+<p>The server SHOULD specify that the <span class="code_inline">Content-Type</span> of the is <span class="code_inline">text/xml</span> or <span class="code_inline">application/xml</span>.
+
 <h3><a name="errordocuments_uris">12.1. Error URIs</a></h3>
 
 <h4><a name="errordocuments_uris_content">12.1.1. sword:ErrorContent</a></h4>
@@ -2274,7 +2278,7 @@ The error document MAY contain a <span class="code_inline">sword:verboseDescript
 The supplied format is not the same as that identified in the <span class="code_inline">Packaging</span> header and/or that supported by the server 
 </p>
 
-<p><strong>Associated HTTP Status</strong>: 415 (Unsupported Media Type)</p>
+<p><strong>Associated HTTP Status</strong>: 415 (Unsupported Media Type) or 406 (Not Acceptable)</p>
 
 <h4><a name="errordocuments_uris_checksum">12.1.2. sword:ErrorChecksumMismatch</a></h4>
 
