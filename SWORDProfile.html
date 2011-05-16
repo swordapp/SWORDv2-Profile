@@ -2332,6 +2332,16 @@ Used where a client has attempted a mediated deposit, but this is not supported 
 Used when the client has attempted one of the HTTP update verbs (POST, PUT, DELETE) but the server has decided not to respond to such requests on the specified resource at that time.  The server MUST also return a status code of <span class="code_inline">405 Method Not Allowed</span>
 </p>
 
+<h4><a name="errordocuments_uris_maxupload">12.1.7. sword:MaxUploadSizeExceeded</a></h4>
+
+<p><strong>IRI</strong>: http://purl.org/net/sword/error/MaxUploadSizeExceeded</p>
+
+<p>
+Used when the client has attempted to supply to the server a file which exceeds the server's maximum upload size limit
+</p>
+
+<p><strong>Associated HTTP Status</strong>: 413 (Request Entity Too Large)</p>
+
 <h3><a name="errordocuments_example">12.2. Error Document Example</a></h3>
 
 <div class="code">
