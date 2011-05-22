@@ -1764,6 +1764,15 @@ If <span class="code_inline">In-Progress</span> is <span class="code_inline">tru
 The client can assert that a deposit process has completed by issuing an HTTP POST to the <strong>SE-IRI</strong> with a blank message body and with the <span class="code_inline">In-Progress</span> header set to false (it may simply omit the header altogether too, as this is treated as <span class="code_inline">In-Progress: false</span> by the server).  The client SHOULD specify a <span class="code_inline">Content-Length: 0</span> HTTP header.
 </p>
 
+<p>
+This operation is effectively equivalent to <a href="#protocoloperations_addingcontent_binary">Section 6.7.2. Adding New Packages or Files to a Container</a>, but with an empty POST body, and the client must fulfill the following requirements:
+</p>
+
+<ul>
+<li>The client MAY provide an <span class="code_inline">In-Progress</span> header with a value of <span class="code_inline">true</span> or <span class="code_inline">false</span> [<a href="#sword001">SWORD001</a>]</li>
+<li>The client MAY provide an <span class="code_inline">On-Behalf-Of</a> header [<a href="#sword001">SWORD001</a>]</li>
+</ul>
+
 <div class="code">
 <pre>
 POST SE-IRI HTTP/1.1
@@ -1776,8 +1785,25 @@ User-Agent: MyJavaClient/0.1 Restlet/2.0
 </div>
 
 <p>
-If <span class="code_inline">In-Progress</span> is <span class="code_inline">false</span>, the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.
+If <span class="code_inline">In-Progress</span> is <span class="code_inline">false</span>, the server MUST assume that it can carry on processing the deposit or deletion as it sees fit.  The server SHOULD NOT modify the existing content.
 </p>
+
+<p>
+Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+200 OK
+Location: [Edit-IRI]
+
+[optional Deposit Receipt]
+</pre>
+</div>
 
 <h2><a name="depositreceipt">10. Deposit Receipt</a></h2>
 
