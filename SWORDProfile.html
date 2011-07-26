@@ -110,6 +110,9 @@ body {
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#errordocuments_uris_notallowed">12.1.6. sword:MethodNotAllowed</a><br/>
 &nbsp;&nbsp;<a href="#errordocuments_example">12.2. Error Document Example</a><br/>
 <strong><a href="#autodiscovery">13. Auto-Discovery</a></strong><br/>
+&nbsp;&nbsp;<a href="#autodiscovery_servicedocuments">13.1. For Service Documents</a><br/>
+&nbsp;&nbsp;<a href="#autodiscovery_deposit">13.2. For Deposit Endpoints</a><br/>
+&nbsp;&nbsp;<a href="#autodiscovery_resources">13.3. For Resources</a><br/>
 <strong><a href="#references">14. References</a></strong>
 
 </td></tr></table>
@@ -1397,7 +1400,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it SHOULD return a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">200 (OK)</span>.  The Deposit Receipt MUST be available under the <strong>Edit-IRI</strong> (Member Entry IRI), which the server MAY supply in the <span class="code_inline">Location</span> header.
+Once the server has processed the request it is RECOMMENDED that it returns a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code 201 (Created). The server MAY, though, return any response which it feels appropriate, and this profile does not limit the response types in any way. Nonetheless, the server MUST include an HTTP <span class="code_inline">Location</span> header with the IRI of the Media Resource itself (i.e. the <strong>EM-IRI</strong>).
 </p>
 
 <p>
@@ -1407,7 +1410,7 @@ For example:
 <div class="code">
 <pre>
 201 Created
-Location: [Edit-IRI]
+Location: [EM-IRI]
 
 [optional Deposit Receipt]
 <pre>
@@ -2246,7 +2249,6 @@ The client's responsibilities are (in addition to those specified in <a href="#s
 </p>
 
 <ul>
-<li>If no <span class="code_inline">sword:packaging</span> term is provided on <span class="code_inline">sword:originalDeposit</span>, the client MUST assume only the a simple zip packaging format (see <a href="#iris">Section 5: IRIs</a>).</li>
 <li>The client MUST ignore without error any terms in the document that it does not understand</li>
 </ul>
 
@@ -2381,7 +2383,14 @@ HTTP 1.1  400 Bad Request
 <h2><a name="autodiscovery">13. Auto-Discovery</a></h2>
 
 <p>
-AtomPub makes no recommendations on the discovery of Service Documents.  SWORD RECOMMENDS that server implementations use: 
+AtomPub makes no recommendations on the discovery of Service Documents or other resources.  SWORD RECOMMENDS that server implementations use the following conventions
+</p>
+
+<h3><a name="autodiscovery_servicedocuments">13.1. For Service Documents</a></h3>
+
+<p>
+Embed an html link with a rel value of <span class="code_inline">sword</span> (for backwards compatibility with
+SWORD 1.3 recommendations), or a rel value of <span class="code_inline">http://purl.org/net/sword/terms/service-document</span>
 </p>
 
 <div class="code">
@@ -2390,9 +2399,42 @@ AtomPub makes no recommendations on the discovery of Service Documents.  SWORD R
 </pre>
 </div>
 
+<p>or</p>
+
+<div class="code">
+<pre>
+&lt;html:link rel="http://purl.org/net/sword/discovery/service-document" href="[Service Document URL]"/&gt;
+</pre>
+</div>
+
+<h3><a name="autodiscovery_deposit">13.2. For Deposit Endpoints</a></h3>
+
 <p>
-in the head of a relevant HTML document to assist with service discovery.
+Embed an html link with a rel value of <span class="code_inline">http://purl.org/net/sword/terms/deposit</span> in
+any page which represents a deposit endpoint (for example, the splash page for a Collection)
 </p>
+
+<div class="code">
+<pre>
+&lt;html:link rel="http://purl.org/net/sword/terms/deposit" href="[Deposit URL]"/&gt;
+</pre>
+</div>
+
+<h3><a name="autodiscovery_resources">13.3. For Resources</a></h3>
+
+<p>
+Embed an html link with a rel value of <span class="code_inline">http://purl.org/net/sword/terms/edit</span> in
+any page which represents a deposited resource, and optionally include a <span class="code_inline">http://purl.org/net/sword/terms/statement</span>
+link as well.
+</p>
+
+<div class="code">
+<pre>
+&lt;html:link rel="http://purl.org/net/sword/terms/edit" href="[Edit-IRI]"/&gt;
+&lt;html:link rel="http://purl.org/net/sword/terms/statement" href="[State-IRI]"/&gt;
+</pre>
+</div>
+
 
 <h2><a name="references">14. References</a></h2>
 
