@@ -71,7 +71,8 @@ body {
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_deleteconteiner">6.8. Deleting the Container</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_statement">6.9. Retrieving the Statement</a><br/>
-&nbsp;&nbsp;<a href="#protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_swordactionableiris">6.10. SWORD Actionable IRIs</a><br/>
+&nbsp;&nbsp;<a href="#protocoloperations_arbitrary">6.11. Use of SWORD with arbitrary IRIs</a><br/>
 <strong><a href="#packaging">7. Packaging</a></strong><br/>
 &nbsp;&nbsp;<a href="#packaging_servicedescription">7.1. Package support in Service description</a><br/>
 &nbsp;&nbsp;<a href="#packaging_creation">7.2. Package support during resource creation</a><br/>
@@ -833,7 +834,7 @@ For more details about the packaging process, see <a href="#packaging">Section 7
 It is RECOMMENDED that implementations provide an EM-IRI in the Deposit Receipt with a type of <span class="code_inline">application/atom+xml;type=feed</span> in addition to any other types available.
 </p>
 
-<p>For example:</p>
+<p>For example, the Depoisit Receipt would contain:</p>
 
 <div class="code">
 <pre>
@@ -852,7 +853,7 @@ It is RECOMMENDED that implementations provide an EM-IRI in the Deposit Receipt 
 </div>
 
 <p>
-The exact contents of the Feed representation are unspecified, but it is RECOMMENDED that this is a list of atom:entry elements which represent the individual media items which together form the Media Resource.
+The exact contents of the Feed representation are unspecified, but it is RECOMMENDED that this is a list of <span class="code_inline">atom:entry</span> elements which represent the individual media items which together form the Media Resource.  Each <span class="code_inline">atom:entry</span> element MUST have an edit-media IRI which SHOULD be actionable as per <a href="protocoloperations_swordactionableiris">Section 6.10</a>.
 </p>
 
 <p>
@@ -1208,7 +1209,7 @@ The requirements placed on the server here are:
 </ul>
 
 <p>
-Once the server has processed the request it is RECOMMENDED that it returns a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The server MAY, though, return any response which it feels appropriate, and this profile does not limit the response types in any way.  Nonetheless, the server MUST include an HTTP <span class="code_inline">Location</span> header with the IRI of the created resource (in the case of an individual file deposit) or the Media Resource itself (in the case of a package deposit).
+Once the server has processed the request it is RECOMMENDED that it returns a Deposit Receipt as described in <a href="#depositreceipt">Section 10: Deposit Receipt</a> with the HTTP status code <span class="code_inline">201 (Created)</span>.  The server MAY, though, return any response which it feels appropriate, and this profile does not limit the response types in any way.  Nonetheless, the server MUST include an HTTP <span class="code_inline">Location</span> header with the IRI of the created resource (in the case of an individual file deposit) or the Media Resource itself (in the case of a package deposit).  If an individual file has been deposited, the IRI of the created resource SHOULD be actionable as per <a href="#protocoloperations_swordactionableiris">Section 6.10: SWORD Actionable IRIs</a>.
 </p>
 
 <p>
@@ -1465,7 +1466,21 @@ For details on these serialisations see <a href="#statement">Section 11: The SWO
 
 <p>Servers MAY restrict access to the statement to authenticated users.  In either case, the client MAY supply an <span class="code_inline">On-Behalf-Of</span> header for the purposes of indicating provenance to the server.</p>
 
-<h3><a name="protocoloperations_arbitrary">6.10. Use of SWORD with arbitrary IRIs</a></h3>
+<h3><a name="protocoloperations_swordactionableiris">6.10. SWORD Actionable IRIs</a></h3>
+
+<p>
+In some cases the SWORD protocol will allow the server to provide IRIs to the client which refer to individual file resources (not the <strong>EM-IRI</strong>).  This document RECOMMENDS that these IRIs are actionable to the extent that they support not only GET but also PUT and DELETE.
+</p>
+
+<p>
+If these IRIs are not actionable as defined above then attempts to PUT or DELETE to them MUST result in a <span class="code_inline">403 (Forbidden)</span> or a <span class="code_inline">405 (Method Not Allowed)</span> HTTP response.
+</p>
+
+<p>
+If these IRIs are actionable as defined above, they SHOULD support the headers as defined in <a href="#protocoloperations_arbitrary">Section 6.11</a>.  Responses to action requests MUST be the appropriate HTTP response codes.
+</p>
+
+<h3><a name="protocoloperations_arbitrary">6.11. Use of SWORD with arbitrary IRIs</a></h3>
 
 <p>
 During normal operation the SWORD server may respond to requests by the client with documents (such as the Statement) which contain IRIs for resources which are not formally covered by this profile.  For example, the Statement may include IRIs to files unpacked from an original deposit package and made available independently.  Or an implementation of a content management protocol such as CMIS [<a href="#cmis">CMIS</a>] or GData [<a href="#gdata">GData</a>] may provide IRIs for resources or collections of resources.
@@ -1778,7 +1793,7 @@ On successfully accepting a POST (deposit), implementers SHOULD return an Atom E
 <li>It MAY contain one or more <span class="code_inline">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/statement</span>, and the href to a IRI where the statement can be retrieved.  The <span class="code_inline">atom:link</span> element MUST contain a type attribute which indicates the mime-type of the statement (for example <span class="code_inline">application/atom+xml;type=feed</span> or <span class="code_inline">application/rdf+xml</span>)</li>
 <li>It MAY contain an <span class="code_inline">atom:link@rel="alternate"</span> element with an <span class="code_inline">href</span> attribute which points to the splash page of the item on the server</li>
 <li>It SHOULD contain a single <span class="code_inlin">atom:link</span> element with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org/net/sword/terms/originalDeposit</span> which provides the IRI identifying the package or file deposited in the current request.  This information is transient and will only be present when responding to a deposit, it is not required that it be available in the Entry Document retreived from the <stong>EM-IRI</strong>.</li>
-<li>It SHOULD, if relevant, contain zero or more <span class="code_inline">atom:link</span> elements with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org.net/sword/terms/derivedResource</span> which provides the IRIs identifying any content resources which were derived or extracted from the originally deposited resource (e.g. the files unpacked from a zip file).</li>
+<li>It SHOULD, if relevant, contain zero or more <span class="code_inline">atom:link</span> elements with the <span class="code_inline">rel</span> attribute of <span class="code_inline">http://purl.org.net/sword/terms/derivedResource</span> which provides the IRIs identifying any content resources which were derived or extracted from the originally deposited resource (e.g. the files unpacked from a zip file).  These IRIs SHOULD be actionable as per <a href="#protocoloperations_swordactionableiris">Section 6.10: SWORD Actionable IRIs</a>.</li>
 </ul>
 
 <p>
@@ -2124,7 +2139,7 @@ The client's responsibilities are:
 <h3><a name="statement_oaiore">11.3. OAI-ORE Serialisation</a></h3>
 
 <p>
-The SWORD statement can be provided as an OAI-ORE Resource [<a href="#oaiore">OAIORE</a>] Map with sword extensions.  For an RDF document to comply with the requirements of the SWORD statement it needs to meet the following requirements but is not constrained in any way as to what additional data is provided alongside.  As such, it is expected that the SWORD statement may be included with existing RDF serialisations of objects provided by the server.
+The SWORD statement can be provided as an OAI-ORE Resource [<a href="#oaiore">OAIORE</a>] Map with SWORD extensions.  For an RDF document to comply with the requirements of the SWORD statement it needs to meet the following requirements but is not constrained in any way as to what additional data is provided alongside.  As such, it is expected that the SWORD statement may be included with existing RDF serialisations of objects provided by the server.
 </p>
 
 <p>
@@ -2140,6 +2155,7 @@ The responsibilities of the server are (as serialisation-specific versions of th
 <li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include the depositor of the package in the <span class="code_inline">sword:depositedBy</span> term</li>
 <li>If present, the <span class="code_inline">sword:originalDeposit</span> term MAY include the user on whose behalf the deposit was made in the <span class="code_inline">sword:depositedOnBehalfOf</span> term</li>
 <li>The statement MAY include any other ORE terms, and any other terms from other ontologies</li>
+<li>All individual files which are listed as <span class="code_inline">ore:aggregation</span> elements SHOULD be actionable as per <a href="#protocoloperations_swordactionableiris">Section 6.10: SWORD Actionable IRIs</a>.</li>
 </ul>
 
 <p>
