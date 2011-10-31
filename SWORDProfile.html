@@ -63,7 +63,7 @@ body {
 &nbsp;&nbsp;<a href="#protocoloperations_editingcontent">6.5. Replacing the Content of a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_binary">6.5.1. Replacing the File Content of a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_metadata">6.5.2. Replacing the Metadata of a Resource</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_multipart">6.5.3. The Metadata and File Content of a Resource</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_editingcontent_multipart">6.5.3. Replacing the Metadata and File Content of a Resource</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_deletingcontent">6.6. Deleting the Content of a Resource</a><br/>
 &nbsp;&nbsp;<a href="#protocoloperations_addingcontent">6.7. Adding Content to a Resource</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#protocoloperations_addingcontent_mediaresource">6.7.1. Adding Content to the Media Resource</a><br/>
@@ -992,7 +992,7 @@ The requirements placed on the server here are:
 Once the server has processed the request it MUST return an HTTP status code <span class="code_inline">200 (OK)</span> or <span class="code_inline">204 (No Content)</span>, or an appropriate error code.
 </p>
 
-<h4><a name="protocoloperations_editingcontent_multipart">6.5.3. The Metadata and File Content of a Resource</a></h4>
+<h4><a name="protocoloperations_editingcontent_multipart">6.5.3. Replacing the Metadata and File Content of a Resource</a></h4>
 
 <em>See [<a href="#atommultipart">AtomMultipart</a>] for details.</em>
 
@@ -1292,7 +1292,7 @@ Location: [Edit-IRI]
 <h4><a name="protocoloperations_addingcontent_multipart">6.7.3. Adding New Metadata and Packages or Files to a Resource with Multipart</a></h4>
 
 <p>
-The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document to the <strong>EM-IRI</strong>.
+The client can add new content and update the metadata attached to a resource by issuing an HTTP POST of an Atom Multipart [<a href="#atommultipart">AtomMultipart</a>] document to the <strong>SE-IRI</strong>.
 </p>
 
 <p><strong>Note: this section does not instruct the server on the best way to handle metadata or content: only that metadata SHOULD be added and not overwritten and that the content SHOULD be added to the existing Media Resource.  If the client requires detailed control over metadata and content see <a href="#protocoloperations_editingcontent_metadata">Section 6.5.2</a> and <a href="#protocoloperations_addingcontent_mediaresource">Section 6.7.1</a> instead.</strong></p>
