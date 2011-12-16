@@ -1,0 +1,417 @@
+<html>
+
+<head>
+	<title>SWORD 002: AtomPub Extensions for Packaged Content</title>
+	<style type="text/css">
+
+body {
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
+.toc {
+    font-size: 10pt;
+}
+
+.code {
+	font-family: monospace;
+	background: #ffffaa;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+    font-size: 10pt;
+}
+
+.code_inline {
+	font-family: monospace;
+	background: #ffffaa;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+    font-size: 10pt;
+}
+
+	</style>
+</head>
+<body>
+
+<h1>AtomPub Extensions for Packaged Content</h1>
+
+<h2>Introduction</h2>
+
+<p>
+   The Atom Publishing Protocol [<a href="#rfc5023">RFC5023</a>] defines how to create a Media
+   Resource by POSTing the media to a server.  It deals exclusively with
+   the upload of a single file to the Media Entry, and does not make
+   explicit allowances for the possibility that this file may be a
+   package or bundle of other files in a particular format.  This
+   specification covers extensions to the protocol to support this extra
+   condition.
+</p>
+
+<p>
+   This specification defines a set of extensions to the Atom Publishing
+   Protocol [<a href="#rfc5023">RFC5023</a>] to support the transfer and recovering of content
+   packages via the standard.
+</p>
+
+<h3>1.1  Terminology</h3>
+
+<p>
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [<a href="#rfc2119">RFC2119</a>].
+</p>
+
+<h3>1.2 Namespaces</h3>
+
+<p>All extensions are defined within the namespace:</p>
+
+<div class="code">
+    http://purl.org/net/sword/
+</div>
+
+<p>This document uses the prefix <span class="code_inline">sword</span> for the namespace name.</p>
+
+<p>The AtomPub namespace is:</p>
+
+<div class="code">
+    http://www.w3.org/2007/app
+</div>
+
+<p>This document uses the prefix <span class="code_inline">app</span> for the namespace name.</p>
+
+<p>The Atom Syndication Format namespace is:</p>
+
+<div class="code">
+       http://www.w3.org/2005/Atom
+</div>
+
+<p>This document uses the prefix <span class="code_inline">atom</span> for the namespace name.</p>
+
+<h2>2  Service Document Extensions</h2>
+
+<p>This section documents extensions to the Atom Service Document.</p>
+
+<h3>2.1 sword:mediation</h3>
+
+<p>
+   The <span class="code_inline">sword:mediation</span> element MUST be used to determine if a Media
+   Collection will accept the deposit of content on behalf of a user
+   other than the authenticated depositor.  If it is not present the
+   client MUST assume that the server does not support such mediated
+   deposit.
+</p>
+
+<p>
+   Traditional HTTP authentication is often insufficient during packaged content
+   deposit, as it is possible that content will be delivered machine-to-
+   machine and the authenticating user will be the client not the
+   content owner.  The presence of the <span class="code_inline">sword:mediation</span> element, which
+   MUST take a <span class="code_inline">true</span> or <span class="code_inline">false</span> value, indicates whether the 
+   <span class="code_inline">On-Behalf-Of</span> HTTP header [<a href="#sword001">SWORD001</a>] can be used to provide the server with a
+   user other than the authenticated one who should be considered the
+   actor in the transfer.
+</p>
+
+<p>For example:</p>
+
+<div class="code">
+<pre>
+&lt;service xmlns="http://www.w3.org/2007/app"
+        xmlns:sword="http://purl.org/net/sword/terms/"
+        xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+    &lt;workspace&gt;
+    
+    &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+    
+    &lt;collection href="http://www.appserver.org/col1"&gt;
+        &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+        &lt;accept&gt;*/*&lt;/accept&gt;
+        &lt;sword:mediation&gt;true&lt;/sword:mediation&gt;
+    &lt;/collection&gt;
+    
+    &lt;/workspace&gt;
+&lt;/service&gt;
+</pre>
+</div>
+
+<h3>2.2 sword:acceptPackaging</h3>
+
+<p>
+   The <span class="code_inline">sword:acceptPackaging</span> element SHOULD be used to indicate to the
+   client what package formats are acceptable to send to the server.
+    If the server does not supply an element, the client MUST assume
+   that the server only supports an ordinary, unstructured zip file. 
+   The server MAY unzip any such files, or MAY store them as opaque
+   binary files.  The <span class="code_inline">sword:acceptPackaging</span> element MUST contain a URI
+   identifying the packaging format.
+</p>
+
+<p>For example:</p>
+
+<div class="code">
+<pre>
+&lt;service xmlns="http://www.w3.org/2007/app"
+        xmlns:sword="http://purl.org/net/sword/terms/"
+        xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+ &lt;workspace&gt;
+
+    &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+    
+        &lt;collection href="http://www.appserver.org/col1"&gt;
+            &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+            &lt;accept&gt;*/*&lt;/accept&gt;
+            &lt;sword:acceptPackaging&gt;
+                http://purl.org/net/sword/package/BagIt
+            &lt;/sword:acceptPackaging&gt;
+            &lt;sword:acceptPackaging&gt;
+                http://purl.org/net/sword/package/METSDSpaceSIP
+            &lt;/sword:acceptPackaging&gt;
+        &lt;/collection&gt;
+    
+    &lt;/workspace&gt;
+&lt;/service&gt;
+</pre>
+</div>
+
+<h2>3 Media Entry Extensions</h3>
+
+<p>
+   This section documents extensions to the Media Entry document which
+   can be retrieved from the server from the Media Entry URI.
+</p>
+
+<h3>3.1 sword:packaging</h3>
+
+<p>
+   The <span class="code_inline">sword:packaging</span> element SHOULD be used by the server to indicate
+   the packaging formats that it is capable of delivering the Media
+   Resource to the client in.  If there is no <span class="code_inline">sword:packaging</span>
+   element, the client MUST NOT assume any packaging format; instead
+   it must rely on the <span class="code_inline">atom:content@type</span> as normal, per [<a href="#rfc5023">RFC5023</a>].  If a
+   <span class="code_inline">sword:packaging</span> element is provided the client MAY request the
+   <span class="code_inline">atom:content@src</span> URI with the <span class="code_inline">Packaging</span> HTTP header [<a href="#sword001">SWORD001</a>]
+   containing the value of the <span class="code_inline">sword:packaging</span> element.
+</p>
+
+<p>
+   The value of the <span class="code_inline">sword:packaging</span> element MUST contain a URI
+   identifying the packaging format.
+</p>
+
+<p>For example:</p>
+
+<div class="code">
+<pre>
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+    xmlns:sword="http://purl.org/net/sword/"&gt;
+
+    &lt;title&gt;My Deposit&lt;/title&gt;
+    &lt;id&gt;info:something:1&lt;/id&gt;
+    
+    &lt;updated&gt;2008-08-18T14:27:08Z&lt;/updated&gt;
+    &lt;author&gt;&lt;name&gt;jbloggs&lt;/name&gt;&lt;/author&gt;
+    &lt;summary type="text"&gt;A summary&lt;/summary&gt;
+    &lt;generator uri="http://www.appserver.org/engine" version="1.0"/&gt;
+    
+    &lt;content type="application/zip"
+        src="http://www.appserver.org/col1/deposit1.zip"/&gt;	
+    &lt;sword:packaging&gt;
+        http://purl.org/net/sword/package/METSDSpaceSIP
+    &lt;/sword:packaging&gt;
+    &lt;link rel="edit"
+        href="http://www.appserver.org/col1/my_deposit.atom" /&gt;
+
+&lt;/entry&gt;
+</pre>
+</div>
+
+
+<h2>4 Packaged Content Delivery over HTTP with AtomPub</h2>
+
+<p>
+   A walkthrough of the process of delivering and retrieving packaged
+   content with a combination of the extensions described in this
+   specification and those detailed in [<a href="#sword001">SWORD001</a>].
+</p>
+
+
+<h3>4.1 Discovering Supported Packaging Formats for Delivery</h3>
+
+<p>
+   The client requests the Service Document from the server, which
+   contains the <span class="code_inline">sword:mediation</span> and <span class="code_inline">sword:acceptPackaging</span> elements.  If
+   the <span class="code_inline">sword:mediation</span> element is present and set to <span class="code_inline">true</span> this tells
+   the client that it can use the <span class="code_inline">On-Behalf-Of</span> HTTP header
+   [<a href="#sword001">SWORD001</a>] when delivering the packaged content.  The
+   <span class="code_inline">sword:acceptPackaging</span> header tells the client what packaging
+   formats it can use to deliver that content.
+</p>
+
+<div class="code">
+<pre>
+    &lt;service xmlns="http://www.w3.org/2007/app"
+            xmlns:sword="http://purl.org/net/sword/terms/"
+            xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+        &lt;workspace&gt;
+        
+        &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+        
+        &lt;collection href="http://www.appserver.org/col1"&gt;
+            &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+            &lt;accept&gt;application/zip&lt;/accept&gt;
+            &lt;sword:mediation&gt;true&lt;/sword:mediation&gt;
+            &lt;sword:acceptPackaging&gt;
+                http://purl.org/net/sword/package/BagIt
+            &lt;/sword:acceptPackaging&gt;
+        &lt;/collection&gt;
+        
+        &lt;/workspace&gt;
+    &lt;/service&gt;
+</pre>
+</div>
+
+<h3>4.2 Delivering Packaged Content</h3>
+
+<p>
+   The client constructs a content package which meets the criteria
+   laid out in the <span class="code_inline">app:accept</span> and <span class="code_inline">sword:acceptPackaging</span> headers in the
+   Service Document; for example an application/zip BagIt packaged file.
+    This is delivered to the server as a standard POST of a Media
+   Resource:
+</p>
+
+<div class="code">
+<pre>
+POST /col1 HTTP/1.1
+On-Behalf-Of: jbloggs
+Packaging: http://purl.org/net/sword/package/BagIt    
+Content-Type: application/zip
+</pre>
+</div>
+
+<p>The response to this MUST be as laid out in [<a href="#sword001">SWORD001</a>]</p>
+
+
+<h3>4.3 Discovering Supported Package Formats for Retrieval</h3>
+
+<p>
+   The supported formats for retrieval are listed in the Media Entry
+   document in the <span class="code_inline">sword:packaging</span> element.  The client can retrieve
+   this document from the Media Entry URI, and discover the URI for the
+   content of the Media Resource and the supported package formats.
+</p>
+
+<div class="code">
+<pre>
+&lt;entry xmlns="http://www.w3.org/2005/Atom"
+    xmlns:sword="http://purl.org/net/sword/"&gt;
+
+    &lt;title&gt;My Deposit&lt;/title&gt;
+    &lt;id&gt;info:something:1&lt;/id&gt;
+    
+    &lt;updated&gt;2008-08-18T14:27:08Z&lt;/updated&gt;
+    &lt;author&gt;&lt;name&gt;jbloggs&lt;/name&gt;&lt;/author&gt;
+    &lt;summary type="text"&gt;A summary&lt;/summary&gt;
+    &lt;generator uri="http://www.appserver.org/engine" version="1.0"/&gt;
+    
+    &lt;content type="application/zip"
+        src="http://www.appserver.org/col1/deposit1.zip"/&gt;	
+    &lt;sword:packaging&gt;
+        http://purl.org/net/sword/package/BagIt
+    &lt;/sword:packaging&gt;
+    &lt;sword:packaging&gt;
+        http://purl.org/net/sword/package/METSDSpaceSIP
+    &lt;/sword:packaging&gt;
+    
+    &lt;link rel="edit"
+        href="http://www.appserver.org/col1/my_deposit.atom" /&gt;
+
+&lt;/entry&gt;
+</pre>
+</div>
+
+<p>
+   The presence of one or more <span class="code_inline">sword:packaging</span> elements tells the user
+   agent that it can request the Media Resource using the <span class="code_inline">Packaging</span> HTTP
+   header [<a href="#sword001">SWORD001</a>] to indicate its desired format.
+</p>
+
+
+<h3>4.4 Retrieving Packaged Content</h3>
+
+<p>
+   The client issues an HTTP GET request on the Media Resource URI
+   and specifies the <span class="code_inline">Packaging</span> HTTP header [<a href="#sword001">SWORD001</a>], as follows:
+</p>
+
+<div class="code">
+<pre>
+GET /col1/deposit1.zip HTTP/1.1    
+Packaging: http://purl.org/net/sword/package/BagIt
+</pre>
+</div>
+
+<p>
+   The server returns the Media Resource packaged as a BagIt zip file. 
+   If the server does not support the requested format it MUST respond
+   as described in [<a href="#sword001">SWORD001</a>].
+</p>
+
+<h2>9  References </h2>
+
+<h3>9.1  Normative References</h3>
+
+<p>[<a name="rfc2119">RFC2119</a>] <a href="http://www.ietf.org/rfc/rfc2119.txt">S. Bradner, "Key words for use in RFCs to Indicate
+               Requirement Levels", BCP 14, RFC 2119, March 1997.</a></p>
+
+<p>[<a name="rfc2616">RFC2616</a>] <a href="http://www.ietf.org/rfc/rfc2616.txt">R. Fielding, UC Irvine, J. Gettys, J. Mogul, H. Frystyk, L. Masinter, P. Leach, T. Berners-Lee
+            "Hypertext Transfer Protocol -- HTTP/1.1",
+               RFC 2616, June 1999.</a></p>
+
+<p>[<a name="rfc5023">RFC5023</a>]  Gregorio, J. and B. de hOra, "The Atom Publishing
+               Protocol", RFC 5023, October 2007.</p>
+
+<p>[<a name="sword001">SWORD001</a>] Jones, R, "Packaged Content Delivery over HTTP", Internet-
+               Draft, February 2011</p>
+
+<h2>Copyright and License Notice</h2>
+
+<p>
+   Copyright (C) SWORD (2011).  All Rights Reserved.
+</p>
+
+<p>
+   This document and translations of it may be copied and furnished to
+   others, and derivative works that comment on or otherwise explain it
+   or assist in its implementation may be prepared, copied, published
+   and distributed, in whole or in part, without restriction of any
+   kind, provided that the above copyright notice and this paragraph are
+   included on all such copies and derivative works.  However, this
+   document itself may not be modified in any way, such as by removing
+   the copyright notice or references to SWORD, except as needed for the
+   purpose of developing Internet standards in which case the procedures
+   for copyrights defined in the Internet Standards process must be
+   followed, or as required to translate it into languages other than
+   English.
+</p>
+
+<p>
+   The limited permissions granted above are perpetual and will not be
+   revoked by SWORD or its successors or assigns.
+</p>
+   This document and the information contained herein is provided on an
+   "AS IS" basis and SWORD DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+   INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+   WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+
+
+</body>
+</html>
