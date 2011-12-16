@@ -1,0 +1,471 @@
+<html>
+
+<head>
+	<title>SWORD 003: AtomPub Extensions for Scholarly Systems</title>
+	<style type="text/css">
+
+body {
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
+.toc {
+    font-size: 10pt;
+}
+
+.code {
+	font-family: monospace;
+	background: #ffffaa;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+    font-size: 10pt;
+}
+
+.code_inline {
+	font-family: monospace;
+	background: #ffffaa;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+    font-size: 10pt;
+}
+
+	</style>
+</head>
+<body>
+
+<h1>AtomPub Extensions for Scholarly Systems</h1>
+
+<h2>Introduction</h2>
+
+<p>
+   The Atom Publishing Protocol [<a href="#rfc5023">RFC5023</a>] defines how to create a Media
+   Resource by POSTing the media to a server.  It deals exclusively with
+   the upload of a single file to the Media Entry, and does not make
+   explicit allowances for the possibility that the end point may be a
+   more complex publishing system.
+</p>
+
+<p>
+   This specification defines a set of extensions to the Atom Publishing
+   Protocol [<a href="#rfc5023">RFC5023</a>] to support the transfer and recovery of content in
+   scholarly systems.  We will refer to a service which complies to this
+   extension to AtomPub as a SWORD "server" throughout the course of this
+   document.
+</p>
+
+<h3>1.1  Terminology</h3>
+
+<p>
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [<a href="#rfc2119">RFC2119</a>].
+</p>
+
+<h3>1.2 Namespaces</h3>
+
+<p>All extensions are defined within the namespace:</p>
+
+<div class="code">
+    http://purl.org/net/sword/
+</div>
+
+<p>This document uses the prefix <span class="code_inline">sword</span> for the namespace name.</p>
+
+<p>The AtomPub namespace is:</p>
+
+<div class="code">
+    http://www.w3.org/2007/app
+</div>
+
+<p>This document uses the prefix <span class="code_inline">app</span> for the namespace name.</p>
+
+<p>The Atom Syndication Format namespace is:</p>
+
+<div class="code">
+       http://www.w3.org/2005/Atom
+</div>
+
+<p>This document uses the prefix <span class="code_inline">atom</span> for the namespace name.</p>
+
+
+<h2>2  Service Document Extensions</h2>
+
+<p>
+   This section documents extensions to the Atom Service Document.
+</p>
+
+<h3>2.1 sword:version</h3>
+
+<p>
+   The <span class="code_inline">sword:version</span> element MUST be used to specify the version number
+   of the SWORD server.  This is to avoid confusion with servers which
+   support older versions of the standard in which it was not compulsory
+   to supply this information.  It is a direct child of the <span class="code_inline">app:service</span>
+   element.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+       &lt;service xmlns="http://www.w3.org/2007/app"
+                xmlns:sword="http://purl.org/net/sword/terms/"
+                xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+
+         &lt;sword:version&gt;2.0&lt;/sword:version&gt;
+
+         &lt;workspace&gt;
+
+           &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+           &lt;collection href="http://www.appserver.org/col1"&gt;
+             &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+             &lt;accept&gt;*/*&lt;/accept&gt;
+           &lt;/collection&gt;
+
+         &lt;/workspace&gt;
+       &lt;/service&gt;
+</pre>
+</div>
+
+<h3>2.2 sword:maxUploadSize</h3>
+
+<p>
+   The <span class="code_inline">sword:maxUploadSize</span> element MAY be used to indicate to the user
+   agent what the maximum content size deliverable in one request is,
+   and MUST contain an integer if it is used.  It is a direct child of
+   the <span class="code_inline">app:service</span> element.  If the server does not supply an element,
+   the client MUST assume that the server will support arbitrarily large
+   files, although due consideration should be taken of limitations in
+   other supporting technology.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+       &lt;service xmlns="http://www.w3.org/2007/app"
+                xmlns:sword="http://purl.org/net/sword/terms/"
+                xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+
+         &lt;sword:version&gt;2.0&lt;/sword:version&gt;
+         &lt;sword:maxUploadSize&gt;1024&lt;/sword:maxUploadSize&gt;
+
+         &lt;workspace&gt;
+
+           &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+           &lt;collection href="http://www.appserver.org/col1"&gt;
+             &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+             &lt;accept&gt;*/*&lt;/accept&gt;
+           &lt;/collection&gt;
+
+         &lt;/workspace&gt;
+       &lt;/service&gt;
+</pre>
+</div>
+
+<h3>2.3 sword:collectionPolicy</h3>
+
+<p>
+   The <span class="code_inline">sword:collectionPolicyM</span> MAY be included, as a child of the
+   <span class="code_inline">app:collection</span> element.  It is to be used for a human-readable
+   description of collection policy. Include either a text description
+   or a URI.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+       &lt;service xmlns="http://www.w3.org/2007/app"
+                xmlns:sword="http://purl.org/net/sword/terms/"
+                xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+
+         &lt;sword:version&gt;2.0&lt;/sword:version&gt;
+         &lt;sword:maxUploadSize&gt;1024&lt;/sword:maxUploadSize&gt;
+
+         &lt;workspace&gt;
+
+           &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+           &lt;collection href="http://www.appserver.org/col1"&gt;
+             &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+             &lt;accept&gt;*/*&lt;/accept&gt;
+             &lt;sword:collectionPolicy&gt;http://www.swordserver.ac.uk/policy&lt;/sword:collectionPolicy&gt;
+           &lt;/collection&gt;
+
+         &lt;/workspace&gt;
+       &lt;/service&gt;
+</pre>
+</div>
+
+
+<h3>2.4 sword:treatment</h3>
+
+<p>
+   The <span class="code_inline">sword:treatment</span> element MAY be included, as a child of the
+   <span class="code_inline">app:collection</span> element. Used for a human-readable statement about
+   what treatment the deposited resource will receive.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+       &lt;service xmlns="http://www.w3.org/2007/app"
+                xmlns:sword="http://purl.org/net/sword/terms/"
+                xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+
+         &lt;sword:version&gt;2.0&lt;/sword:version&gt;
+         &lt;sword:maxUploadSize&gt;1024&lt;/sword:maxUploadSize&gt;
+
+         &lt;workspace&gt;
+
+           &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+           &lt;collection href="http://www.appserver.org/col1"&gt;
+             &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+             &lt;accept&gt;*/*&lt;/accept&gt;
+             &lt;sword:collectionPolicy&gt;http://www.swordserver.ac.uk/policy&lt;/sword:collectionPolicy&gt;
+             &lt;sword:treatment&gt;treatment description&lt;/sword:treatment&gt;
+           &lt;/collection&gt;
+
+         &lt;/workspace&gt;
+       &lt;/service&gt;
+</pre>
+</div>
+
+
+<h3>2.5 sword:service</h3>
+
+<p>
+   Zero or more <span class="code_inline">sword:service</span> elements MAY be included, as children of
+   <span class="code_inline">app:collection</span>, to direct clients to nested service definitions. If
+   present, the value MUST be a URI that dereferences to another Service
+   Document.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+       &lt;service xmlns="http://www.w3.org/2007/app"
+                xmlns:sword="http://purl.org/net/sword/terms/"
+                xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+
+         &lt;sword:version&gt;2.0&lt;/sword:version&gt;
+         &lt;sword:maxUploadSize&gt;1024&lt;/sword:maxUploadSize&gt;
+
+         &lt;workspace&gt;
+
+           &lt;atom:title&gt;Main Site&lt;/atom:title&gt;
+           &lt;collection href="http://www.appserver.org/col1"&gt;
+             &lt;atom:title&gt;Collection 1&lt;/atom:title&gt;
+             &lt;accept&gt;*/*&lt;/accept&gt;
+             &lt;sword:collectionPolicy&gt;http://www.swordserver.ac.uk/policy&lt;/sword:collectionPolicy&gt;
+             &lt;sword:treatment&gt;treatment description&lt;/sword:treatment&gt;
+             &lt;sword:service&gt;http://www.swordserver.ac.uk/service/subservice&lt;/sword:service&gt;
+           &lt;/collection&gt;
+
+         &lt;/workspace&gt;
+       &lt;/service&gt;
+</pre>
+</div>
+
+
+<h2>3 Media Entry Extensions</h2>
+
+<p>
+   This section documents extensions to the Media Entry document which
+   can be retrieved from the server from the Media Entry URI.
+</p>
+
+<h3>3.1 sword:treatment</h3>
+
+<p>
+   The <span class="code_inline">sword:treatment</span> element SHOULD be included, as a child of the
+   <span class="code_inline">atom:entry</span> element. Used for a human-readable statement about what
+   treatment the deposited resource received.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+     &lt;entry xmlns="http://www.w3.org/2005/Atom"
+           xmlns:sword="http://purl.org/net/sword/"&gt;
+
+       &lt;title&gt;My Deposit&lt;/title&gt;
+       &lt;id&gt;info:something:1&lt;/id&gt;
+       &lt;updated&gt;2008-08-18T14:27:08Z&lt;/updated&gt;
+       &lt;summary type="text"&gt;A summary&lt;/summary&gt;
+       &lt;generator uri="http://www.swordserver.ac.uk/sword-plugin" version="1.0"/&gt;
+
+       &lt;sword:treatment&gt;Unpacked. JPEG contents converted to JPEG2000.&lt;/sword:treatment&gt;
+
+       &lt;content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;
+       &lt;link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;
+       &lt;link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" /&gt;
+
+     &lt;/entry&gt;
+</pre>
+</div>
+
+<h3>3.2 sword:verboseDescription</h3>
+
+<p>
+   The <span class="code_inline">sword:verboseDescription</span> element MAY be included, as a child of
+   the <span class="code_inline">atom:entry</span> element. Used for a detailed description of the
+   processes that the service has carried out while processing the
+   deposit.  This differs from the <span class="code_inline">sword:treatment</span> element in that it is
+   specifically for developers to provide extensive logging and other
+   feedback to clients and client developers, and SHOULD NOT be used to
+   enhance the user experience at the client end.
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+     &lt;entry xmlns="http://www.w3.org/2005/Atom"
+           xmlns:sword="http://purl.org/net/sword/"&gt;
+
+       &lt;title&gt;My Deposit&lt;/title&gt;
+       &lt;id&gt;info:something:1&lt;/id&gt;
+       &lt;updated&gt;2008-08-18T14:27:08Z&lt;/updated&gt;
+       &lt;summary type="text"&gt;A summary&lt;/summary&gt;
+       &lt;generator uri="http://www.swordserver.ac.uk/sword-plugin" version="1.0"/&gt;
+
+       &lt;sword:verboseDescription&gt;
+   	Deposit Received 2011-01-14T04:45:32Z
+   	Authenticated User: jbloggs ... success
+   	Depositing Resource in Collection: col1
+   	Created File: mypicture.jpg
+   	Filtering files ... 
+   	JPEG file found: mypicture.jpg
+   	Converting JPEG file mypicture.jpg to mypicture_jpg2000.jpg
+   	Deposit Complete 2011-01-14T04:45:34Z
+       &lt;/sword:verboseDescription&gt;
+
+       &lt;sword:treatment&gt;Unpacked. JPEG contents converted to JPEG2000.&lt;/sword:treatment&gt;
+
+       &lt;content type="application/zip" src="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;
+       &lt;link rel="edit-media" href="http://www.swordserver.ac.uk/col1/mydeposit"/&gt;
+       &lt;link rel="edit" href="http://www.swordserver.ac.uk/col1/mydeposit.atom" /&gt;
+
+     &lt;/entry&gt;
+</pre>
+</div>
+
+
+<h2>4 Error Documents</h2>
+
+<p>
+   This extension describes a new class of document in the AtomPub
+   protocol for error handling.  These give service implementations the
+   ability to describe error conditions more fully than HTTP response
+   codes allow.  If a server is reporting an error condition in response
+   to a resource POST, PUT or DELETE, it SHOULD also return a document
+   with a root element of sword:error. The <span class="code_inline">sword:error</span> element SHOULD
+   have an <span class="code_inline">href</span> attribute containing a URI that identifies the error.
+</p>
+
+<p>
+   The <span class="code_inline">sword:error</span> element MAY contain any of the elements normally used
+   in Atom Entry Documents, but all fields are OPTIONAL
+</p>
+
+<p>
+   For example:
+</p>
+
+<div class="code">
+<pre>
+   HTTP 1.1  400 Bad Request
+   &lt;?xml version="1.0" encoding="utf-8"?&gt;
+   &lt;sword:error xmlns="http://www.w3.org/2005/Atom"
+          xmlns:sword="http://purl.org/net/sword/"
+          href="http://example.org/errors/BadManifest"&gt;
+     &lt;author&gt;
+       &lt;name&gt;A.N. Other&lt;/name&gt;
+     &lt;/author&gt;
+     &lt;title&gt;ERROR&lt;/title&gt;
+     &lt;updated&gt;2008-02-19T09:34:27Z&lt;/updated&gt;
+
+     &lt;generator uri="https://example.org/sword-app/"
+                  version="0.9"&gt;sword@example.org&lt;/generator&gt;
+
+     &lt;summary&gt;
+         The manifest could be parsed, but was not valid - 
+         no technical metadata was provided.
+     &lt;/summary&gt;
+
+     &lt;sword:treatment&gt;processing failed&lt;/sword:treatment&gt;
+  &lt;/sword:error&gt;
+</pre>
+</div>
+
+
+<h2>5 References </h2>
+
+<h3>5.1  Normative References</h3>
+
+<p>[<a name="rfc2119">RFC2119</a>] <a href="http://www.ietf.org/rfc/rfc2119.txt">S. Bradner, "Key words for use in RFCs to Indicate
+               Requirement Levels", BCP 14, RFC 2119, March 1997.</a></p>
+
+<p>[<a name="rfc5023">RFC5023</a>]  Gregorio, J. and B. de hOra, "The Atom Publishing
+               Protocol", RFC 5023, October 2007.</p>
+
+
+<h2>Copyright and License Notice</h2>
+
+<p>
+   Copyright (C) SWORD (2011).  All Rights Reserved.
+</p>
+
+<p>
+   This document and translations of it may be copied and furnished to
+   others, and derivative works that comment on or otherwise explain it
+   or assist in its implementation may be prepared, copied, published
+   and distributed, in whole or in part, without restriction of any
+   kind, provided that the above copyright notice and this paragraph are
+   included on all such copies and derivative works.  However, this
+   document itself may not be modified in any way, such as by removing
+   the copyright notice or references to SWORD, except as needed for the
+   purpose of developing Internet standards in which case the procedures
+   for copyrights defined in the Internet Standards process must be
+   followed, or as required to translate it into languages other than
+   English.
+</p>
+
+<p>
+   The limited permissions granted above are perpetual and will not be
+   revoked by SWORD or its successors or assigns.
+</p>
+   This document and the information contained herein is provided on an
+   "AS IS" basis and SWORD DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+   INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+   WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+
+
+</body>
+</html>
