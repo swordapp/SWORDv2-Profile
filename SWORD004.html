@@ -1,0 +1,257 @@
+<html>
+
+<head>
+	<title>SWORD 004: Atom Multipart Extensions for Packaged Content</title>
+	<style type="text/css">
+
+body {
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
+.toc {
+    font-size: 10pt;
+}
+
+.code {
+	font-family: monospace;
+	background: #ffffaa;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+    font-size: 10pt;
+}
+
+.code_inline {
+	font-family: monospace;
+	background: #ffffaa;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+    font-size: 10pt;
+}
+
+	</style>
+</head>
+<body>
+
+<h1>SWORD 004: Atom Multipart Extensions for Packaged Content</h1>
+
+<h2>Credits</h2>
+
+<p>
+<strong>SWORD 2.0 Technical Lead</strong>: Richard Jones, Cottage Labs
+</p>
+
+<p>
+<strong>SWORD 2.0 Community Manager</strong>: Stuart Lewis, University of Auckland
+</p>
+
+<p>
+<strong>SWORD 2.0 Technical Advisory Group</strong><br/>
+Julie Allinson, University of York<br/>
+Tim Brody, University of Southampton<br/>
+David Flanders, JISC<br/>
+Graham Klyne, University of Oxford<br/>
+Alister Miles, University of Oxford<br/>
+Ben O'Steen, Cottage Labs<br/>
+Mark MacGillivray, Cottage Labs<br/>
+Rob Sanderson, LANL<br/>
+Nick Sheppard, Leeds Metropolitan University<br/>
+Eddie Shin, MediaShelf<br/>
+Ian Stuart, University of Edinburgh<br/>
+Ed Summers, Library of Congress<br/>
+David Tarrant, University of Southampton<br/>
+Graham Triggs, BioMed Central<br/>
+Scott Wilson, University of Bolton<br/>
+</p>
+
+<p>
+<strong>Further acknowledgements of input</strong><br/>
+Aaron Birkland (Cornell University), Tim Donohue (DuraSpace), Jim Downing (University of Cambridge), Ross Gardler (OSS Watch), Steve Midgley (US Department of Education), Glen Robson (National Library of Wales), Peter Sefton (University Of Southern Queensland), Adrian Stevenson (UKOLN), Paul Walk (UKOLN), Nigel Ward (University of Queensland)
+</p>
+
+
+<h2>Introduction</h2>
+
+<p>
+   The AtomPub Multipart Media Resource Creation Internet Draft
+   [<a href="#atommultipart">AtomMultipart</a>] defines how an Atom Publishing Protocol collection
+   may process <span class="code_inline">multipart/related</span> requests and how a service announces
+   that it accepts <span class="code_inline">multipart/related</span>entities.  This document adds a
+   short additional extension to that draft for supporting the delivery
+   of packaged content in the same way.
+</p>
+
+<p>
+   This specification defines a set of extensions to the Atom Publishing
+   Protocol [<a href="#rfc5023">RFC5023</a>] to support the transfer and recovery of content in
+   scholarly systems.  We will refer to a service which complies to this
+   extension to AtomPub as a SWORD "server" throughout the course of this
+   document.
+</p>
+
+<h3>1.1  Terminology</h3>
+
+<p>
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [<a href="#rfc2119">RFC2119</a>].
+</p>
+
+
+<h3>1.2 Namespaces</h3>
+
+<p>All extensions are defined within the namespace:</p>
+
+<div class="code">
+    http://purl.org/net/sword/
+</div>
+
+<p>This document uses the prefix <span class="code_inline">sword</span> for the namespace name.</p>
+
+<p>The AtomPub namespace is:</p>
+
+<div class="code">
+    http://www.w3.org/2007/app
+</div>
+
+<p>This document uses the prefix <span class="code_inline">app</span> for the namespace name.</p>
+
+<p>The Atom Syndication Format namespace is:</p>
+
+<div class="code">
+       http://www.w3.org/2005/Atom
+</div>
+
+<p>This document uses the prefix <span class="code_inline">atom</span> for the namespace name.</p>
+
+
+<h2>2  Multipart Representations Extensions</h2>
+
+<p>
+   This section documents extensions to the Multipart Representations of
+   the deposit.
+</p>
+
+<p>
+   Further to the requirements laid out in [<a href="#atommultipart">AtomMultipart</a>] the Entry
+   Part MUST include a <span class="code_inline">Content-Disposition</span> header of type <span class="code_inline">attachment</span>
+   and name parameter of <span class="code_inline">atom</span>:
+</p>
+
+<div class="code">
+<pre>
+   	Content-Disposition: attachment; name=atom
+</pre>
+</div>
+
+<p>
+   The Media Part MUST include a <span class="code_inline">Content-Disposition</span> header of type
+   <span class="code_inline">attachment</span> and name parameter of <span class="code_inline">payload</span>.  It MAY also include a
+   <span class="code_inline">filename</span> parameter:
+ </p>
+
+<div class="code">
+<pre>
+   	Content-Disposition: attachment; name=payload; filename=example.zip
+</pre>
+</div>
+
+<p>
+   The Media Part MAY supply a <span class="code_inline">Packaging</span> header [<a href="#sword001">SWORD001</a>] providing the
+   URI of the packaging format used in the payload.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="code">
+<pre>
+POST /collection HTTP/1.1
+Host: example.org
+Content-Length: nnnn
+Content-Type: multipart/related;
+      boundary="===============1605871705==";
+      type="application/atom+xml"
+MIME-Version: 1.0
+
+Media Post
+--===============1605871705==
+Content-Type: application/atom+xml; charset="utf-8"
+Content-Disposition: attachment; type=atom
+MIME-Version: 1.0
+
+&lt;?xml version="1.0"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom"&gt;
+    ...
+&lt;/entry&gt;
+--===============1605871705==
+Content-Type: application/zip
+Content-Disposition: attachment; name=payload; filename=example.zip
+Packaging: http://purl.org/net/terms/package/default
+MIME-Version: 1.0
+Content-ID: &lt;99334422@example.com&gt;
+
+...binary package data...
+--===============1605871705==--
+</pre>
+</div>
+
+<h2>3 References </h2>
+
+<h3>3.1  Normative References</h3>
+
+<p>[<a name="rfc2119">RFC2119</a>] <a href="http://www.ietf.org/rfc/rfc2119.txt">S. Bradner, "Key words for use in RFCs to Indicate
+               Requirement Levels", BCP 14, RFC 2119, March 1997.</a></p>
+
+<p>[<a name="atommultipart">AtomMultipart</a>]  <a href="http://tools.ietf.org/html/draft-gregorio-atompub-multipart-04">Gregorio, J. "AtomPub Multipart Media Resource
+               Creation", September 2008</a></p>
+
+<p>[<a name="rfc5023">RFC5023</a>]  Gregorio, J. and B. de hOra, "The Atom Publishing
+               Protocol", RFC 5023, October 2007.</p>
+
+<p>[<a name="sword001">SWORD001</a>] Jones, R.  "Packaged Content Delivery over HTTP", January
+               2011</p>
+
+
+<h2>Copyright and License Notice</h2>
+
+<p>
+   Copyright (C) SWORD (2011).  All Rights Reserved.
+</p>
+
+<p>
+   This document and translations of it may be copied and furnished to
+   others, and derivative works that comment on or otherwise explain it
+   or assist in its implementation may be prepared, copied, published
+   and distributed, in whole or in part, without restriction of any
+   kind, provided that the above copyright notice and this paragraph are
+   included on all such copies and derivative works.  However, this
+   document itself may not be modified in any way, such as by removing
+   the copyright notice or references to SWORD, except as needed for the
+   purpose of developing Internet standards in which case the procedures
+   for copyrights defined in the Internet Standards process must be
+   followed, or as required to translate it into languages other than
+   English.
+</p>
+
+<p>
+   The limited permissions granted above are perpetual and will not be
+   revoked by SWORD or its successors or assigns.
+</p>
+   This document and the information contained herein is provided on an
+   "AS IS" basis and SWORD DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+   INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+   WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+
+
+</body>
+</html>
